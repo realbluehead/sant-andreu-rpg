@@ -4,6 +4,10 @@ Un mapa explorable en estil pixel art RPG de **Sant Andreu de Palomar** (Barcelo
 
 ## Com jugar
 
+Juga directament a **https://realbluehead.github.io/sant-andreu-rpg/**
+
+O en local:
+
 ```bash
 python3 -m http.server 8737 --directory public
 ```

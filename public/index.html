@@ -101,6 +101,12 @@
   #zoom-level small { display: block; font-size: 7px; color: var(--muted); margin-bottom: 3px; }
   #avatar-btn { top: 78px; right: 16px; font: inherit; font-size: 10px; color: var(--text); cursor: pointer; padding: 9px 12px; }
   #avatar-btn:hover { color: var(--accent); }
+  #music-btn { top: 128px; right: 16px; font: inherit; font-size: 9px; color: var(--text); cursor: pointer; padding: 8px 10px;
+    display: flex; align-items: center; gap: 8px; }
+  #music-btn:hover { color: var(--accent); }
+  #music-btn i { width: 10px; height: 10px; background: #4ade80; box-shadow: 0 0 0 2px #0b0d1f; }
+  #music-btn.off { color: var(--muted); }
+  #music-btn.off i { background: #6b7280; }
   #avatar-panel { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; background: rgba(8,9,20,.55); padding: 16px; }
   #avatar-panel .panel { position: relative; width: min(620px, 100%); max-height: calc(100vh - 32px); overflow-y: auto;
     display: grid; grid-template-columns: 180px 1fr; gap: 18px; padding: 16px; }
@@ -166,13 +172,19 @@
   #chat-log .msg.mine b { color: var(--accent); }
   #chat-log .msg.old { opacity: 0; }
   body.touch #chat-log { bottom: 200px; }
-  body.touch #minimap-wrap { bottom: auto; top: 128px; transform: scale(.75); transform-origin: top right; }
+  body.touch #minimap-wrap { bottom: auto; top: 176px; transform: scale(.75); transform-origin: top right; }
   @media (max-width: 700px) {
     #help { display: none; }
-    #location { right: 16px; max-width: none; padding: 8px 10px; font-size: 8px; }
-    #zoom { top: 92px; }
-    #avatar-btn { top: 154px; }
-    body.touch #minimap-wrap { top: 204px; }
+    /* panell d'informació a l'esquerra i columna de botons a la dreta */
+    #location { max-width: calc(100vw - 168px); padding: 8px 10px; font-size: 7px; }
+    #location .place { font-size: 7px; }
+    #hp .bar, #drunk .bar { min-width: 40px; }
+    #hp .lbl, #drunk .lbl { display: none; }
+    #money b { font-size: 10px; }
+    #zoom { top: 16px; gap: 6px; }
+    #avatar-btn { top: 72px; }
+    #music-btn { top: 116px; font-size: 7px; }
+    body.touch #minimap-wrap { top: 160px; }
     #location .street { font-size: 10px; }
     #location .meta { display: none; }
     #minimap-wrap { transform: scale(.7); transform-origin: bottom right; }
@@ -200,7 +212,7 @@
   <b>FLETXES / WASD</b> caminar · <b>SHIFT</b> córrer<br>
   <b>+ / −</b> o roda: zoom · arrossega: moure càmera<br>
   <b>C</b> centrar · <b>M</b> minimapa · <b>L</b> rètols<br>
-  <b>ENTER</b> parlar · <b>N</b> fantasma · <b>P</b> avatar · <b>H</b> ajuda
+  <b>ENTER</b> parlar · <b>N</b> fantasma · <b>P</b> avatar · <b>B</b> música · <b>H</b> ajuda
 </div>
 <div id="zoom" class="panel">
   <button id="zoom-out" type="button" aria-label="Allunyar">−</button>
@@ -223,6 +235,7 @@
     <div id="avatar-fields"></div>
   </div>
 </div>
+<button id="music-btn" class="panel" type="button" aria-pressed="true"><i></i><span>Música: sí</span></button>
 <div id="joystick" class="touch-only" aria-label="Joystick per moure el personatge"><div class="knob"></div></div>
 <button id="run-btn" class="touch-btn touch-only" type="button" aria-pressed="false">Córrer</button>
 <button id="map-btn" class="touch-btn touch-only" type="button">MAPA</button>
@@ -247,12 +260,13 @@
   <a href="https://opendata-ajuntament.barcelona.cat/data/ca/dataset/cens-locals-planta-baixa-act-economica" target="_blank" rel="noopener">Ajuntament de Barcelona</a> (CC-BY) ·
   <a href="https://overturemaps.org" target="_blank" rel="noopener">Overture Maps Foundation</a></div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=20"></script>
-<script src="npcs.js?v=20"></script>
-<script src="pois.js?v=20"></script>
-<script src="animals.js?v=20"></script>
-<script src="coins.js?v=20"></script>
-<script src="thieves.js?v=20"></script>
-<script src="drinks.js?v=20"></script>
+<script src="game.js?v=25"></script>
+<script src="npcs.js?v=25"></script>
+<script src="pois.js?v=25"></script>
+<script src="animals.js?v=25"></script>
+<script src="coins.js?v=25"></script>
+<script src="thieves.js?v=25"></script>
+<script src="drinks.js?v=25"></script>
+<script src="music.js?v=25"></script>
 </body>
 </html>

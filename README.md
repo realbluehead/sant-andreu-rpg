@@ -26,15 +26,20 @@ Obre <http://localhost:8737>.
 | N | mode fantasma (travessa edificis) |
 | P | personalitzar l'avatar |
 | Enter / T | escriure un missatge (màx. 30 caràcters) que surt en una bombolla |
+| B | activar o aturar la música |
 | H | amagar l'ajuda |
 
 Al mòbil apareixen controls tàctils: un joystick per caminar, el botó **Córrer**, **MAPA** per obrir el minimapa i **CENTRAR** per tornar la càmera al personatge. També pots arrossegar el mapa amb el dit.
+
+## Música
+
+La música de fons és una composició original en estil chiptune de 8 bits, sintetitzada en directe amb Web Audio (`public/music.js`): dues ones quadrades (melodia i arpegis), una triangular (baix) i soroll (bateria). Comença amb la primera tecla o toc i es pot aturar amb el botó **Música** o la tecla **B**.
 
 ## Com està fet
 
 - `data/osm.json` — dades d'OpenStreetMap descarregades amb l'API d'Overpass (edificis, vies, usos del sòl, arbres, llocs).
 - `build_map.py` — rasteritza les dades en una graella de tiles de 2 m (`public/map.bin`) i exporta carrers, llocs i el límit del barri (`public/map.json`). Només fa servir la biblioteca estàndard de Python.
-- `public/game.js` — motor del joc en canvas: tiles i sprites pixel art generats per codi (panot barceloní, terrats, persianes verdes, plàtans…), càmera, col·lisions, rètols, minimapa i editor d'avatar.
+- `public/game.js` — motor del joc en canvas: tiles i sprites pixel art generats per codi en estil de poble RPG (gespa, camins de terra, empedrat, teulades de colors, cases amb bigues de fusta…), càmera, col·lisions, rètols, minimapa i editor d'avatar.
 
 Per regenerar el mapa després d'actualitzar `data/osm.json`:
 

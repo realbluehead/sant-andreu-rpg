@@ -154,104 +154,129 @@ class Pix {
 }
 
 // ---------------------------------------------------------------------------
-// Tileset procedural
+// Tileset procedural, estil poble RPG de 16 bits (gespa viva, camins de terra, empedrat,
+// teulades de colors i cases de guix amb bigues de fusta)
 const C = {
-  ground: hex("#cdbd98"), sidewalk: hex("#b8b4aa"), plaza: hex("#d9c7a2"), asphalt: hex("#4b4d57"),
-  grass: hex("#6aa84f"), forest: hex("#3d7a3c"), water: hex("#3b7dd8"), white: hex("#ece8d8"),
+  grass: hex("#6cc04a"), grassDark: hex("#3f9136"), path: hex("#e2c487"), stone: hex("#d8d0b8"),
+  cobble: hex("#a89c84"), forest: hex("#3c8a3a"), water: hex("#3f8ae0"), white: hex("#fbf7ea"),
 };
+
+// Gespa amb mates en forma de "v" i alguna flor
+function grassBase(p, r, c, flowers) {
+  p.noise(r, c, [shade(c, 8), shade(c, -6)], 0.25);
+  const tuft = shade(c, -34), lite = shade(c, 26);
+  for (let i = 0; i < 5; i++) {
+    const x = 1 + ((r() * 13) | 0), y = 2 + ((r() * 12) | 0);
+    p.set(x, y, tuft); p.set(x + 2, y, tuft); p.set(x + 1, y + 1, tuft); p.set(x + 1, y - 1, lite);
+  }
+  if (flowers) {
+    const fl = [[hex("#ffffff"), hex("#f6e05e")], [hex("#ff6b6b"), hex("#ffe08a")], [hex("#b794f4"), hex("#ffffff")]];
+    for (let i = 0; i < flowers; i++) {
+      const [pet, mid] = fl[(r() * fl.length) | 0], x = 2 + ((r() * 12) | 0), y = 2 + ((r() * 12) | 0);
+      p.set(x - 1, y, pet); p.set(x + 1, y, pet); p.set(x, y - 1, pet); p.set(x, y + 1, pet); p.set(x, y, mid);
+    }
+  }
+}
+
+// Lloses de pedra irregulars (sense aspecte de totxana)
+function slabs(p, r, c, v) {
+  p.fill(c);
+  const gap = shade(c, -22), hi = shade(c, 14), lo = shade(c, -10);
+  const cuts = [[0, 0, 9, 7], [9, 0, 7, 6], [0, 7, 6, 9], [6, 7, 10, 3], [9, 6, 7, 1], [6, 10, 10, 6]];
+  const off = (v % 2) * 3;
+  for (const [x, y, w, h] of cuts) {
+    const tone = shade(c, ((hash2(x + v * 7, y + off) % 5) - 2) * 4);
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const X = (x + i + off) % 16, Y = y + j;
+      const edgeT = j === 0, edgeL = i === 0, edgeB = j === h - 1, edgeR = i === w - 1;
+      p.set(X, Y, edgeT || edgeL ? (edgeT && edgeL ? gap : hi) : edgeB || edgeR ? lo : (r() < 0.08 ? shade(tone, -6) : tone));
+    }
+  }
+  for (let i = 0; i < 16; i++) { if (r() < 0.05) p.set(i, (r() * 16) | 0, gap); }
+}
+
+// Empedrat de pedres arrodonides
+function cobbles(p, r, c) {
+  p.fill(shade(c, -30));
+  for (let row = 0; row < 4; row++) for (let col = -1; col < 4; col++) {
+    const cx = col * 4 + (row % 2) * 2 + 1, cy = row * 4;
+    const t = shade(c, ((r() * 3) | 0) * 6 - 6);
+    for (let j = 0; j < 3; j++) for (let i = 0; i < 3; i++) {
+      if ((i === 0 || i === 2) && (j === 0 || j === 2) && r() < 0.6) continue;
+      p.set(cx + i, cy + j, j === 0 ? shade(t, 16) : j === 2 ? shade(t, -10) : t);
+    }
+  }
+}
 
 function paintGround(p, id, v, r) {
   switch (id) {
-    case T.GROUND: // sauló / terra urbana
-      p.noise(r, C.ground, [shade(C.ground, -14), shade(C.ground, 10), shade(C.ground, -6)], 0.35);
+    case T.GROUND: // patis i espais sense mapejar: gespa de poble
+      grassBase(p, r, C.grass, v === 3 ? 2 : 0);
       break;
-    case T.SIDEWALK: { // panot barceloní
-      p.noise(r, C.sidewalk, [shade(C.sidewalk, -6), shade(C.sidewalk, 5)], 0.25);
-      const grout = shade(C.sidewalk, -28), hi = shade(C.sidewalk, 18), lo = shade(C.sidewalk, -16);
-      for (let i = 0; i < 16; i++) { p.set(i, 0, grout); p.set(i, 8, grout); p.set(0, i, grout); p.set(8, i, grout); }
-      for (const ox of [0, 8]) for (const oy of [0, 8]) for (const a of [2, 5]) for (const b of [2, 5]) {
-        p.rect(ox + a, oy + b, 2, 2, hi); p.set(ox + a + 1, oy + b + 1, lo);
-      }
+    case T.SIDEWALK: { // camí de terra piconada
+      p.noise(r, C.path, [shade(C.path, -10), shade(C.path, 8)], 0.3);
+      for (let i = 0; i < 4; i++) { const x = (r() * 15) | 0, y = (r() * 15) | 0; p.set(x, y, shade(C.path, -28)); p.set(x + 1, y, shade(C.path, 18)); }
       break;
     }
-    case T.PLAZA: { // llambordes
-      const grout = shade(C.plaza, -30);
-      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
-        const row = y >> 2, off = (row & 1) * 4;
-        const edge = y % 4 === 3 || (x + off) % 8 === 7;
-        p.set(x, y, edge ? grout : shade(C.plaza, ((hash2(((x + off) >> 3) + v * 7, row) % 3) - 1) * 8 + (r() < 0.2 ? -6 : 0)));
-      }
+    case T.PLAZA:
+      slabs(p, r, C.stone, v);
       break;
-    }
-    case T.ROAD: case T.ROAD_LINE: case T.CROSSWALK: case T.PARKING: {
-      const base = id === T.PARKING ? shade(C.asphalt, 12) : C.asphalt;
-      p.noise(r, base, [shade(base, -6), shade(base, 6), shade(base, -12)], 0.4);
-      if (id === T.ROAD_LINE && v % 2 === 0) p.rect(6, 6, 4, 4, C.white);
-      if (id === T.CROSSWALK) for (let x = 1; x < 16; x += 5) p.rect(x, 0, 3, 16, C.white);
-      if (id === T.PARKING && v === 0) p.rect(0, 0, 1, 16, C.white);
+    case T.ROAD: case T.ROAD_LINE: case T.CROSSWALK:
+      cobbles(p, r, C.cobble);
       break;
-    }
-    case T.CYCLEWAY: { const c = hex("#8c4f44"); p.noise(r, c, [shade(c, -10), shade(c, 8)], 0.35); break; }
+    case T.PARKING:
+      cobbles(p, r, shade(C.cobble, -10));
+      break;
+    case T.CYCLEWAY: { const c = hex("#d39a68"); p.noise(r, c, [shade(c, -12), shade(c, 8)], 0.3); break; }
     case T.STEPS: {
-      const c = hex("#a9a49a");
-      for (let y = 0; y < 16; y++) p.rect(0, y, 16, 1, y % 4 === 0 ? shade(c, 25) : y % 4 === 3 ? shade(c, -30) : c);
+      const c = C.stone;
+      for (let y = 0; y < 16; y++) p.rect(0, y, 16, 1, y % 4 === 0 ? shade(c, 22) : y % 4 === 3 ? shade(c, -34) : c);
       break;
     }
-    case T.GRASS: case T.PARK: {
-      const c = id === T.PARK ? shade(C.grass, -6) : C.grass;
-      p.noise(r, c, [shade(c, -14), shade(c, 12), shade(c, -22)], 0.35);
-      for (let i = 0; i < 4; i++) { const x = (r() * 15) | 0, y = (r() * 14 + 1) | 0; p.set(x, y, shade(c, 28)); p.set(x, y - 1, shade(c, 18)); }
-      if (id === T.PARK && v === 3) {
-        const fl = [hex("#f6e05e"), hex("#f56565"), hex("#ffffff"), hex("#b794f4")];
-        for (let i = 0; i < 3; i++) p.set((r() * 16) | 0, (r() * 16) | 0, fl[(r() * 4) | 0]);
-      }
+    case T.GRASS:
+      grassBase(p, r, C.grass, v === 3 ? 1 : 0);
       break;
-    }
+    case T.PARK:
+      grassBase(p, r, shade(C.grass, -4), v >= 2 ? 3 : 0);
+      break;
     case T.FOREST: {
-      p.noise(r, C.forest, [shade(C.forest, -12), shade(C.forest, 10), hex("#6b5a33")], 0.4);
+      grassBase(p, r, C.forest, 0);
+      if (v % 2 === 0) { // matoll
+        const b = hex("#2f7a2e");
+        for (let y = 0; y < 7; y++) for (let x = 0; x < 9; x++) {
+          const dx = (x - 4) / 4.5, dy = (y - 3.5) / 3.5;
+          if (dx * dx + dy * dy < 1) p.set(4 + x, 5 + y, dy < -0.2 ? shade(b, 25) : b);
+        }
+      }
       break;
     }
     case T.WATER: case T.POOL: {
-      const c = id === T.POOL ? hex("#5cc3e6") : C.water;
-      p.noise(r, c, [shade(c, -8), shade(c, 6)], 0.2);
-      if (id === T.POOL) { const l = shade(c, 25); for (let i = 0; i < 16; i++) { p.set(i, 0, l); p.set(0, i, l); } }
-      for (let i = 0; i < 2; i++) { const x = (r() * 11) | 0, y = (r() * 14 + 1) | 0; p.rect(x, y, 4, 1, shade(c, 45)); p.rect(x + 1, y - 1, 2, 1, shade(c, 30)); }
+      const c = id === T.POOL ? hex("#6fd0f0") : C.water;
+      p.noise(r, c, [shade(c, -6)], 0.15);
+      for (let i = 0; i < 2; i++) {
+        const x = (r() * 10) | 0, y = 3 + ((r() * 10) | 0);
+        p.rect(x, y, 3, 1, shade(c, 50)); p.rect(x + 3, y - 1, 2, 1, shade(c, 50));
+      }
+      if (v === 1) p.set((r() * 16) | 0, (r() * 16) | 0, C.white);
       break;
     }
     case T.RAIL: {
-      const g = hex("#7c6d5c");
+      const g = hex("#9c8f78");
       p.noise(r, g, [shade(g, -15), shade(g, 15)], 0.5);
-      for (let y = 1; y < 16; y += 4) p.rect(1, y, 14, 2, hex("#5a3a26"));
-      p.rect(4, 0, 1, 16, hex("#b8bcc4")); p.rect(11, 0, 1, 16, hex("#b8bcc4"));
+      for (let y = 1; y < 16; y += 4) p.rect(1, y, 14, 2, hex("#7a4e2c"));
+      p.rect(4, 0, 1, 16, hex("#c8ccd4")); p.rect(11, 0, 1, 16, hex("#c8ccd4"));
       break;
     }
-    case T.SAND: { const c = hex("#e3cf98"); p.noise(r, c, [shade(c, -12), shade(c, 10)], 0.3); break; }
-    case T.PITCH: {
-      const c = v % 2 ? hex("#4f9c45") : hex("#58a84d");
-      p.noise(r, c, [shade(c, -6), shade(c, 6)], 0.25);
-      break;
-    }
-    case T.GRAVEL: {
-      const c = hex("#a89d88");
-      p.noise(r, c, [shade(c, -18), shade(c, 14), hex("#8e8270")], 0.45);
-      break;
-    }
-    case T.PLAYGROUND: { const c = hex("#c4573e"); p.noise(r, c, [hex("#3f7fbf"), hex("#e3b341"), shade(c, -10)], 0.12); break; }
-    case T.DIRT: { const c = hex("#a7845d"); p.noise(r, c, [shade(c, -14), shade(c, 12)], 0.35); break; }
-    case T.SCHOOLYARD: { const c = hex("#d2a679"); p.noise(r, c, [shade(c, -8), shade(c, 8)], 0.25); break; }
-    case T.CONCRETE: {
-      const c = hex("#b3b1ab");
-      p.noise(r, c, [shade(c, -8), shade(c, 6)], 0.25);
-      const s = shade(c, -22); for (let i = 0; i < 16; i++) { p.set(i, 15, s); p.set(15, i, s); }
-      break;
-    }
-    case T.RUINS: {
-      const c = hex("#8f8478");
-      p.noise(r, c, [hex("#6e6258"), hex("#a9998a"), hex("#a85d45")], 0.5);
-      break;
-    }
+    case T.SAND: { const c = hex("#f0dca0"); p.noise(r, c, [shade(c, -12), shade(c, 10)], 0.3); break; }
+    case T.PITCH: grassBase(p, r, v % 2 ? hex("#5fb546") : hex("#69c24f"), 0); break;
+    case T.GRAVEL: { const c = hex("#c4b89c"); p.noise(r, c, [shade(c, -20), shade(c, 14)], 0.45); break; }
+    case T.PLAYGROUND: { const c = hex("#efd28e"); p.noise(r, c, [shade(c, -14), shade(c, 10)], 0.35); break; }
+    case T.DIRT: { const c = hex("#b98a55"); p.noise(r, c, [shade(c, -14), shade(c, 12)], 0.35); break; }
+    case T.SCHOOLYARD: { const c = hex("#e2c487"); p.noise(r, c, [shade(c, -8), shade(c, 8)], 0.25); break; }
+    case T.CONCRETE: slabs(p, r, hex("#c9c6bb"), v); break;
+    case T.RUINS: { const c = hex("#a39684"); p.noise(r, c, [hex("#7d7062"), hex("#c2b5a2"), hex("#8a6a4a")], 0.5); break; }
     case T.TRACK: {
-      const c = hex("#b44d3a");
+      const c = hex("#c8683f");
       p.noise(r, c, [shade(c, -10), shade(c, 8)], 0.3);
       p.rect(0, 7, 16, 1, C.white);
       break;
@@ -261,81 +286,69 @@ function paintGround(p, id, v, r) {
   }
 }
 
+// Teulades de colors: cada tipus d'edifici té una paleta i cada edifici en tria un color
 const ROOF = [
-  { base: hex("#c79f86"), wall: ["#ead8b8", "#d9b99b", "#f1e6d2", "#d4ad8e"] },   // pisos: terrat de rajola
-  { base: hex("#b8532f"), wall: ["#ebcfa6", "#e6c191", "#f0dcc0", "#dcb487"] },   // casa: teula
-  { base: hex("#767b8c"), wall: ["#cdbb9b", "#c4b08e", "#d3c3a6", "#bfa985"] },   // església
-  { base: hex("#98a2ab"), wall: ["#a85d45", "#9e5640", "#b0664c", "#94503c"] },   // industrial (maó)
-  { base: hex("#8ea2b9"), wall: ["#dcd6c8", "#d2cbbb", "#e4dfd3", "#cac2b0"] },   // equipament públic
-  { base: hex("#c3c1bb"), wall: ["#bcc6cf", "#b0bcc6", "#c7d0d7", "#a9b5c0"] },   // comercial
+  { colors: ["#c8483c", "#3f72c4", "#4f9e48", "#d1803a"], wall: ["#f3e6c4", "#eedcb2", "#f6edd6", "#e9d5a8"] }, // pisos
+  { colors: ["#c8483c", "#b9542e", "#a8403a", "#d06a3a"], wall: ["#f3e6c4", "#efdcb4", "#f6edd6", "#ead6ac"] }, // cases
+  { colors: ["#6a5c9e", "#58648a", "#7a5aa0", "#5e6e96"], wall: ["#d9d3c4", "#cfc8b6", "#e0dacb", "#c9c1ad"] }, // esglésies
+  { colors: ["#7f8a96", "#8c6a4c", "#6e7b70", "#94826c"], wall: ["#b98a55", "#a97c4a", "#c09260", "#9e7244"] }, // naus (fusta)
+  { colors: ["#2f8f8a", "#3f72c4", "#3a8f6a", "#4a7fb0"], wall: ["#ece6d6", "#e4dcc8", "#f2ecde", "#ddd4bf"] }, // equipaments
+  { colors: ["#d1a23a", "#5aa05a", "#c0603a", "#4f8fc0"], wall: ["#f0e6cf", "#e8ddc2", "#f5eedc", "#e2d6b8"] }, // comerços
 ];
-const SHADES = [-12, 0, 10, -5];
+const roofColor = (type, s) => hex(ROOF[type].colors[s]);
 
+// Teules grans en forma d'escata, en fileres decalades (8x8 px)
 function paintRoof(p, type, s, v, r) {
-  const c = shade(ROOF[type].base, SHADES[s]);
-  switch (type) {
-    case 0: { // rajola de terrat
-      const g = shade(c, -18);
-      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, (x % 4 === 3 || y % 4 === 3) ? g : (r() < 0.15 ? shade(c, 7) : c));
-      if (v === 1) { p.rect(3, 3, 6, 5, hex("#e8e8e8")); p.rect(3, 8, 6, 1, hex("#9a9a9a")); } // dipòsit / caseta
-      if (v === 2) { p.rect(10, 9, 3, 3, hex("#5a5e66")); }                                     // xemeneia
-      break;
-    }
-    case 1: { // teula àrab
-      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
-        const k = (x + ((y >> 2) & 1) * 2) % 4;
-        p.set(x, y, y % 4 === 3 ? shade(c, -35) : k === 0 ? shade(c, -15) : k === 2 ? shade(c, 15) : c);
-      }
-      break;
-    }
-    case 2: // pissarra
-      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, y % 3 === 2 ? shade(c, -25) : ((x + (y / 3 | 0) * 2) % 5 === 0 ? shade(c, -12) : c));
-      break;
-    case 3: // xapa ondulada
-      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, x % 3 === 0 ? shade(c, -20) : x % 3 === 1 ? shade(c, 12) : c);
-      break;
-    case 4:
-      p.noise(r, c, [shade(c, -6), shade(c, 6)], 0.2);
-      for (let i = 0; i < 16; i++) { p.set(i, 7, shade(c, -18)); p.set(7, i, shade(c, -18)); }
-      break;
-    case 5:
-      p.noise(r, c, [shade(c, -6), shade(c, 6)], 0.2);
-      if (v === 0) { p.rect(4, 4, 7, 6, hex("#e4e4e4")); p.rect(5, 5, 5, 4, hex("#8a8f97")); p.rect(7, 6, 1, 2, hex("#e4e4e4")); }
-      break;
+  const c = roofColor(type, s);
+  const hi = shade(c, 30), lo = shade(c, -14), edge = shade(c, -40);
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+    const row = y >> 3, yy = y % 8, sx = (x + (row % 2) * 4) % 8;
+    let col = yy >= 5 ? lo : c;
+    if (yy === 0 || (yy === 1 && sx > 1 && sx < 6)) col = hi;
+    if (yy === 7 || (yy >= 5 && (sx === 0 || sx === 7)) || (yy === 6 && (sx === 1 || sx === 6))) col = edge;
+    p.set(x, y, col);
+  }
+  if (v === 1 && type !== 3) { // xemeneia de pedra
+    p.rect(10, 2, 4, 6, hex("#b8ad98")); p.rect(10, 2, 4, 1, hex("#e2d8c2")); p.rect(11, 1, 2, 1, hex("#5a5048"));
+    p.rect(10, 7, 4, 1, hex("#7d7262"));
   }
 }
 
+// Façana: guix amb biga de fusta, finestra amb travessers i test de flors, o porta de fusta
 function paintFacade(p, type, s, v, r) {
-  const wall = shade(hex(ROOF[type].wall[s]), 0);
-  p.noise(r, wall, [shade(wall, -8), shade(wall, 6)], 0.18);
-  p.rect(0, 0, 16, 2, shade(wall, -40)); // cornisa
-  p.rect(0, 2, 16, 1, shade(wall, -18));
-  const glass = hex("#2d3a50"), glassHi = hex("#5b7192"), frame = shade(wall, 30);
-  if (type === 3) { // finestral industrial
-    p.rect(2, 4, 12, 8, frame); p.rect(3, 5, 10, 6, glass);
-    p.rect(7, 5, 1, 6, frame); p.rect(3, 8, 10, 1, frame); p.set(4, 6, glassHi);
-    p.rect(0, 13, 16, 1, shade(wall, -20));
+  const wall = hex(ROOF[type].wall[s]);
+  const beam = hex("#8a5a32"), beamD = hex("#5e3b20");
+  if (type === 3) { // nau de fusta: taulons
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, x % 4 === 0 ? shade(wall, -26) : (r() < 0.1 ? shade(wall, -8) : wall));
+  } else {
+    p.noise(r, wall, [shade(wall, -6), shade(wall, 5)], 0.15);
+  }
+  p.rect(0, 0, 16, 2, beam); p.rect(0, 2, 16, 1, beamD);             // biga sota la teulada
+  p.rect(0, 15, 16, 1, shade(wall, -30));                              // sòcol
+  if (type === 2) { // església: vitrall en arc
+    p.rect(5, 5, 6, 9, hex("#6a5a48")); p.rect(6, 4, 4, 1, hex("#6a5a48"));
+    p.rect(6, 5, 4, 8, hex("#7f5fb0")); p.set(7, 6, hex("#f6e05e")); p.set(8, 8, hex("#e85d5d")); p.set(7, 10, hex("#5fb3ff"));
     return;
   }
-  if (v === 0) { // porta
-    p.rect(4, 5, 8, 11, shade(wall, -30)); p.rect(5, 6, 6, 10, hex("#6b4226"));
-    p.rect(5, 6, 6, 1, hex("#8a5a35")); p.set(9, 11, hex("#e7c35a"));
+  if (v === 0) { // porta de fusta amb arc
+    p.rect(5, 5, 6, 10, beamD); p.rect(6, 4, 4, 1, beamD);
+    p.rect(6, 5, 4, 10, hex("#a8703c")); p.rect(7, 5, 1, 10, hex("#8a5a32"));
+    p.set(9, 10, hex("#f6d55c")); p.rect(5, 14, 6, 1, hex("#7d7262"));
     return;
   }
-  if (type === 2) { // vitrall
-    p.rect(6, 4, 4, 9, shade(wall, -30)); p.rect(7, 5, 2, 7, hex("#7f5fb0")); p.set(7, 6, hex("#e3b341")); p.set(8, 9, hex("#d14b4b"));
-    return;
+  // finestra amb marc de fusta i travessers
+  const glass = hex("#5b9ee0"), glassHi = hex("#bfe3ff");
+  p.rect(4, 5, 8, 7, beamD); p.rect(5, 6, 6, 5, glass);
+  p.rect(7, 6, 2, 5, beamD); p.rect(5, 8, 6, 1, beamD);
+  p.set(5, 6, glassHi); p.set(9, 6, glassHi);
+  if (type !== 4 && type !== 5 && v !== 3) { // test amb flors
+    p.rect(4, 12, 8, 2, hex("#8a5a32"));
+    for (let x = 4; x < 12; x += 2) p.set(x + (r() < 0.5 ? 0 : 1), 11, [hex("#ff6b6b"), hex("#f6e05e"), hex("#ffffff")][(r() * 3) | 0]);
+    p.rect(4, 11, 8, 1, hex("#3f9136"));
+    for (let x = 4; x < 12; x += 2) p.set(x + 1, 11, [hex("#ff6b6b"), hex("#f6e05e"), hex("#ffffff")][(r() * 3) | 0]);
+  } else if (type === 5) { // comerç: tendal de ratlles
+    for (let x = 3; x < 13; x++) p.set(x, 4, x % 2 ? hex("#e85d5d") : C.white);
   }
-  // balcó amb persianes verdes, molt de Barcelona
-  p.rect(5, 4, 6, 9, frame); p.rect(6, 5, 4, 7, glass); p.set(6, 5, glassHi); p.set(7, 6, glassHi);
-  if (type !== 5) {
-    const persiana = v === 1 ? hex("#3f6f45") : v === 2 ? hex("#3f6f45") : hex("#6f8f5a");
-    p.rect(3, 4, 2, 9, persiana); p.rect(11, 4, 2, 9, persiana);
-    for (let y = 5; y < 13; y += 2) { p.set(3, y, shade(persiana, -25)); p.set(4, y, shade(persiana, -25)); p.set(11, y, shade(persiana, -25)); p.set(12, y, shade(persiana, -25)); }
-  }
-  p.rect(3, 12, 10, 1, hex("#2c2c34")); // barana
-  for (let x = 3; x < 13; x += 2) p.set(x, 13, hex("#2c2c34"));
-  p.rect(3, 14, 10, 1, shade(wall, -25));
 }
 
 const tileCache = new Map();
@@ -544,14 +557,20 @@ function renderChunk(cx, cy) {
       const below = g(tx, ty + 1);
       if (!isBuilding(below)) {
         c.drawImage(getTile("f", v, hv % 4), px, py);
+        c.fillStyle = "#2a1d2e";
+        if ((g(tx - 1, ty) & 127) !== v) c.fillRect(px, py, 1, TS);
+        if ((g(tx + 1, ty) & 127) !== v) c.fillRect(px + TS - 1, py, 1, TS);
+        c.fillRect(px, py + TS - 1, TS, 1);
       } else {
-        c.drawImage(getTile("r", v, (hv % 17) < 3 ? (hv % 3) : 3), px, py);
+        c.drawImage(getTile("r", v, (hv % 23) === 0 ? 1 : 0), px, py);
         const up = g(tx, ty - 1), lf = g(tx - 1, ty), rt = g(tx + 1, ty);
-        // Parapets: separen edificis i donen relleu
-        if ((up & 127) !== v) { c.fillStyle = "rgba(255,255,255,.35)"; c.fillRect(px, py, TS, 2); }
-        if ((lf & 127) !== v) { c.fillStyle = "rgba(255,255,255,.22)"; c.fillRect(px, py, 2, TS); }
-        if ((rt & 127) !== v) { c.fillStyle = "rgba(0,0,0,.28)"; c.fillRect(px + TS - 2, py, 2, TS); }
-        if (!isBuilding(g(tx, ty + 2)) && (below & 127) === v) { c.fillStyle = "rgba(0,0,0,.18)"; c.fillRect(px, py + TS - 2, TS, 2); }
+        // Contorn fosc de cada teulada (com els RPG de 16 bits) i carener il·luminat a dalt
+        c.fillStyle = "#2a1d2e";
+        if ((up & 127) !== v) { c.fillRect(px, py, TS, 1); c.fillStyle = "rgba(255,255,255,.35)"; c.fillRect(px, py + 1, TS, 1); c.fillStyle = "#2a1d2e"; }
+        if ((lf & 127) !== v) c.fillRect(px, py, 1, TS);
+        if ((rt & 127) !== v) c.fillRect(px + TS - 1, py, 1, TS);
+        // ràfec: ombra a la part de baix de la teulada, just damunt de la façana
+        if (!isBuilding(g(tx, ty + 2)) && (below & 127) === v) { c.fillStyle = "rgba(20,10,30,.35)"; c.fillRect(px, py + TS - 3, TS, 3); }
       }
     } else {
       let variant = hv % 4;
@@ -560,7 +579,7 @@ function renderChunk(cx, cy) {
       c.drawImage(getTile("g", v, variant), px, py);
       // vorada entre calçada i vorera
       if (ROADISH.has(v)) {
-        c.fillStyle = "#c9c5b8";
+        c.fillStyle = "#8a7f6a"; // vorada de pedra
         if (!ROADISH.has(g(tx, ty - 1) & 127)) c.fillRect(px, py, TS, 2);
         if (!ROADISH.has(g(tx, ty + 1) & 127)) c.fillRect(px, py + TS - 2, TS, 2);
         if (!ROADISH.has(g(tx - 1, ty) & 127)) c.fillRect(px, py, 2, TS);
@@ -636,11 +655,11 @@ const mm = document.getElementById("minimap");
 const mmCtx = mm.getContext("2d");
 let mmBase = null, mmScale = 1;
 const MM_COLORS = {
-  [T.GROUND]: "#cdbd98", [T.GRASS]: "#6aa84f", [T.PARK]: "#5f9d47", [T.ROAD]: "#4b4d57", [T.ROAD_LINE]: "#4b4d57",
-  [T.SIDEWALK]: "#b8b4aa", [T.PLAZA]: "#d9c7a2", [T.CYCLEWAY]: "#8c4f44", [T.STEPS]: "#a9a49a", [T.CROSSWALK]: "#8a8a8a",
-  [T.WATER]: "#3b7dd8", [T.RAIL]: "#6e5a48", [T.SAND]: "#e3cf98", [T.PITCH]: "#4f9c45", [T.PARKING]: "#5a5c66",
-  [T.GRAVEL]: "#a89d88", [T.PLAYGROUND]: "#c4573e", [T.POOL]: "#5cc3e6", [T.DIRT]: "#a7845d", [T.FOREST]: "#3d7a3c",
-  [T.SCHOOLYARD]: "#d2a679", [T.CONCRETE]: "#b3b1ab", [T.RUINS]: "#8f8478", [T.TRACK]: "#b44d3a",
+  [T.GROUND]: "#6cc04a", [T.GRASS]: "#6cc04a", [T.PARK]: "#62b444", [T.ROAD]: "#a89c84", [T.ROAD_LINE]: "#a89c84",
+  [T.SIDEWALK]: "#e2c487", [T.PLAZA]: "#d8d0b8", [T.CYCLEWAY]: "#d39a68", [T.STEPS]: "#d8d0b8", [T.CROSSWALK]: "#a89c84",
+  [T.WATER]: "#3f8ae0", [T.RAIL]: "#8a6a4a", [T.SAND]: "#f0dca0", [T.PITCH]: "#5fb546", [T.PARKING]: "#988c76",
+  [T.GRAVEL]: "#c4b89c", [T.PLAYGROUND]: "#efd28e", [T.POOL]: "#6fd0f0", [T.DIRT]: "#b98a55", [T.FOREST]: "#3c8a3a",
+  [T.SCHOOLYARD]: "#e2c487", [T.CONCRETE]: "#c9c6bb", [T.RUINS]: "#a39684", [T.TRACK]: "#c8683f",
 };
 function buildMinimap() {
   const { W, H } = state;
@@ -650,7 +669,8 @@ function buildMinimap() {
   const lut = [];
   for (let v = 0; v < 256; v++) {
     const id = v & 127;
-    let col = id >= BUILDING_BASE ? ROOF[((id - BUILDING_BASE) / 4) | 0]?.base ?? [128, 128, 128] : hex(MM_COLORS[id] || "#ff00ff");
+    const b = id - BUILDING_BASE;
+    let col = id >= BUILDING_BASE ? (ROOF[(b / 4) | 0] ? roofColor((b / 4) | 0, b % 4) : [128, 128, 128]) : hex(MM_COLORS[id] || "#ff00ff");
     if (id >= BUILDING_BASE) col = shade(col, -10);
     if (v & OUTSIDE) col = col.map((k) => k * 0.55 + 10);
     lut[v] = col;
@@ -1400,6 +1420,7 @@ async function main() {
   initCoins();
   initThieves();
   initDrinks();
+  initMusic();
   bindNpcUi();
   net.connect();
   document.getElementById("loading").classList.add("hidden");
@@ -1425,7 +1446,10 @@ async function main() {
   window.__sa = state; // per depurar
 }
 
-main().catch((e) => {
+// Esperem que s'hagin executat tots els scripts (npcs.js, coins.js…) abans d'arrencar
+const start = () => main().catch((e) => {
   document.getElementById("loading").textContent = "Error carregant el mapa: " + e.message;
   console.error(e);
 });
+if (document.readyState === "loading") addEventListener("DOMContentLoaded", start);
+else start();

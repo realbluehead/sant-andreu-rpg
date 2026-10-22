@@ -331,29 +331,61 @@ const ROUTE = {
 const THEMES = [MAGIC, SHIRE, HERO, STEAM, KAWAII, ROUTE];
 
 // ---------------------------------------------------------------------------
-// Sectors: Voronoi de 6 punts repartits en una graella 2x3 sobre la zona del barri.
-// Cada casella pertany al punt més proper (també les de fora del barri, per continuïtat).
-const SECTOR_LAYOUT = [   // [fracció x, fracció y, tema]
-  [0.30, 0.17, 1], [0.70, 0.17, 3],  // nord: Comarca (parcs) · Vapor (vies i fàbriques)
-  [0.30, 0.50, 5], [0.70, 0.50, 2],  // centre: Ruta dels Monstres · Poble de l'Heroi (Plaça d'Orfila, on comences)
-  [0.30, 0.83, 0], [0.70, 0.83, 4],  // sud: Bruixots · Kawaii
+// Sectors definits per carrers reals:
+//  - el Carrer Gran de Sant Andreu separa els dos costats del barri
+//  - el Carrer de Malats i el Carrer de Sòcrates el tallen en tres franges
+// On un carrer s'acaba, se n'allarga el traçat en línia recta fins a la vora del mapa.
+const DIVIDERS = { gran: "Carrer Gran de Sant Andreu", band1: "Carrer de Malats", band2: "Carrer de Sòcrates" };
+// [franja][costat] -> tema. Franja 0 = abans de Malats, 1 = entre Malats i Sòcrates, 2 = després de Sòcrates.
+// Costat 0 = oest del Carrer Gran, 1 = est.
+const SECTOR_THEMES = [
+  [1, 3],  // Comarca dels Turons · Districte del Vapor (vies i fàbriques)
+  [5, 2],  // Ruta dels Monstres · Poble de l'Heroi (Plaça d'Orfila, on comences)
+  [0, 4],  // Vila dels Bruixots · Racó Kawaii
 ];
 
-function initThemes() {
-  const { W, H, ground } = state;
-  let x0 = W, y0 = H, x1 = 0, y1 = 0;
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    if (!(ground[y * W + x] & OUTSIDE)) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+// Funció lineal a trossos que dona la coordenada "out" d'un carrer per a cada valor de "key"
+function streetCurve(name, key, out) {
+  const st = state.meta.streets.find((x) => x.name === name);
+  if (!st) return null;
+  const pts = st.lines.flat().map((p) => [p[key], p[out]]).sort((a, b) => a[0] - b[0]);
+  // mitjana dels punts propers (el carrer pot tenir dues calçades)
+  const merged = [];
+  for (const [k, v] of pts) {
+    const last = merged[merged.length - 1];
+    if (last && k - last[0] < 6) { last[2] += v; last[3]++; last[0] = (last[0] + k) / 2; }
+    else merged.push([k, 0, v, 1]);
   }
-  const seeds = SECTOR_LAYOUT.map(([fx, fy, th]) => [x0 + (x1 - x0) * fx, y0 + (y1 - y0) * fy, th]);
+  const P = merged.map(([k, , sum, n]) => [k, sum / n]);
+  const first = P[0], last = P[P.length - 1];
+  const slope = (last[1] - first[1]) / ((last[0] - first[0]) || 1); // direcció general del carrer
+  return (k) => {
+    if (k <= first[0]) return first[1] + slope * (k - first[0]);
+    if (k >= last[0]) return last[1] + slope * (k - last[0]);
+    let i = 1;
+    while (P[i][0] < k) i++;
+    const [k0, v0] = P[i - 1], [k1, v1] = P[i];
+    return v0 + (v1 - v0) * (k - k0) / ((k1 - k0) || 1);
+  };
+}
+
+function initThemes() {
+  const { W, H } = state;
+  const granX = streetCurve(DIVIDERS.gran, 1, 0);      // x del Carrer Gran per a cada y
+  const malatsY = streetCurve(DIVIDERS.band1, 0, 1);   // y de Malats per a cada x
+  const socratesY = streetCurve(DIVIDERS.band2, 0, 1); // y de Sòcrates per a cada x
   const sec = new Uint8Array(W * H);
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    let best = 0, bd = Infinity;
-    for (const [sx, sy, th] of seeds) {
-      const d = (sx - x) ** 2 + ((sy - y) * 0.9) ** 2;
-      if (d < bd) { bd = d; best = th; }
+  if (granX && malatsY && socratesY) {
+    const gx = Float32Array.from({ length: H }, (_, y) => granX(y));
+    const my = Float32Array.from({ length: W }, (_, x) => malatsY(x));
+    const sy = Float32Array.from({ length: W }, (_, x) => socratesY(x));
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const side = x < gx[y] ? 0 : 1;
+      const band = y < my[x] ? 0 : y < sy[x] ? 1 : 2;
+      sec[y * W + x] = SECTOR_THEMES[band][side];
     }
-    sec[y * W + x] = best;
+  } else {
+    sec.fill(BASE_THEME);
   }
   state.sector = sec;
   state.chunks.clear();

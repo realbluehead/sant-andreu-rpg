@@ -33,7 +33,7 @@ Al mòbil apareixen controls tàctils: un joystick per caminar, el botó **Córr
 
 ## Zones temàtiques
 
-El barri està dividit en 6 zones, cadascuna amb el seu estil de tiles, teulades, façanes, arbres, rètols de botigues i música (`public/themes.js`). Són estils inspirats en sagues conegudes, amb noms i música de creació pròpia:
+El barri està dividit en 6 zones per carrers reals: el **Carrer Gran de Sant Andreu** separa el costat de muntanya del de mar, i el **Carrer de Malats** i el **Carrer de Sòcrates** el tallen en tres franges (cap al Besòs, al mig i cap al Llobregat). Cadascuna té el seu estil de tiles, teulades, façanes, arbres, rètols de botigues i música (`public/themes.js`). Són estils inspirats en sagues conegudes, amb noms i música de creació pròpia:
 
 | Zona | Estil | Música |
 |---|---|---|

@@ -1,7 +1,7 @@
 // Sant Andreu RPG — mapa pixel art de Sant Andreu de Palomar fet amb dades d'OpenStreetMap.
 "use strict";
 
-const DATA_VERSION = 4;
+const DATA_VERSION = 6;
 
 // Paràmetres del joc (velocitats, quantitats de NPCs, danys…). Es llegeixen de config.json,
 // que es pot editar amb l'app d'admin (admin/). Aquests valors només s'usen si no es pot carregar.
@@ -70,6 +70,10 @@ const CFG = {
   },
   "chat": {
     "maxLength": 30
+  },
+  "bicing": {
+    "speedMultiplier": 3,
+    "radius": 2
   },
   "magic": {
     "ghosts": 12,
@@ -557,7 +561,7 @@ const state = {
   W: 0, H: 0, ground: null, decor: null, meta: null,
   zoomIdx: 2, cam: { x: 0, y: 0 }, follow: true,
   player: { x: 0, y: 0, dir: "down", frame: 0, anim: 0, moving: false },
-  keys: new Set(), noclip: false, showLabels: true, showMinimap: true, look: loadLook(), editing: false, chatting: false, bubble: null,
+  keys: new Set(), noclip: false, showLabels: true, showMinimap: true, look: loadLook(), editing: false, chatting: false, bubble: null, riding: false,
   joy: { active: false, x: 0, y: 0 }, touchRun: false,
   labels: [], segs: [], chunks: new Map(), sprites: {},
 };
@@ -829,7 +833,8 @@ function update(dt) {
   if (pl.moving) {
     state.follow = true;
     const running = k.has("ShiftLeft") || k.has("ShiftRight") || state.touchRun;
-    const speed = (running ? CFG.player.runSpeed : CFG.player.walkSpeed) * (state.noclip ? 2 : 1);
+    const speed = (state.riding ? CFG.player.walkSpeed * CFG.bicing.speedMultiplier // en bici
+      : running ? CFG.player.runSpeed : CFG.player.walkSpeed) * (state.noclip ? 2 : 1);
     const mx = dx * speed * dt, my = dy * speed * dt;
     if (!collides(pl.x + mx, pl.y)) pl.x += mx;
     if (!collides(pl.x, pl.y + my)) pl.y += my;
@@ -900,12 +905,16 @@ function draw() {
   const pl = state.player;
   // L'avatar manté sempre la mateixa mida en pantalla, independentment del zoom
   const k = HERO_SCREEN_SCALE / ZOOMS[state.zoomIdx];
-  list.push([pl.y, S.hero[pl.dir][pl.frame], Math.round(pl.x) - 8 * k, Math.round(pl.y) - 23 * k, false, k]);
+  if (state.riding) list.push([pl.y, S.rider[pl.dir][pl.moving ? pl.frame % 2 : 0], Math.round(pl.x) - 11 * k, Math.round(pl.y) - 27 * k, false, k]);
+  else list.push([pl.y, S.hero[pl.dir][pl.frame], Math.round(pl.x) - 8 * k, Math.round(pl.y) - 23 * k, false, k]);
   // Els altres jugadors i els NPCs s'escalen amb el mapa; rètols i monedes no
   const kw = 1;
   for (const o of net.others.values()) {
     if (o.x < camX - 64 || o.x > camX + vw + 64 || o.y < camY - 64 || o.y > camY + vh + 96) continue;
-    list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * kw, Math.round(o.y) - 23 * kw, false, kw]);
+    if (o.bike) {
+      o.riderSprites ||= makeRiderSet(o.look);
+      list.push([o.y, o.riderSprites[o.dir][o.frame % 2], Math.round(o.x) - 11 * kw, Math.round(o.y) - 27 * kw, false, kw]);
+    } else list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * kw, Math.round(o.y) - 23 * kw, false, kw]);
   }
   pushNpcSprites(list, camX, camY, vw, vh, kw);
   pushPoiSprites(list, camX, camY, vw, vh, k);
@@ -913,6 +922,7 @@ function draw() {
   pushCoinSprites(list, camX, camY, vw, vh, k);
   pushThiefSprites(list, camX, camY, vw, vh, kw);
   pushSpookySprites(list, camX, camY, vw, vh, kw);
+  pushBicingSprites(list, camX, camY, vw, vh, kw);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -1098,6 +1108,7 @@ let previewSprites = null, previewTimer = null;
 
 function applyLook() {
   state.sprites.hero = makeHeroSet(state.look);
+  state.sprites.rider = makeRiderSet(state.look);
   previewSprites = state.sprites.hero;
   saveLook();
   net.sendLook();
@@ -1214,7 +1225,7 @@ const net = {
   send(m) { if (this.ws?.readyState === 1) this.ws.send(JSON.stringify(m)); },
   pos() {
     const pl = state.player;
-    return { x: Math.round(pl.x), y: Math.round(pl.y), dir: pl.dir, moving: pl.moving };
+    return { x: Math.round(pl.x), y: Math.round(pl.y), dir: pl.dir, moving: pl.moving, bike: !!state.riding };
   },
   sendLook() {
     clearTimeout(this.lookTimer);
@@ -1234,14 +1245,14 @@ const net = {
       this.others.delete(m.id);
     } else if (m.t === "move") {
       const o = this.others.get(m.id);
-      if (o) Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving });
+      if (o) Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving, bike: !!m.bike });
     } else if (m.t === "say") {
       const o = this.others.get(m.id);
       const text = String(m.text).slice(0, CFG.chat.maxLength);
       if (o) { o.bubble = bubbleFor(text); logChat(o.look.name, text, false); }
     } else if (m.t === "look") {
       const o = this.others.get(m.id);
-      if (o) { o.look = m.look; o.sprites = makeHeroSet(m.look); }
+      if (o) { o.look = m.look; o.sprites = makeHeroSet(m.look); o.riderSprites = null; }
     }
     updateOnline();
   },
@@ -1385,6 +1396,7 @@ function bindInput() {
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
     if (e.code === "Escape" && state.editing) { toggleAvatarPanel(false); return; }
     if (e.code === "KeyP" && !e.repeat) { toggleAvatarPanel(); return; }
+    if (e.code === "KeyR" && !e.repeat && !state.editing && !state.chatting) { toggleBike(); return; }
     if ((e.key === "Enter" || e.code === "KeyT") && !state.editing && !e.repeat) { e.preventDefault(); toggleChat(true); return; }
     if (state.editing) return;
     state.keys.add(e.code);
@@ -1485,6 +1497,7 @@ async function main() {
   bindChat();
   initNPCs(state.meta.graph);
   initPois();
+  initBicing();
   initAnimals();
   initCoins();
   initThieves();
@@ -1505,6 +1518,7 @@ async function main() {
     updateCoins(dt);
     updateThieves(dt);
     updateSpooky(dt);
+    updateBicing();
     updateDrinks(dt);
     updateZone();
     tickBubbles(dt);

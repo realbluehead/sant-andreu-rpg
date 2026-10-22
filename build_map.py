@@ -507,7 +507,8 @@ POI_CATS = {
     "scissors": {"shop": ["hairdresser", "beauty", "barber", "cosmetics"]},
     "shirt": {"shop": ["clothes", "shoes", "fashion", "boutique", "jewelry", "bag"]},
     "book": {"shop": ["books", "stationery", "newsagent"], "amenity": ["library"]},
-    "bike": {"amenity": ["bicycle_rental"], "shop": ["bicycle"]},
+    "bicing": {"amenity": ["bicycle_rental"]},   # estacions de Bicing: s'hi pot agafar una bici
+    "bike": {"shop": ["bicycle"]},
     "fuel": {"amenity": ["fuel"]},
     "film": {"amenity": ["cinema", "theatre"]},
     "bed": {"tourism": ["hotel", "hostel"]},
@@ -586,7 +587,7 @@ def overture_category(basic, cat):
              ("hair_salon", "scissors"), ("barber", "scissors"), ("beauty_salon", "scissors"), ("nail_salon", "scissors"),
              ("clothing", "shirt"), ("shoe_store", "shirt"), ("jewelry", "shirt"), ("fashion", "shirt"),
              ("bookstore", "book"), ("newsstand", "book"), ("stationery", "book"),
-             ("bicycle", "bike"), ("gas_station", "fuel"), ("cinema", "film"), ("theat", "film"),
+             ("bicycle_rental", None), ("bike_rental", None), ("bicycle", "bike"), ("gas_station", "fuel"), ("cinema", "film"), ("theat", "film"),
              ("hotel", "bed"), ("hostel", "bed"), ("mobile_phone", "phone"), ("electronics_store", "phone"),
              ("dental", "health"), ("doctors_office", "health"), ("hospital", "health"), ("outpatient", "health"),
              ("_store", "shop")]
@@ -682,7 +683,26 @@ pois = [p for p in pois if not (p["n"] and any(math.hypot(p["x"] - cx, p["y"] - 
                                                 for cn, cx, cy in closed))]
 for p in pois:
     del p["src"]
-print(f"  {len(pois)} establiments (OSM {n_osm}, cens +{n_cens}, Overture +{n_ov}, tancats -{before - len(pois)})")
+n_closed = before - len(pois)
+
+# Estacions de Bicing extra del joc on les reals queden lluny: cap punt del barri a més de 200 m
+MAX_GAP = 200 * M
+stations = [(p["x"], p["y"]) for p in pois if p["c"] == "bicing"]
+dock_ok = [(tx + 0.5, ty + 0.5) for ty in range(0, HEIGHT, 2) for tx in range(0, WIDTH, 2)
+           if not ground[ty * WIDTH + tx] & OUTSIDE and ground[ty * WIDTH + tx] in (SIDEWALK, PLAZA)]
+probe = [(tx + 0.5, ty + 0.5) for ty in range(0, HEIGHT, 6) for tx in range(0, WIDTH, 6) if not ground[ty * WIDTH + tx] & OUTSIDE]
+n_extra = 0
+while stations and dock_ok:
+    gap = lambda q: min((q[0] - sx) ** 2 + (q[1] - sy) ** 2 for sx, sy in stations)
+    far = max(probe, key=gap)
+    if gap(far) <= MAX_GAP ** 2:
+        break
+    nx, ny = min(dock_ok, key=lambda d: (d[0] - far[0]) ** 2 + (d[1] - far[1]) ** 2)
+    stations.append((nx, ny))
+    n_extra += 1
+    pois.append({"c": "bicing", "n": f"Estació del joc {n_extra}", "x": round(nx, 1), "y": round(ny, 1)})
+print(f"  {len(stations)} estacions de Bicing ({n_extra} extra del joc)")
+print(f"  {len(pois)} establiments (OSM {n_osm}, cens +{n_cens}, Overture +{n_ov}, tancats -{n_closed}, Bicing del joc +{n_extra})")
 
 # --- 10. Punts on poden aparèixer monedes (per al servidor) -------------
 # Tiles caminables dins del barri, sense arbres ni fonts, triats de manera repartida.

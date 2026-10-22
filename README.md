@@ -23,6 +23,7 @@ Obre <http://localhost:8737>.
 | C | centrar la càmera |
 | M | minimapa (clic sobre un punt blau per saber quin jugador és i a quina distància) |
 | L | rètols de carrers i places |
+| R | agafar o deixar una bici a una estació de Bicing |
 | N | mode fantasma (travessa edificis) |
 | P | personalitzar l'avatar |
 | Enter / T | escriure un missatge (màx. 30 caràcters) que surt en una bombolla |
@@ -83,6 +84,10 @@ Cada 5 segons el servidor fa aparèixer una moneda en un lloc accessible del bar
 Els punts on poden aparèixer els genera `build_map.py` a `server/src/spawns.json`.
 
 Les monedes que recull van a la **cartera** ("A sobre"). Si passes per un **banc o caixer** queden **assegurades** ("Banc") i ja no te les poden robar.
+
+## Bicing
+
+Hi ha **52 estacions de Bicing**: les 31 reals d'OpenStreetMap més 21 del joc, que `build_map.py` afegeix on les reals queden lluny perquè cap punt del barri quedi a més de 200 m d'una estació. Si ets a prop d'una estació i prems **R** (o el botó **BICI** al mòbil), agafes una bici i vas 3 vegades més ràpid. Per deixar-la has de tornar a una estació i prémer **R**. Els altres jugadors et veuen en bici.
 
 ## Bars, cafeteries i embriaguesa
 

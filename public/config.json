@@ -64,6 +64,10 @@
   "chat": {
     "maxLength": 116
   },
+  "bicing": {
+    "speedMultiplier": 3,
+    "radius": 2
+  },
   "magic": {
     "ghosts": 12,
     "zombies": 14,

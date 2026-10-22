@@ -437,6 +437,34 @@
       ]
     },
     {
+      "key": "bicing",
+      "title": "Bicing",
+      "icon": "🚲",
+      "fields": [
+        {
+          "key": "speedMultiplier",
+          "label": "Multiplicador de velocitat en bici",
+          "type": "number",
+          "min": 1,
+          "max": 8,
+          "step": 0.5,
+          "default": 3,
+          "unit": "×",
+          "help": "Respecte de la velocitat caminant"
+        },
+        {
+          "key": "radius",
+          "label": "Distància per agafar o deixar la bici",
+          "type": "number",
+          "min": 0.5,
+          "max": 8,
+          "step": 0.5,
+          "default": 2,
+          "unit": "caselles"
+        }
+      ]
+    },
+    {
       "key": "bank",
       "title": "Bancs",
       "icon": "🏦",

@@ -199,6 +199,8 @@ function die() {
 
 function revive() {
   npcs.dead = false;
+  state.riding = false; // la bici torna sola a l'estació
+  updateBikeUi();
   npcs.hp = CFG.player.maxHp;
   npcs.invuln = 2.5; // uns segons de gràcia
   document.getElementById("death").classList.add("hidden");

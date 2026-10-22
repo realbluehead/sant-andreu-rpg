@@ -133,6 +133,16 @@ const POI_ICONS = {
     "WWWWWWWWW",
     "....W....",
     "........."] },
+  bicing: { bg: "#d8312b", label: "Estació de Bicing", pal: { W: "#ffffff" }, g: [
+    ".........",
+    "......WW.",
+    "..WW.W...",
+    "..W.WW...",
+    ".WWWWWWW.",
+    "W..WW..WW",
+    "W.W..WW.W",
+    "W..W.W..W",
+    ".WW...WW."] },
   bike: { bg: "#dc2626", label: "Bicicletes", pal: { W: "#ffffff" }, g: [
     ".........",
     "......WW.",

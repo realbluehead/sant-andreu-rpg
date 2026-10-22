@@ -596,6 +596,12 @@ function drawMinimap() {
     mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(ox - 2.5, oy - 2.5, 5, 5);
     mmCtx.fillStyle = "#5fb3ff"; mmCtx.fillRect(ox - 1.5, oy - 1.5, 3, 3);
   }
+  // jugador seleccionat amb un clic: anella que parpelleja uns segons
+  const f = state.mmFocus, fo = f && net.others.get(f.id);
+  if (fo && performance.now() < f.until && Math.floor(performance.now() / 250) % 2) {
+    mmCtx.strokeStyle = "#ffffff"; mmCtx.lineWidth = 1.5;
+    mmCtx.beginPath(); mmCtx.arc(fo.x / TS * mmScale, fo.y / TS * mmScale, 6, 0, Math.PI * 2); mmCtx.stroke();
+  }
   drawNpcMinimap(mmCtx, mmScale);
   mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(px - 3, py - 3, 6, 6);
   mmCtx.fillStyle = "#ff4d4d"; mmCtx.fillRect(px - 2, py - 2, 4, 4);
@@ -1228,13 +1234,28 @@ function bindInput() {
   canvas.addEventListener("pointerup", end);
   canvas.addEventListener("pointercancel", end);
 
+  // El minimapa no teletransporta: un clic només diu qui hi ha en aquell punt
   mm.addEventListener("click", (e) => {
     const r = mm.getBoundingClientRect();
-    const tx = (e.clientX - r.left) / r.width * state.W, ty = (e.clientY - r.top) / r.height * state.H;
-    placePlayer(tx, ty);
-    const z = ZOOMS[state.zoomIdx];
-    state.cam.x = state.player.x - canvas.width / dpr / z / 2;
-    state.cam.y = state.player.y - canvas.height / dpr / z / 2;
+    const onMap = (x, y) => [r.left + (x / TS / state.W) * r.width, r.top + (y / TS / state.H) * r.height];
+    const near = [];
+    for (const [id, o] of net.others) {
+      const [cx, cy] = onMap(o.x, o.y);
+      const d = Math.hypot(cx - e.clientX, cy - e.clientY);
+      if (d < 12) near.push({ id, o, d });
+    }
+    near.sort((a, b) => a.d - b.d);
+    const [mx, my] = onMap(state.player.x, state.player.y);
+    if (!near.length) {
+      state.mmFocus = null;
+      toast(Math.hypot(mx - e.clientX, my - e.clientY) < 12 ? "Ets tu!" : "No hi ha cap jugador aquí");
+      return;
+    }
+    const { id, o } = near[0];
+    const meters = Math.round(Math.hypot(o.x - state.player.x, o.y - state.player.y) / TS * state.meta.metersPerTile);
+    state.mmFocus = { id, until: performance.now() + 4000 };
+    const more = near.length > 1 ? ` (+${near.length - 1} més)` : "";
+    toast(`${o.look.name.trim() || "Jugador"} és a ${meters} m de tu${more}`);
   });
   addEventListener("resize", () => { resize(); buildMinimap(); });
 }

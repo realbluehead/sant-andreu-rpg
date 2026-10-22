@@ -21,7 +21,7 @@ Obre <http://localhost:8737>.
 | + / − o roda del ratolí | zoom (també amb els botons de dalt a la dreta) |
 | Arrossegar | moure la càmera |
 | C | centrar la càmera |
-| M | minimapa (clic per teletransportar-te) |
+| M | minimapa (clic sobre un punt blau per saber quin jugador és i a quina distància) |
 | L | rètols de carrers i places |
 | N | mode fantasma (travessa edificis) |
 | P | personalitzar l'avatar |

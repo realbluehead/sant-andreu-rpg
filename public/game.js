@@ -370,6 +370,31 @@ const DEFAULT_LOOK = {
   bottom: "pants", pants: "#2c3e70", shoes: "#3b2a20", extra: "none", extraColor: "#2b6cb0",
 };
 
+// Disfressa de drac de foc (original): caputxa amb banyes, panxa clara, ales i cua amb flama
+const DRAGON = { body: hex("#f08030"), dark: hex("#c05a20"), belly: hex("#f8d8a0"), horn: hex("#f6ecd0"),
+  wing: hex("#d86a2a"), flame: [hex("#ffe14a"), hex("#ff8a1e"), hex("#e83a1a")] };
+function dragonCostume(p, dir, f) {
+  const D = DRAGON, flick = f % 2;
+  const flame = (x, y) => { p.rect(x, y, 2, 2, D.flame[1]); p.set(x, y - 1 - flick, D.flame[0]); p.set(x + 1, y + 2, D.flame[2]); };
+  if (dir === "down" || dir === "up") {
+    p.rect(1, 10, 2, 5, D.wing); p.rect(13, 10, 2, 5, D.wing); p.set(1, 9, D.dark); p.set(14, 9, D.dark); // ales
+    p.rect(3, 1, 10, 3, D.body); p.rect(3, 4, 1, 6, D.body); p.rect(12, 4, 1, 6, D.body);             // caputxa
+    p.set(4, 0, D.horn); p.set(11, 0, D.horn);                                                         // banyes
+    if (dir === "down") {
+      p.rect(6, 12, 4, 5, D.belly);                                                                    // panxa
+      p.rect(4, 3, 8, 1, D.dark);                                                                       // vora de la caputxa
+    } else {
+      p.rect(4, 4, 8, 6, D.body); p.rect(5, 11, 6, 4, D.wing);                                         // esquena
+      p.rect(7, 17, 2, 4, D.body); p.rect(8, 21, 2, 1, D.body); flame(9, 20);                         // cua
+    }
+  } else {
+    p.rect(4, 1, 8, 3, D.body); p.rect(4, 4, 3, 6, D.body); p.set(5, 0, D.horn); p.set(8, 0, D.horn); // caputxa
+    p.rect(10, 12, 2, 4, D.belly);
+    p.rect(4, 10, 3, 4, D.wing); p.set(3, 9, D.dark);                                                  // ala
+    p.rect(2, 16, 3, 2, D.body); p.rect(1, 15, 2, 1, D.body); flame(0, 13);                           // cua
+  }
+}
+
 function makeHero(dir, f, look = DEFAULT_LOOK) {
   const p = new Pix(16, 24);
   const skin = hex(look.skin), hair = hex(look.hair), shirt = hex(look.shirt), shirtD = shade(shirt, -40);
@@ -453,6 +478,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
       p.rect(5, 5, 7, 1, gold);
       p.rect(3, 6, 12, 1, shade(extra, -20));
     }
+    if (look.costume === "dragon") dragonCostume(p, "right", f);
     stripes();
     if (dir === "left") { // mirall
       const q = new Pix(16, 24);
@@ -461,6 +487,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
       return q.toCanvas();
     }
   }
+  if (look.costume === "dragon") dragonCostume(p, dir, f);
   stripes();
   p.outline(OUTLINE);
   return p.toCanvas();

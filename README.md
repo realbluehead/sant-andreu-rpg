@@ -46,7 +46,7 @@ El barri està dividit en 6 zones per carrers reals: el **Carrer Gran de Sant An
 
 Quan canvies de zona surt un avís, el panell mostra la zona actual i la música canvia amb un fos. Al minimapa es veuen les fronteres.
 
-A la **Vila dels Bruixots**, els lladres van vestits de bruixot (túnica i barret en punta) i hi viuen **fantasmes** que suren travessant parets i espanten (però no fan mal) i **zombies** lents que, si et veuen, t'empaiten i et mosseguen (-10). Els zombies no surten de la Vila. Les quantitats i el dany es configuren a l'admin.
+A la **Vila dels Bruixots**, els lladres van vestits de bruixot (túnica i barret en punta) i hi viuen **fantasmes** que suren travessant parets i espanten (però no fan mal) i **zombies** lents que, si et veuen, t'empaiten i et mosseguen (-10). Els zombies no surten de la Vila. Les quantitats i el dany es configuren a l'admin. A la **Ruta dels Monstres**, els lladres van amb una disfressa de drac de foc (caputxa amb banyes, ales i cua amb flama).
 
 ## Música
 

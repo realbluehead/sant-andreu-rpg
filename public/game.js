@@ -886,7 +886,7 @@ function bindAvatarPanel() {
 
 // ---------------------------------------------------------------------------
 // Multijugador: WebSocket cap al servidor de Cloudflare (sala única)
-const PROD_SERVER = "wss://sant-andreu-rpg.WORKERS_SUBDOMAIN.workers.dev/ws";
+const PROD_SERVER = "wss://sant-andreu-rpg.realbluehead.workers.dev/ws";
 function serverUrl() {
   const q = new URLSearchParams(location.search).get("server");
   if (q) return q;

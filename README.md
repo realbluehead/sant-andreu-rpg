@@ -41,6 +41,19 @@ Per regenerar el mapa després d'actualitzar `data/osm.json`:
 python3 build_map.py
 ```
 
+## Multijugador
+
+Quan entres, el joc es connecta per WebSocket a un servidor de Cloudflare (Workers + Durable Objects, pla gratuït) i veus els altres avatars connectats, amb el seu nom i aspecte.
+
+El codi del servidor és a `server/`:
+
+```bash
+cd server
+npm install
+npm run dev      # servidor local a ws://localhost:8787/ws (el joc en local s'hi connecta sol)
+npm run deploy   # publica a Cloudflare (cal `npx wrangler login`)
+```
+
 ## Llicència de les dades
 
 Dades del mapa © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), disponibles sota la llicència ODbL.

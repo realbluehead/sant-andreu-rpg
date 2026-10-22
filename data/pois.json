@@ -1,0 +1,6631 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-07-15T15:22:01Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 449383314,
+  "lat": 41.4330796,
+  "lon": 2.1836133,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "428",
+    "addr:postcode": "08030",
+    "addr:street": "Avinguda Meridiana",
+    "amenity": "clinic",
+    "check_date": "2026-01-08",
+    "check_date:opening_hours": "2026-01-08",
+    "name": "Centre d'Atenció Primària Sant Andreu",
+    "opening_hours": "Mo-Fr 08:00-20:00",
+    "short_name": "CAP Sant Andreu",
+    "toilets:wheelchair": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 478867119,
+  "lat": 41.4354066,
+  "lon": 2.1816530,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "9",
+    "addr:postcode": "08016",
+    "addr:street": "Passeig Andreu Nin",
+    "check_date": "2025-11-20",
+    "name": "ibis Barcelona Meridiana",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 481122006,
+  "lat": 41.4354074,
+  "lon": 2.1805915,
+  "tags": {
+    "amenity": "cinema",
+    "check_date": "2024-01-20",
+    "name": "CINESA Porta",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 839474835,
+  "lat": 41.4472500,
+  "lon": 2.1950830,
+  "tags": {
+    "addr:housenumber": "71",
+    "addr:street": "PASEO SANTA COLOMA",
+    "amenity": "fuel",
+    "brand": "Repsol",
+    "brand:wikidata": "Q174747",
+    "brand:wikipedia": "es:Repsol",
+    "fuel:GTL_diesel": "yes",
+    "fuel:diesel": "yes",
+    "fuel:lpg": "yes",
+    "fuel:octane_95": "yes",
+    "fuel:octane_98": "yes",
+    "name": "Repsol",
+    "name:ca": "Repsol",
+    "opening_hours": "24/7",
+    "operator": "Repsol",
+    "source": "Ministerio de Industria, Turismo y Comercio",
+    "source:date": "2010-08-06"
+  }
+},
+{
+  "type": "node",
+  "id": 1215020586,
+  "lat": 41.4403511,
+  "lon": 2.1850032,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "avinguda Meridiana, 479",
+    "addr:housenumber": "479",
+    "addr:postcode": "08016",
+    "addr:street": "avinguda Meridiana",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933507966",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Herrero Oliver, M. Consol",
+    "ref": "3624397",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:19 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 1215032456,
+  "lat": 41.4408242,
+  "lon": 2.1819658,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer Vinyar",
+    "brand": "Dia",
+    "brand:wikidata": "Q925132",
+    "brand:wikipedia": "es:DIA (supermercados)",
+    "name": "Dia",
+    "name:ca": "Dia",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 1320545234,
+  "lat": 41.4262731,
+  "lon": 2.1873830,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Pacífic, 61",
+    "addr:housenumber": "61",
+    "addr:postcode": "08027",
+    "addr:street": "carrer Pacífic",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933409520",
+    "dispensing": "yes",
+    "name": "Farmàcia Serra Simón, Susanna",
+    "ref": "3623416",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:06 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 1458910236,
+  "lat": 41.4300765,
+  "lon": 2.1815374,
+  "tags": {
+    "addr:housenumber": "123",
+    "addr:postcode": "08016",
+    "addr:street": "Passeig de Fabra i Puig",
+    "branch": "Fabra i Puig",
+    "brand": "CeX",
+    "brand:wikidata": "Q5055676",
+    "brand:wikipedia": "en:CeX (company)",
+    "name": "CeX",
+    "opening_hours": "Mo-Sa 10:00-21:00; Su 12:00-20:00",
+    "phone": "+34935272347",
+    "shop": "electronics",
+    "source": "survey",
+    "website": "http://webuy.com",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1458910237,
+  "lat": 41.4304004,
+  "lon": 2.1813944,
+  "tags": {
+    "amenity": "bank",
+    "brand": "Caixabank",
+    "brand:website": "https://caixabank.es",
+    "brand:wikidata": "Q847225",
+    "brand:wikipedia": "es:CaixaBank",
+    "contact:website": "https://www.caixabank.es",
+    "fee": "varies",
+    "name": "Caixabank",
+    "network": "Servired",
+    "operator": "Caixabank",
+    "operator:wikidata": "Q847225",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 1458911238,
+  "lat": 41.4303531,
+  "lon": 2.1812194,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "passeig de Fabra i Puig, 136",
+    "addr:housenumber": "136",
+    "addr:postcode": "08016",
+    "addr:street": "Passeig de Fabra i Puig",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933493282",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Maria Loreto Cardellà Pou",
+    "name:ca": "Farmàcia Maria Loreto Cardellà Pou",
+    "ref": "3621993",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:29 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 1458936579,
+  "lat": 41.4308960,
+  "lon": 2.1818758,
+  "tags": {
+    "addr:housenumber": "9",
+    "addr:postcode": "08016",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "amenity": "pub",
+    "internet_access": "no",
+    "name": "Bar Bilbilis",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1458941815,
+  "lat": 41.4313496,
+  "lon": 2.1812074,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Restaurant All i Oli",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 1465976931,
+  "lat": 41.4303903,
+  "lon": 2.1810197,
+  "tags": {
+    "addr:housenumber": "140",
+    "addr:street": "Passeig de Fabra i Puig",
+    "check_date": "2025-02-23",
+    "indoor_seating": "no",
+    "name": "Forn del Passeig",
+    "name:ca": "Forn del Passeig",
+    "outdoor_seating": "no",
+    "phone": "+34934082061",
+    "shop": "bakery",
+    "source": "knowledge",
+    "takeaway": "only",
+    "website": "https://www.forndelpasseig.com/",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 1465976933,
+  "lat": 41.4300847,
+  "lon": 2.1822508,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Yamato",
+    "source": "knowledge"
+  }
+},
+{
+  "type": "node",
+  "id": 1466014011,
+  "lat": 41.4314962,
+  "lon": 2.1805659,
+  "tags": {
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 1466014012,
+  "lat": 41.4312348,
+  "lon": 2.1805713,
+  "tags": {
+    "amenity": "bar",
+    "internet_access": "wlan",
+    "internet_access:access": "customers",
+    "internet_access:fee": "no",
+    "name": "MAXI & MAX",
+    "source": "knowledge"
+  }
+},
+{
+  "type": "node",
+  "id": 1467583584,
+  "lat": 41.4307545,
+  "lon": 2.1810239,
+  "tags": {
+    "name": "Autoservicio Manuel Alonso",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 1467583591,
+  "lat": 41.4305078,
+  "lon": 2.1815624,
+  "tags": {
+    "brand": "Movistar",
+    "brand:wikidata": "Q967735",
+    "name": "Movistar",
+    "operator": "Telefonica Movistar",
+    "shop": "telecommunication"
+  }
+},
+{
+  "type": "node",
+  "id": 1467583592,
+  "lat": 41.4304186,
+  "lon": 2.1806077,
+  "tags": {
+    "brand": "Movistar",
+    "brand:wikidata": "Q967735",
+    "name": "Movistar",
+    "operator": "Telefonica Movistar",
+    "shop": "telecommunication"
+  }
+},
+{
+  "type": "node",
+  "id": 1467583593,
+  "lat": 41.4303239,
+  "lon": 2.1821933,
+  "tags": {
+    "name": "Viajes Iberia",
+    "shop": "travel_agency"
+  }
+},
+{
+  "type": "node",
+  "id": 1467583594,
+  "lat": 41.4303270,
+  "lon": 2.1820014,
+  "tags": {
+    "brand": "Vodafone",
+    "brand:wikidata": "Q122141",
+    "brand:wikipedia": "en:Vodafone",
+    "name": "Vodafone",
+    "operator": "Vodafone",
+    "shop": "telecommunication"
+  }
+},
+{
+  "type": "node",
+  "id": 1467583595,
+  "lat": 41.4305445,
+  "lon": 2.1810098,
+  "tags": {
+    "brand": "Vodafone",
+    "brand:wikidata": "Q122141",
+    "brand:wikipedia": "en:Vodafone",
+    "name": "Vodafone",
+    "operator": "Vodafone",
+    "shop": "telecommunication"
+  }
+},
+{
+  "type": "node",
+  "id": 1477740284,
+  "lat": 41.4357760,
+  "lon": 2.1910710,
+  "tags": {
+    "name": "El molí vell",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 1735343657,
+  "lat": 41.4349497,
+  "lon": 2.1895577,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "241",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "amenity": "cafe",
+    "name": "Xurreria Sant Andreu",
+    "name:ca": "Xurreria Sant Andreu",
+    "phone": "+34933118754",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 1936552651,
+  "lat": 41.4403977,
+  "lon": 2.1973797,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Pollo Campero",
+    "brand:wikidata": "Q942741",
+    "brand:wikipedia": "en:Pollo Campero",
+    "cuisine": "chicken",
+    "name": "Pollo Campero",
+    "takeaway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 1936558003,
+  "lat": 41.4348789,
+  "lon": 2.1807879,
+  "tags": {
+    "amenity": "fast_food",
+    "cuisine": "chicken",
+    "name": "Pollo Campero"
+  }
+},
+{
+  "type": "node",
+  "id": 2031413414,
+  "lat": 41.4319624,
+  "lon": 2.1863569,
+  "tags": {
+    "addr:housenumber": "62",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Sòcrates",
+    "amenity": "restaurant",
+    "cuisine": "tapas",
+    "name": "La Divina",
+    "phone": "+34 667 253 318",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2034800451,
+  "lat": 41.4350956,
+  "lon": 2.1916255,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2026-01-06",
+    "name": "La Terraza",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2034800459,
+  "lat": 41.4358114,
+  "lon": 2.1911120,
+  "tags": {
+    "amenity": "pub",
+    "name": "L'Orfila 9",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 2034800466,
+  "lat": 41.4372492,
+  "lon": 2.1913439,
+  "tags": {
+    "amenity": "cafe",
+    "cuisine": "spanish",
+    "name": "Ikero",
+    "source": "survey"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950736,
+  "lat": 41.4289381,
+  "lon": 2.1827039,
+  "tags": {
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950759,
+  "lat": 41.4288210,
+  "lon": 2.1819404,
+  "tags": {
+    "brand": "Lidl",
+    "brand:website": "https://www.lidl.es",
+    "brand:wikidata": "Q151954",
+    "brand:wikipedia": "en:Lidl",
+    "check_date": "2025-02-23",
+    "name": "Lidl",
+    "shop": "supermarket",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950766,
+  "lat": 41.4292996,
+  "lon": 2.1822972,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950771,
+  "lat": 41.4295591,
+  "lon": 2.1811277,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950777,
+  "lat": 41.4293038,
+  "lon": 2.1826780,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950802,
+  "lat": 41.4291187,
+  "lon": 2.1824125,
+  "tags": {
+    "shop": "car_repair"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950809,
+  "lat": 41.4295209,
+  "lon": 2.1823293,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950821,
+  "lat": 41.4288231,
+  "lon": 2.1833245,
+  "tags": {
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2063950839,
+  "lat": 41.4297482,
+  "lon": 2.1818894,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 2684159676,
+  "lat": 41.4416172,
+  "lon": 2.1827397,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "26",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer del Vinyar",
+    "name": "Super Moyer",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2684744022,
+  "lat": 41.4423410,
+  "lon": 2.1830669,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "34",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer del Vinyar",
+    "name": "PAPIROTECNIC S.L.",
+    "shop": "stationery"
+  }
+},
+{
+  "type": "node",
+  "id": 2684744024,
+  "lat": 41.4407244,
+  "lon": 2.1826364,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Argullos, 49",
+    "addr:housenumber": "49",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer d'Argullós",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933540304",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Lavilla Biarge, Rodolf",
+    "ref": "3621661",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:19 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 2684909265,
+  "lat": 41.4391569,
+  "lon": 2.1821812,
+  "tags": {
+    "name": "Supermercat SuperDragó",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2684909269,
+  "lat": 41.4386777,
+  "lon": 2.1811350,
+  "tags": {
+    "name": "Forn de Pa MediaVilla",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 2684909281,
+  "lat": 41.4422592,
+  "lon": 2.1847634,
+  "tags": {
+    "brand": "Sorli Discau",
+    "brand:wikidata": "Q21034458",
+    "brand:wikipedia": "ca:La Sirena",
+    "name": "Sorli Discau",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2684909287,
+  "lat": 41.4427910,
+  "lon": 2.1847918,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Tissó, 4",
+    "addr:housenumber": "4",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer d'En Tissó",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933544103",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Martínez Folch, Gonzalo",
+    "ref": "3623811",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:17 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 2686532052,
+  "lat": 41.4400902,
+  "lon": 2.1818189,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "3-7",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Baltasar Gracián",
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "name": "Condis",
+    "operator": "Condis",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 2689736934,
+  "lat": 41.4403298,
+  "lon": 2.1817019,
+  "tags": {
+    "addr:floor": "0",
+    "addr:housenumber": "10",
+    "addr:street": "Carrer de Baltasar Gracián",
+    "amenity": "restaurant",
+    "bar": "yes",
+    "capacity": "35",
+    "changing_table": "no",
+    "check_date": "2024-12-29",
+    "cuisine": "spanish",
+    "description": "Especialidad bocadillos y tapas",
+    "internet_access": "wlan",
+    "internet_access:fee": "customers",
+    "level": "0",
+    "name": "Bar Bodega Molina",
+    "name:ca": "Bar Bodega Molina",
+    "name:es": "Bar Bodega Molina",
+    "outdoor_seating": "yes",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "smoking": "outside",
+    "source": "survey",
+    "toilets": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 2702746120,
+  "lat": 41.4388577,
+  "lon": 2.1890672,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "7",
+    "addr:postcode": "08030",
+    "addr:street": "Guardiola i Feliu",
+    "name": "Talens",
+    "shop": "stationery",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 3123673058,
+  "lat": 41.4412809,
+  "lon": 2.1989235,
+  "tags": {
+    "addr:housenumber": "2",
+    "addr:street": "Paseo Portesí",
+    "brand": "Leroy Merlin",
+    "brand:wikidata": "Q889624",
+    "brand:wikipedia": "en:Leroy Merlin",
+    "contact:facebook": "leroymerlines",
+    "contact:instagram": "leroymerlines",
+    "contact:twitter": "leroymerlin_es",
+    "email": "atencioncliente.lamaquinista@leroymerlin.es",
+    "name": "Leroy Merlin",
+    "opening_hours": "Mo-Sa 9:00-21:00; Jun-Sep Mo-Sa 9:00-22:00",
+    "phone": "+34932748484",
+    "shop": "doityourself",
+    "website": "https://www.leroymerlin.es"
+  }
+},
+{
+  "type": "node",
+  "id": 3450858350,
+  "lat": 41.4306588,
+  "lon": 2.1894382,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "105",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "name": "Calçat Andrea",
+    "name:ca": "Calçat Andrea",
+    "shop": "shoes"
+  }
+},
+{
+  "type": "node",
+  "id": 3612155093,
+  "lat": 41.4303330,
+  "lon": 2.1848722,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Llenguadoc, 118",
+    "addr:housenumber": "118",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Llenguadoc",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933966056",
+    "dispensing": "yes",
+    "name": "Farmàcia Peris Grau, Joaquim",
+    "name:ca": "Farmàcia Peris Grau, Joaquim",
+    "ref": "3621008",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:12 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 3612155197,
+  "lat": 41.4302523,
+  "lon": 2.1895477,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "rambla Fabra I Puig, 2",
+    "addr:housenumber": "2",
+    "addr:postcode": "08030",
+    "addr:street": "rambla Fabra I Puig",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933459058",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Castellanos Llorens, Xavier",
+    "ref": "3620606",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:28 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 3739065067,
+  "lat": 41.4358092,
+  "lon": 2.1909325,
+  "tags": {
+    "amenity": "pub",
+    "name": "Territori Blau",
+    "name:ca": "Territori Blau"
+  }
+},
+{
+  "type": "node",
+  "id": 3802107533,
+  "lat": 41.4393270,
+  "lon": 2.1908313,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Pura Brasa",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3843439819,
+  "lat": 41.4375487,
+  "lon": 2.1936151,
+  "tags": {
+    "brand": "Mercadona",
+    "brand:wikidata": "Q377705",
+    "brand:wikipedia": "es:Mercadona",
+    "name": "Mercadona",
+    "name:ca": "Mercadona",
+    "shop": "supermarket",
+    "toilets:wheelchair": "yes",
+    "website": "https://www.mercadona.es",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3945302891,
+  "lat": 41.4255051,
+  "lon": 2.1869263,
+  "tags": {
+    "addr:housenumber": "326",
+    "addr:street": "Avinguda Meridiana",
+    "brand": "Mercadona",
+    "brand:wikidata": "Q377705",
+    "brand:wikipedia": "es:Mercadona",
+    "name": "Mercadona",
+    "name:ca": "Mercadona",
+    "phone": "+34936343430",
+    "shop": "supermarket",
+    "website": "https://www.mercadona.es"
+  }
+},
+{
+  "type": "node",
+  "id": 3992999159,
+  "lat": 41.4374722,
+  "lon": 2.1965954,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Rías Gallegas"
+  }
+},
+{
+  "type": "node",
+  "id": 4288047598,
+  "lat": 41.4314904,
+  "lon": 2.1943998,
+  "tags": {
+    "addr:housenumber": "86",
+    "addr:street": "Carrer del Segre",
+    "name": "DyN clínica Podologica",
+    "shop": "beauty"
+  }
+},
+{
+  "type": "node",
+  "id": 4288485810,
+  "lat": 41.4256128,
+  "lon": 2.1937425,
+  "tags": {
+    "access": "yes",
+    "addr:housenumber": "1-3",
+    "addr:street": "Carrer del Camp del Ferro",
+    "amenity": "library",
+    "check_date": "2023-12-26",
+    "name": "Biblioteca de la Sagrera-Marina Clotet",
+    "note": "Gestiona: Diputació de Barcelona - Consorci de Biblioteques de Barcelona",
+    "opening_hours": "Mo 15:30-20:00; Tu-Fr 09:30-13:30,15:30-20:00; Sa 10:00-14:00; Su off",
+    "operator": "Diputació de Barcelona",
+    "wheelchair": "yes",
+    "wikidata": "Q85693367",
+    "wikimedia_commons": "Category:Biblioteca La Sagrera-Marina Clotet"
+  }
+},
+{
+  "type": "node",
+  "id": 4337200789,
+  "lat": 41.4354928,
+  "lon": 2.1806468,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:postcode": "08016",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "brand:wikipedia": "es:McDonald's",
+    "cuisine": "burger",
+    "diet:gluten_free": "yes",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "McDonald's",
+    "name:ca": "McDonald's",
+    "opening_hours": "Su-Th 09:00-00:00; Fr-Sa 09:00-01:00",
+    "outdoor_seating": "yes",
+    "smoking": "no",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "toilets:access": "customers",
+    "website": "https://mcdonalds.es",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4638522949,
+  "lat": 41.4351011,
+  "lon": 2.1813542,
+  "tags": {
+    "brand": "Mercadona",
+    "brand:wikidata": "Q377705",
+    "brand:wikipedia": "es:Mercadona",
+    "name": "Mercadona",
+    "name:ca": "Mercadona",
+    "shop": "supermarket",
+    "website": "https://www.mercadona.es"
+  }
+},
+{
+  "type": "node",
+  "id": 4762854022,
+  "lat": 41.4300847,
+  "lon": 2.1824324,
+  "tags": {
+    "amenity": "fast_food",
+    "cuisine": "kebab"
+  }
+},
+{
+  "type": "node",
+  "id": 4762859824,
+  "lat": 41.4266808,
+  "lon": 2.1823241,
+  "tags": {
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 4762864130,
+  "lat": 41.4295444,
+  "lon": 2.1827375,
+  "tags": {
+    "name": "Planet Mobils",
+    "shop": "mobile_phone"
+  }
+},
+{
+  "type": "node",
+  "id": 4762934621,
+  "lat": 41.4300779,
+  "lon": 2.1826793,
+  "tags": {
+    "amenity": "fast_food",
+    "cuisine": "burger",
+    "name": "Ovante",
+    "name:es": "Ovante"
+  }
+},
+{
+  "type": "node",
+  "id": 4762934622,
+  "lat": 41.4259246,
+  "lon": 2.1825869,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Pardo, 4",
+    "addr:housenumber": "4",
+    "addr:postcode": "08027",
+    "addr:street": "Carrer de Pardo",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933526058",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Jorba Ylla, M. Antònia",
+    "ref": "3623242",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:19 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 4881181780,
+  "lat": 41.4413687,
+  "lon": 2.1825458,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "20",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer del Vinyar",
+    "name": "Ciudad&Cash",
+    "shop": "hardware"
+  }
+},
+{
+  "type": "node",
+  "id": 4881181781,
+  "lat": 41.4415130,
+  "lon": 2.1826605,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "24",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer del Vinyar",
+    "brand": "Clarel",
+    "brand:wikidata": "Q48784350",
+    "name": "Clarel",
+    "shop": "chemist",
+    "website": "https://www.clarel.es/"
+  }
+},
+{
+  "type": "node",
+  "id": 4881181797,
+  "lat": 41.4420581,
+  "lon": 2.1834715,
+  "tags": {
+    "amenity": "bar",
+    "name": "Sierra Nevada",
+    "outdoor_seating": "yes",
+    "smoking": "outside"
+  }
+},
+{
+  "type": "node",
+  "id": 4882275490,
+  "lat": 41.4264305,
+  "lon": 2.1874519,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "74",
+    "addr:postcode": "08027",
+    "addr:street": "Carrer del Pacífic",
+    "amenity": "restaurant",
+    "cuisine": "seafood;spanish",
+    "name": "La Paradeta",
+    "opening_hours": "Tu-Th 20:00-23:30; Fr 20:00-24:00; Sa 13:00-16:00,20:00-24:00",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4916382322,
+  "lat": 41.4317886,
+  "lon": 2.1892454,
+  "tags": {
+    "addr:housenumber": "143",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "check_date": "2026-05-25",
+    "internet_access": "wlan",
+    "name": "El forn de Sant Andreu",
+    "name:ca": "El forn de Sant Andreu",
+    "phone": "+34933467252",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5005313036,
+  "lat": 41.4415407,
+  "lon": 2.1906233,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:floor": "1",
+    "addr:housename": "Casa Bloc",
+    "addr:housenumber": "91",
+    "addr:postcode": "08030",
+    "addr:room": "11",
+    "addr:street": "Passeig de Torras i Bages",
+    "addr:unit": "2",
+    "charge": "4 EUR",
+    "fee": "yes",
+    "name": "Pis-Museu Casa Bloc",
+    "name:ca": "Pis-Museu Casa Bloc",
+    "opening_hours": "Sa 11:00-12:30; Aug,week 01 Sep off",
+    "operator": "Ajuntament de Barcelona",
+    "phone": "+34932566800",
+    "reservation": "required",
+    "tourism": "museum",
+    "website": "http://www.museudeldisseny.cat/ca/exposicio/pis-museu-de-la-casa-bloc-habitatge-111",
+    "wheelchair": "limited",
+    "wikidata": "Q2836969",
+    "wikimedia_commons": "Category:Casa Bloc",
+    "wikipedia": "ca:Casa Bloc"
+  }
+},
+{
+  "type": "node",
+  "id": 5016316856,
+  "lat": 41.4362341,
+  "lon": 2.1896734,
+  "tags": {
+    "brand": "Bon Area",
+    "brand:wikidata": "Q11924743",
+    "brand:wikipedia": "ca:Grup Alimentari Guissona",
+    "check_date": "2024-08-24",
+    "name": "Bon Area",
+    "shop": "supermarket",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5210862782,
+  "lat": 41.4302209,
+  "lon": 2.1867737,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "La Rambleta",
+    "name:ca": "La Rambleta"
+  }
+},
+{
+  "type": "node",
+  "id": 5210881007,
+  "lat": 41.4362228,
+  "lon": 2.1910354,
+  "tags": {
+    "name": "Kiosc Recuperat",
+    "opening_hours": "Sa 10:00-14:00",
+    "shop": "books",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5210881008,
+  "lat": 41.4370905,
+  "lon": 2.1909925,
+  "tags": {
+    "addr:housenumber": "13",
+    "addr:street": "Passeig de Torras i Bages",
+    "amenity": "fast_food",
+    "check_date": "2026-01-06",
+    "cuisine": "turkish",
+    "name": "Nyam nyam"
+  }
+},
+{
+  "type": "node",
+  "id": 5210884653,
+  "lat": 41.4359158,
+  "lon": 2.1929260,
+  "tags": {
+    "amenity": "pub",
+    "check_date": "2024-01-15",
+    "indoor_seating": "yes",
+    "name": "Bar Restaurant Tres Temps",
+    "outdoor_seating": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5262543718,
+  "lat": 41.4395263,
+  "lon": 2.1821968,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "24",
+    "ebike": "yes",
+    "name": "464 - Rio de Janeiro 96",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "464"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548968,
+  "lat": 41.4346300,
+  "lon": 2.1817470,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "32",
+    "ebike": "yes",
+    "ele": "42",
+    "name": "298 - Andreu Nin 22",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "298"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548970,
+  "lat": 41.4365050,
+  "lon": 2.1838770,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "32",
+    "ebike": "yes",
+    "ele": "42",
+    "name": "296 - Rosselló i Porcel 1",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "296"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548979,
+  "lat": 41.4367080,
+  "lon": 2.1860590,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "22",
+    "ebike": "yes",
+    "ele": "35",
+    "name": "285 - Malats 98",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "285"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548987,
+  "lat": 41.4306930,
+  "lon": 2.1822250,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "30",
+    "ebike": "yes",
+    "ele": "39",
+    "name": "275 - Rio de Janeiro 3",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "275"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548988,
+  "lat": 41.4300710,
+  "lon": 2.1847300,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "29",
+    "ebike": "yes",
+    "ele": "34",
+    "name": "274 - Rambla Fabra i Puig 67",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "274"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548989,
+  "lat": 41.4304784,
+  "lon": 2.1834115,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "36",
+    "ebike": "yes",
+    "ele": "38",
+    "name": "273 - Av. Meridiana 404",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "273"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548992,
+  "lat": 41.4484642,
+  "lon": 2.1898267,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "27",
+    "ebike": "yes",
+    "ele": "37",
+    "name": "270 - Ctra. de Ribes 77",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "270"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548993,
+  "lat": 41.4481280,
+  "lon": 2.1928260,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "ele": "26",
+    "name": "269 - Via Barcino 121",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "269"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548994,
+  "lat": 41.4457050,
+  "lon": 2.1928920,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "ele": "26",
+    "name": "268 - Fernando Pessoa 72",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "268"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548995,
+  "lat": 41.4433950,
+  "lon": 2.1906230,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "ele": "27",
+    "name": "267 - Pg. Torras i Bages 129",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "267"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548996,
+  "lat": 41.4276113,
+  "lon": 2.1840804,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "25",
+    "ebike": "yes",
+    "ele": "37",
+    "name": "266 - Concepció Arenal 176",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "266"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548998,
+  "lat": 41.4384316,
+  "lon": 2.1954210,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "10",
+    "addr:street": "Carrer de Ferran Junoy",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "32",
+    "ebike": "yes",
+    "name": "264 - Ferran Junoy 10",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "264"
+  }
+},
+{
+  "type": "node",
+  "id": 5262548999,
+  "lat": 41.4376560,
+  "lon": 2.1913860,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "ele": "25",
+    "name": "263 - Joan Torras 28",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "263"
+  }
+},
+{
+  "type": "node",
+  "id": 5262549001,
+  "lat": 41.4361800,
+  "lon": 2.1929520,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "24",
+    "ebike": "yes",
+    "ele": "21",
+    "name": "260 - Plaça de l'Estació 6",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "260"
+  }
+},
+{
+  "type": "node",
+  "id": 5262549002,
+  "lat": 41.4391090,
+  "lon": 2.1858180,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "ele": "34",
+    "name": "259 - Bartrina 14",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "259"
+  }
+},
+{
+  "type": "node",
+  "id": 5262549004,
+  "lat": 41.4359980,
+  "lon": 2.1895240,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "24",
+    "ebike": "yes",
+    "ele": "25",
+    "name": "256 - Malats 28",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "256"
+  }
+},
+{
+  "type": "node",
+  "id": 5262549005,
+  "lat": 41.4311830,
+  "lon": 2.1858520,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "22",
+    "ebike": "yes",
+    "ele": "30",
+    "name": "255 - Irlanda 11",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "255"
+  }
+},
+{
+  "type": "node",
+  "id": 5262549006,
+  "lat": 41.4303430,
+  "lon": 2.1895810,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "32",
+    "ebike": "yes",
+    "ele": "27",
+    "name": "254 - Gran de Sant Andreu 93",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "254"
+  }
+},
+{
+  "type": "node",
+  "id": 5262549007,
+  "lat": 41.4299770,
+  "lon": 2.1918210,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "25",
+    "ebike": "yes",
+    "ele": "25",
+    "name": "253 - Onze de Setembre 37",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "253"
+  }
+},
+{
+  "type": "node",
+  "id": 5262549008,
+  "lat": 41.4262480,
+  "lon": 2.1901320,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "ele": "27",
+    "name": "250 - Portugal 12",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "250"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863046,
+  "lat": 41.4321164,
+  "lon": 2.1837595,
+  "tags": {
+    "name": "Evaristo Foxo",
+    "shop": "galician"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863047,
+  "lat": 41.4322582,
+  "lon": 2.1837515,
+  "tags": {
+    "name": "Óptica Christian",
+    "shop": "optician"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863048,
+  "lat": 41.4322501,
+  "lon": 2.1835476,
+  "tags": {
+    "amenity": "restaurant",
+    "indoor_seating": "yes",
+    "name": "Rest. Alexandre",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863050,
+  "lat": 41.4323687,
+  "lon": 2.1835101,
+  "tags": {
+    "name": "Eurosport",
+    "shop": "sports"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863051,
+  "lat": 41.4324271,
+  "lon": 2.1835101,
+  "tags": {
+    "name": "Bazar Oriente",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863061,
+  "lat": 41.4325001,
+  "lon": 2.1835043,
+  "tags": {
+    "amenity": "bar",
+    "name": "Bar Meridiana"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863062,
+  "lat": 41.4325859,
+  "lon": 2.1835181,
+  "tags": {
+    "name": "Pastissería Forn del Passeig",
+    "shop": "pastry"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863065,
+  "lat": 41.4327147,
+  "lon": 2.1835275,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "avinguda Meridiana, 422",
+    "addr:housenumber": "422",
+    "addr:postcode": "08030",
+    "addr:street": "Avinguda Meridiana",
+    "amenity": "pharmacy",
+    "check_date": "2026-01-08",
+    "check_date:opening_hours": "2026-01-08",
+    "contact:phone": "+34933110201",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Marcet Fernández, Ignasi",
+    "name:ca": "Farmàcia Marcet Fernández, Ignasi",
+    "opening_hours": "Mo-Fr 08:30-20:30; Sa 09:00-14:00",
+    "operator": "ecoceutics",
+    "ref": "3623506",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:17 AM +0000",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863084,
+  "lat": 41.4333119,
+  "lon": 2.1836763,
+  "tags": {
+    "check_date": "2026-01-08",
+    "check_date:opening_hours": "2026-01-08",
+    "name": "Ortopèdia Andorrà",
+    "name:ca": "Ortopèdia Andorrà",
+    "opening_hours": "Mo-Fr 09:00-13:30, Mo-Th 16:30-20:00",
+    "shop": "medical_supply",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863086,
+  "lat": 41.4335502,
+  "lon": 2.1837327,
+  "tags": {
+    "name": "Barcelona Móviles",
+    "shop": "mobile_phone"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863091,
+  "lat": 41.4336306,
+  "lon": 2.1837675,
+  "tags": {
+    "name": "3X5 Informàtica",
+    "name:ca": "3X5 Informàtica",
+    "shop": "computer"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863092,
+  "lat": 41.4338357,
+  "lon": 2.1838266,
+  "tags": {
+    "amenity": "restaurant"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863106,
+  "lat": 41.4343545,
+  "lon": 2.1841216,
+  "tags": {
+    "name": "Fruit Ria",
+    "shop": "greengrocer"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863107,
+  "lat": 41.4344671,
+  "lon": 2.1841377,
+  "tags": {
+    "name": "Perruquers Sar-Sua",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863109,
+  "lat": 41.4341356,
+  "lon": 2.1841434,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer de Concepció Arenal, 310",
+    "addr:housenumber": "310",
+    "addr:postcode": "08030",
+    "addr:street": "carrer de Concepció Arenal",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933112053",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Tomàs Busquet Masip - Xavier Busquet Aguiló",
+    "opening_hours": "09:00-13:30,16:30-20:00",
+    "ref": "3623508",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:30 AM +0000",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863110,
+  "lat": 41.4346119,
+  "lon": 2.1841779,
+  "tags": {
+    "name": "La Fábrica del Cartucho",
+    "shop": "printer_ink"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863444,
+  "lat": 41.4398098,
+  "lon": 2.1866616,
+  "tags": {
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "name": "Condis",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5271863447,
+  "lat": 41.4285428,
+  "lon": 2.1835637,
+  "tags": {
+    "name": "Galerías del Tresillo",
+    "shop": "furniture"
+  }
+},
+{
+  "type": "node",
+  "id": 5453781021,
+  "lat": 41.4330099,
+  "lon": 2.1893771,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Gran de Sant Andreu, 186",
+    "addr:housenumber": "186",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Gran de Sant Andreu",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933366351",
+    "dispensing": "yes",
+    "name": "Farmàcia Mor Puig, Marta-Rodríguez Mur, Cristina",
+    "name:ca": "Farmàcia Mor Puig, Marta-Rodríguez Mur, Cristina",
+    "ref": "3621006",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:15 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5453882724,
+  "lat": 41.4337985,
+  "lon": 2.1892481,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Gran de Sant Andreu, 211",
+    "addr:housenumber": "211",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Gran de Sant Andreu",
+    "amenity": "pharmacy",
+    "check_date": "2026-01-06",
+    "contact:email": "info@farmaciaclapes.es",
+    "contact:phone": "+34933466356",
+    "dispensing": "yes",
+    "name": "Farmàcia Jaume i Antoni Clapés Viñas",
+    "opening_hours": "Mo-Su 09:00-22:00",
+    "ref": "3621482",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:28 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5453933822,
+  "lat": 41.4313193,
+  "lon": 2.1892986,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Gran de Sant Andreu, 125",
+    "addr:housenumber": "125",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Gran de Sant Andreu",
+    "alt_name": "Farmàcia Anna Benasco Buscató",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933468803",
+    "dispensing": "yes",
+    "name": "Farmàcia Buscató",
+    "opening_hours": "Mo-Sa 09:00-20:30",
+    "ref": "3621481",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:32 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5453939121,
+  "lat": 41.4291855,
+  "lon": 2.1903052,
+  "tags": {
+    "brand:wikidata": "Q11903664",
+    "name": "Abacus",
+    "shop": "books"
+  }
+},
+{
+  "type": "node",
+  "id": 5633317573,
+  "lat": 41.4397961,
+  "lon": 2.1907955,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "passeig de Torras i Bages, 83",
+    "addr:housenumber": "83",
+    "addr:postcode": "08030",
+    "addr:street": "passeig de Torras i Bages",
+    "amenity": "pharmacy",
+    "dispensing": "yes",
+    "name": "Farmàcia Josep Maria Planas Pascual",
+    "phone": "+34 933 45 06 34",
+    "ref": "3621152",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:11 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5633330855,
+  "lat": 41.4389109,
+  "lon": 2.1908637,
+  "tags": {
+    "addr:housenumber": "53",
+    "addr:street": "Passeig de Torras i Bages",
+    "amenity": "doctors",
+    "healthcare": "doctor",
+    "name": "Centro Médico Adeslas",
+    "phone": "+34 932744988"
+  }
+},
+{
+  "type": "node",
+  "id": 5679982317,
+  "lat": 41.4407774,
+  "lon": 2.1980025,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "italian",
+    "diet:gluten_free": "yes",
+    "name": "Ginos"
+  }
+},
+{
+  "type": "node",
+  "id": 5679985335,
+  "lat": 41.4393537,
+  "lon": 2.1989298,
+  "tags": {
+    "amenity": "fast_food",
+    "cuisine": "burger",
+    "name": "La Burguesa",
+    "phone": "+34933608893",
+    "website": "https://www.laburguesa.es/"
+  }
+},
+{
+  "type": "node",
+  "id": 5764130888,
+  "lat": 41.4385713,
+  "lon": 2.1960087,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "4",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de São Paulo",
+    "amenity": "fast_food",
+    "cuisine": "kebab;pizza;chicken",
+    "name": "Maki pizzeria, kebab y pollo a l'ast"
+  }
+},
+{
+  "type": "node",
+  "id": 5810477832,
+  "lat": 41.4300880,
+  "lon": 2.1806258,
+  "tags": {
+    "amenity": "dentist",
+    "brand": "Dentix",
+    "brand:wikidata": "Q30505320",
+    "brand:wikipedia": "es:Dentix",
+    "healthcare": "dentist",
+    "name": "Dentix"
+  }
+},
+{
+  "type": "node",
+  "id": 5810478994,
+  "lat": 41.4292104,
+  "lon": 2.1841892,
+  "tags": {
+    "brand": "General Óptica",
+    "brand:wikidata": "Q62391672",
+    "check_date": "2026-01-08",
+    "name": "General Óptica",
+    "shop": "optician"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816654,
+  "lat": 41.4283442,
+  "lon": 2.1904970,
+  "tags": {
+    "name": "LaMiniPelu",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816655,
+  "lat": 41.4357971,
+  "lon": 2.1908940,
+  "tags": {
+    "amenity": "bar",
+    "indoor_seating": "yes",
+    "name": "Bar Beny",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816656,
+  "lat": 41.4361612,
+  "lon": 2.1908114,
+  "tags": {
+    "shop": "mobile_phone"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816753,
+  "lat": 41.4256929,
+  "lon": 2.1911368,
+  "tags": {
+    "name": "Noor Supermercat",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816754,
+  "lat": 41.4263927,
+  "lon": 2.1910973,
+  "tags": {
+    "amenity": "bar"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816755,
+  "lat": 41.4272012,
+  "lon": 2.1910858,
+  "tags": {
+    "addr:housenumber": "198",
+    "addr:street": "Carrer Gran de la Sagrera",
+    "brand": "Suma",
+    "brand:wikidata": "Q58012362",
+    "check_date": "2023-12-23",
+    "delivery:covid19": "no",
+    "name": "Suma",
+    "name:ca": "Suma",
+    "opening_hours": "Mo-Su,PH 09:00-23:00",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "shop": "supermarket",
+    "takeaway:covid19": "only"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816853,
+  "lat": 41.4260810,
+  "lon": 2.1911147,
+  "tags": {
+    "addr:housenumber": "172",
+    "addr:street": "Carrer Gran de la Sagrera",
+    "amenity": "bank",
+    "brand": "Caixabank",
+    "brand:website": "https://caixabank.es",
+    "brand:wikidata": "Q847225",
+    "brand:wikipedia": "es:CaixaBank",
+    "contact:website": "https://www.caixabank.es",
+    "name": "Caixabank"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816854,
+  "lat": 41.4279119,
+  "lon": 2.1906334,
+  "tags": {
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "amenity": "bar",
+    "name": "L'ideal"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816855,
+  "lat": 41.4302381,
+  "lon": 2.1897877,
+  "tags": {
+    "amenity": "bank",
+    "brand": "Banco Santander",
+    "brand:en": "Santander Bank",
+    "brand:es": "Banco Santander",
+    "brand:wikidata": "Q6496310",
+    "brand:wikipedia": "es:Banco Santander",
+    "name": "Banco Santander",
+    "name:ca": "Banc Santander",
+    "name:en": "Santander Bank",
+    "name:es": "Banco Santander",
+    "official_name": "Santander Group",
+    "operator": "Santander"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816856,
+  "lat": 41.4358713,
+  "lon": 2.1913031,
+  "tags": {
+    "amenity": "bank",
+    "brand": "Caixabank",
+    "brand:-2021": "Bankia",
+    "brand:website": "https://caixabank.es",
+    "brand:wikidata": "Q847225",
+    "brand:wikidata:-2021": "Q806807",
+    "brand:wikipedia": "es:CaixaBank",
+    "brand:wikipedia:-2021": "es:Bankia",
+    "contact:website": "https://www.caixabank.es",
+    "name": "Caixabank",
+    "name:-2021": "Bankia",
+    "operator": "Caixabank",
+    "operator:-2021": "Bankia",
+    "operator:wikidata": "Q847225",
+    "operator:wikidata:-2021": "Q806807",
+    "operator:wikipedia": "es:CaixaBank",
+    "operator:wikipedia:-2021": "es:Bankia"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816954,
+  "lat": 41.4297272,
+  "lon": 2.1900149,
+  "tags": {
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "name": "Condis",
+    "operator": "Condis",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 5820816955,
+  "lat": 41.4355315,
+  "lon": 2.1898677,
+  "tags": {
+    "check_date": "2026-05-25",
+    "name": "Pa artesà del Vallès",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 5820817053,
+  "lat": 41.4286048,
+  "lon": 2.1903591,
+  "tags": {
+    "name": "Rumble bikes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 5820817153,
+  "lat": 41.4299281,
+  "lon": 2.1900325,
+  "tags": {
+    "amenity": "bank",
+    "brand": "Caixabank",
+    "brand:website": "https://caixabank.es",
+    "brand:wikidata": "Q847225",
+    "brand:wikipedia": "es:CaixaBank",
+    "contact:website": "https://www.caixabank.es",
+    "name": "Caixabank",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511036,
+  "lat": 41.4393801,
+  "lon": 2.1984101,
+  "tags": {
+    "amenity": "cinema",
+    "name": "CINESA 3D La Maquinista"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511038,
+  "lat": 41.4396495,
+  "lon": 2.1986756,
+  "tags": {
+    "brand": "Apple Store",
+    "brand:wikidata": "Q421253",
+    "brand:wikipedia": "en:Apple Store",
+    "name": "Apple Store",
+    "shop": "electronics"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511042,
+  "lat": 41.4396254,
+  "lon": 2.1984101,
+  "tags": {
+    "brand": "Zara",
+    "brand:wikidata": "Q147662",
+    "brand:wikipedia": "en:Zara (retailer)",
+    "name": "Zara",
+    "name:ca": "Zara",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511043,
+  "lat": 41.4395148,
+  "lon": 2.1977100,
+  "tags": {
+    "brand": "H&M",
+    "brand:wikidata": "Q188326",
+    "brand:wikipedia": "en:H&M",
+    "name": "H&M",
+    "name:ca": "H&M",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511044,
+  "lat": 41.4394445,
+  "lon": 2.1986836,
+  "tags": {
+    "brand": "Forever 21",
+    "brand:wikidata": "Q1060537",
+    "brand:wikipedia": "en:Forever 21",
+    "name": "Forever 21",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511055,
+  "lat": 41.4395088,
+  "lon": 2.1970555,
+  "tags": {
+    "brand": "Decathlon",
+    "brand:wikidata": "Q509349",
+    "brand:wikipedia": "es:Decathlon (empresa)",
+    "contact:instagram": "decathlonlamaquinista",
+    "name": "Decathlon",
+    "opening_hours": "Mo-Sa 09:00-21:00",
+    "phone": "+34935215736",
+    "shop": "sports",
+    "website": "https://www.decathlon.es/ca/store-view/tienda-de-deportes-la-maquinista-barcelona-0070187701877"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511056,
+  "lat": 41.4399813,
+  "lon": 2.1985308,
+  "tags": {
+    "name": "La Maquinista",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511057,
+  "lat": 41.4396013,
+  "lon": 2.1981955,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Yogurtería Danone"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511058,
+  "lat": 41.4399109,
+  "lon": 2.1976027,
+  "tags": {
+    "amenity": "cafe",
+    "brand": "Starbucks",
+    "brand:wikidata": "Q37158",
+    "brand:wikipedia": "en:Starbucks",
+    "cuisine": "coffee_shop",
+    "diet:gluten_free": "yes",
+    "name": "Starbucks",
+    "name:ca": "Starbucks",
+    "official_name": "Starbucks Coffee",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511339,
+  "lat": 41.4399009,
+  "lon": 2.1987587,
+  "tags": {
+    "brand": "Nespresso",
+    "brand:wikidata": "Q301301",
+    "brand:wikipedia": "en:Nespresso",
+    "name": "Nespresso",
+    "shop": "coffee"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511340,
+  "lat": 41.4401743,
+  "lon": 2.1973613,
+  "tags": {
+    "name": "MACSON",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511343,
+  "lat": 41.4403674,
+  "lon": 2.1989277,
+  "tags": {
+    "brand": "Fnac",
+    "brand:wikidata": "Q676585",
+    "name": "Fnac",
+    "shop": "computer"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511349,
+  "lat": 41.4417708,
+  "lon": 2.1978468,
+  "tags": {
+    "name": "DRIM",
+    "shop": "toys"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511354,
+  "lat": 41.4409485,
+  "lon": 2.1975384,
+  "tags": {
+    "amenity": "restaurant",
+    "brand": "Foster's Hollywood",
+    "brand:wikidata": "Q5864366",
+    "brand:wikipedia": "es:Foster's Hollywood",
+    "cuisine": "american",
+    "diet:gluten_free": "yes",
+    "name": "Foster's Hollywood"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511355,
+  "lat": 41.4407756,
+  "lon": 2.1974659,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Burger King",
+    "brand:wikidata": "Q177054",
+    "brand:wikipedia": "es:Burger King",
+    "cuisine": "burger",
+    "diet:gluten_free": "yes",
+    "name": "Burger King",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511356,
+  "lat": 41.4393841,
+  "lon": 2.1980587,
+  "tags": {
+    "brand": "Mango",
+    "brand:wikidata": "Q136503",
+    "brand:wikipedia": "en:Mango (retailer)",
+    "name": "Mango",
+    "name:ca": "Mango",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511364,
+  "lat": 41.4410490,
+  "lon": 2.1979997,
+  "tags": {
+    "name": "La Casa del Libro",
+    "shop": "books"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511365,
+  "lat": 41.4417206,
+  "lon": 2.1975625,
+  "tags": {
+    "name": "MARYPAZ",
+    "shop": "shoes"
+  }
+},
+{
+  "type": "node",
+  "id": 5834511366,
+  "lat": 41.4417306,
+  "lon": 2.1983510,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Enrique Tomás"
+  }
+},
+{
+  "type": "node",
+  "id": 5844153852,
+  "lat": 41.4475689,
+  "lon": 2.1834908,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Chafarinas, 10-12",
+    "addr:housenumber": "14",
+    "addr:postcode": "08033",
+    "addr:street": "Carrer de Chafarinas",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933505696",
+    "dispensing": "yes",
+    "name": "Farmàcia Chacón Puig, Ana Cristina",
+    "ref": "3624227",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:28 AM +0000",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809944,
+  "lat": 41.4400121,
+  "lon": 2.1972584,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "brand:wikipedia": "es:McDonald's",
+    "cuisine": "burger",
+    "diet:gluten_free": "yes",
+    "name": "McDonald's",
+    "name:ca": "McDonald's",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809945,
+  "lat": 41.4394793,
+  "lon": 2.1974703,
+  "tags": {
+    "name": "HEMA",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809946,
+  "lat": 41.4396803,
+  "lon": 2.1989617,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Five Guys",
+    "brand:wikidata": "Q1131810",
+    "brand:wikipedia": "en:Five Guys",
+    "cuisine": "burger",
+    "name": "Five Guys",
+    "official_name": "Five Guys Burgers and Fries",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809947,
+  "lat": 41.4396763,
+  "lon": 2.1971163,
+  "tags": {
+    "name": "DC Store",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809948,
+  "lat": 41.4395698,
+  "lon": 2.1979397,
+  "tags": {
+    "brand": "Nike",
+    "brand:wikidata": "Q483915",
+    "brand:wikipedia": "en:Nike, Inc.",
+    "name": "Nike",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809949,
+  "lat": 41.4405711,
+  "lon": 2.1987498,
+  "tags": {
+    "brand": "Desigual",
+    "brand:wikidata": "Q83750",
+    "brand:wikipedia": "en:Desigual",
+    "name": "Desigual",
+    "name:ca": "Desigual",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809950,
+  "lat": 41.4407923,
+  "lon": 2.1987203,
+  "tags": {
+    "name": "lefties",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809951,
+  "lat": 41.4418800,
+  "lon": 2.1975642,
+  "tags": {
+    "old_name": "veritas",
+    "shop": "vacant"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809953,
+  "lat": 41.4414216,
+  "lon": 2.1986425,
+  "tags": {
+    "brand": "Deichmann",
+    "brand:wikidata": "Q664543",
+    "brand:wikipedia": "en:Deichmann SE",
+    "name": "Deichmann",
+    "shop": "shoes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809954,
+  "lat": 41.4412527,
+  "lon": 2.1986532,
+  "tags": {
+    "brand": "Inside",
+    "name": "Inside",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809961,
+  "lat": 41.4415583,
+  "lon": 2.1975803,
+  "tags": {
+    "name": "Samsung",
+    "shop": "mobile_phone"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809962,
+  "lat": 41.4412246,
+  "lon": 2.1975749,
+  "tags": {
+    "name": "natura",
+    "name:ca": "natura",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809963,
+  "lat": 41.4388218,
+  "lon": 2.1986639,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Marisquería La Maquinista"
+  }
+},
+{
+  "type": "node",
+  "id": 5851809965,
+  "lat": 41.4403097,
+  "lon": 2.1985110,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "The Good Burger",
+    "brand:wikidata": "Q20962086",
+    "cuisine": "burger",
+    "delivery": "yes",
+    "name": "The Good Burger",
+    "short_name": "TGB",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5851810108,
+  "lat": 41.4419967,
+  "lon": 2.1983045,
+  "tags": {
+    "name": "Fina García",
+    "shop": "jewelry"
+  }
+},
+{
+  "type": "node",
+  "id": 5856432697,
+  "lat": 41.4361442,
+  "lon": 2.1906790,
+  "tags": {
+    "name": "Yelko Chantal",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 5856758686,
+  "lat": 41.4357708,
+  "lon": 2.1910224,
+  "tags": {
+    "amenity": "bar",
+    "indoor_seating": "yes",
+    "name": "El racó de les tapes",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 5863098354,
+  "lat": 41.4299526,
+  "lon": 2.1931632,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "name": "252 - Onze de Setembre 31",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "252"
+  }
+},
+{
+  "type": "node",
+  "id": 5867484385,
+  "lat": 41.4409559,
+  "lon": 2.1871757,
+  "tags": {
+    "amenity": "cafe",
+    "internet_access": "wlan",
+    "name": "Forn Trinitat",
+    "name:ca": "Forn Trinitat"
+  }
+},
+{
+  "type": "node",
+  "id": 5961171186,
+  "lat": 41.4305718,
+  "lon": 2.1878239,
+  "tags": {
+    "amenity": "bar",
+    "check_date": "2026-01-07",
+    "name": "Bar La Casa de les Monges"
+  }
+},
+{
+  "type": "node",
+  "id": 5970451128,
+  "lat": 41.4409291,
+  "lon": 2.1983672,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Potosí, 10, porta 2",
+    "addr:housenumber": "10",
+    "addr:postcode": "08030",
+    "addr:street": "Passeig de Potosí",
+    "amenity": "pharmacy",
+    "contact:phone": "+34931010126",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Ortí Bravo, Angel",
+    "ref": "3621318",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:14 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5970467268,
+  "lat": 41.4381156,
+  "lon": 2.1962788,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "passatge de Posoltega, 11-13, bloc u",
+    "addr:housenumber": "11-13",
+    "addr:postcode": "08030",
+    "addr:street": "Passatge de Posoltega",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933462239",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Mercedes Blanc Acha-Orbea",
+    "ref": "3621293",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:32 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5970477205,
+  "lat": 41.4464504,
+  "lon": 2.1987580,
+  "tags": {
+    "addr:housenumber": "16",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Clariana",
+    "amenity": "pharmacy",
+    "dispensing": "yes",
+    "name": "Farmàcia Reyes-Gómez"
+  }
+},
+{
+  "type": "node",
+  "id": 5970485617,
+  "lat": 41.4487819,
+  "lon": 2.1914562,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Torné, 12",
+    "addr:housenumber": "12",
+    "addr:postcode": "08033",
+    "addr:street": "Carrer de Torné",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933023940",
+    "dispensing": "yes",
+    "name": "Farmàcia Adell Vidal, Ll / Paytubi Hierro, M",
+    "ref": "3620718",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:35 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 5996559889,
+  "lat": 41.4330311,
+  "lon": 2.1854966,
+  "tags": {
+    "name": "Ca la Nuri",
+    "shop": "butcher"
+  }
+},
+{
+  "type": "node",
+  "id": 5997845038,
+  "lat": 41.4382954,
+  "lon": 2.1876154,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Agusti I Mila, 38",
+    "addr:housenumber": "38",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Agusti I Mila",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933458141",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Guerrero Pozo, M. Carme",
+    "ref": "3621630",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:20 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6002215085,
+  "lat": 41.4377994,
+  "lon": 2.1909192,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Joan Torres, 21-23",
+    "addr:housenumber": "21-23",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Joan Torres",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933111207",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Calduch Barneda, Joaquim",
+    "ref": "3623789",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:30 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6002264406,
+  "lat": 41.4420517,
+  "lon": 2.1909534,
+  "tags": {
+    "name": "Xurreria",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 6060118490,
+  "lat": 41.4265836,
+  "lon": 2.1823699,
+  "tags": {
+    "addr:housenumber": "9",
+    "addr:postcode": "08027",
+    "addr:street": "Carrer de Pardo",
+    "amenity": "doctors",
+    "email": "centrepodologiccongres@gmail.com",
+    "entrance": "yes",
+    "internet_access": "wlan",
+    "name": "Centre Podològic \"Congrés\"",
+    "opening_hours": "Mo-Tu, Th 16:00-20:00",
+    "phone": "+34 933527502"
+  }
+},
+{
+  "type": "node",
+  "id": 6061526303,
+  "lat": 41.4259415,
+  "lon": 2.1855635,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "327",
+    "addr:postcode": "08027",
+    "addr:street": "Avinguda Meridiana",
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "healthcare:speciality": "general;physiotherapy;dentist;dermatology;podologist;clinic",
+    "name": "Espai Salut DKV",
+    "name:ca": "Espai Salut DKV",
+    "operator": "DKV"
+  }
+},
+{
+  "type": "node",
+  "id": 6169525485,
+  "lat": 41.4335664,
+  "lon": 2.1894753,
+  "tags": {
+    "name": "Granier",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 6169525486,
+  "lat": 41.4398705,
+  "lon": 2.1886676,
+  "tags": {
+    "brand": "Lidl",
+    "brand:website": "https://www.lidl.es",
+    "brand:wikidata": "Q151954",
+    "brand:wikipedia": "en:Lidl",
+    "name": "Lidl",
+    "name:en": "Lidl",
+    "name:es": "Lidl",
+    "opening_hours": "Mo-Sa 09:00-21:00",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 6175104685,
+  "lat": 41.4270368,
+  "lon": 2.1857716,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "KFC",
+    "brand:wikidata": "Q524757",
+    "brand:wikipedia": "en:KFC",
+    "name": "KFC",
+    "name:en": "KFC"
+  }
+},
+{
+  "type": "node",
+  "id": 6178186686,
+  "lat": 41.4362161,
+  "lon": 2.1847265,
+  "tags": {
+    "brand": "Condis",
+    "brand:wikidata": "Q57417581",
+    "name": "Condis",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 6202968288,
+  "lat": 41.4287276,
+  "lon": 2.1882701,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "52",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Nadal",
+    "amenity": "pharmacy",
+    "contact:phone": "+34931133328",
+    "dispensing": "yes",
+    "healthcare": "pharmacy"
+  }
+},
+{
+  "type": "node",
+  "id": 6202998685,
+  "lat": 41.4280046,
+  "lon": 2.1897978,
+  "tags": {
+    "amenity": "pharmacy",
+    "name": "Santiago Gómes Facundo"
+  }
+},
+{
+  "type": "node",
+  "id": 6203004488,
+  "lat": 41.4298077,
+  "lon": 2.1942984,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "rambla de L'Onze de Setembre, 15",
+    "addr:housenumber": "15",
+    "addr:postcode": "08030",
+    "addr:street": "rambla de L'Onze de Setembre",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933111451",
+    "dispensing": "yes",
+    "name": "Farmàcia Fernández Retuerto, M. Carme",
+    "ref": "3624135",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:24 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6203018085,
+  "lat": 41.4280502,
+  "lon": 2.1943516,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Pare Manyanet, 46",
+    "addr:housenumber": "46",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Pare Manyanet",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933118206",
+    "dispensing": "yes",
+    "name": "Farmàcia Ramos Ontiveros, Eloisa",
+    "ref": "3621466",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:10 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6218031779,
+  "lat": 41.4324585,
+  "lon": 2.1842761,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "ele": "33",
+    "name": "272 - Concepció Arenal 281",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "272"
+  }
+},
+{
+  "type": "node",
+  "id": 6231215852,
+  "lat": 41.4436335,
+  "lon": 2.1819079,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Pablo Iglesias, 48-50",
+    "addr:housenumber": "48-50",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Pablo Iglesias",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933592890",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Blanc, Begoña - Prats, Dario",
+    "ref": "3624202",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:32 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6231219605,
+  "lat": 41.4444088,
+  "lon": 2.1849688,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Formentera, 44",
+    "addr:housenumber": "44",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Formentera",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933540183",
+    "dispensing": "yes",
+    "name": "Farmàcia Farré-Roma",
+    "ref": "3621649",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:25 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6231231201,
+  "lat": 41.4456919,
+  "lon": 2.1832616,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Pablo Iglesias, 112",
+    "addr:housenumber": "112-114",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Pablo Iglesias",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933590037",
+    "dispensing": "yes",
+    "name": "Farmàcia Renedo Palomero, Sílvia",
+    "ref": "3623820",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:10 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6231234585,
+  "lat": 41.4455993,
+  "lon": 2.1816791,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Moli, 102",
+    "addr:housenumber": "102",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer Molí",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933548994",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Sardà Costa, Pere",
+    "ref": "3623097",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:06 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6240301278,
+  "lat": 41.4473817,
+  "lon": 2.1868343,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer S'Agaro, 3",
+    "addr:housenumber": "3",
+    "addr:postcode": "08033",
+    "addr:street": "Carrer de S'Agaró",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933542705",
+    "dispensing": "yes",
+    "entrance": "yes",
+    "name": "Farmàcia Miralles Majo, Lluís",
+    "ref": "3624699",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:16 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6276931623,
+  "lat": 41.4280968,
+  "lon": 2.1908220,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "12",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "contact:facebook": "https://www.facebook.com/Orient-Express-Modelismo-166821413458712/",
+    "name": "Orient Express",
+    "opening_hours": "Mo-Fr 10:00-13:30,17:00-20:30",
+    "phone": "+34 933 11 30 05",
+    "shop": "model",
+    "website": "https://www.orientexpressmodelismo.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 6373628535,
+  "lat": 41.4355000,
+  "lon": 2.1879937,
+  "tags": {
+    "addr:housenumber": "30",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Pons i Gallarza",
+    "entrance": "yes",
+    "name": "La Tribu Llibreria",
+    "shop": "books",
+    "website": "https://www.latribullibreria.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 6402952997,
+  "lat": 41.4344110,
+  "lon": 2.1926269,
+  "tags": {
+    "amenity": "bar",
+    "name": "Mirasol"
+  }
+},
+{
+  "type": "node",
+  "id": 6549790486,
+  "lat": 41.4370159,
+  "lon": 2.1913807,
+  "tags": {
+    "addr:housenumber": "16",
+    "addr:street": "Passeig de Torras i Bages",
+    "amenity": "restaurant",
+    "name": "Marin"
+  }
+},
+{
+  "type": "node",
+  "id": 6589854556,
+  "lat": 41.4418874,
+  "lon": 2.1809094,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Enric Casanovas, 94",
+    "addr:housenumber": "94",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer Enric Casanovas",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933504896",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Delgado Rica, M. Pilar",
+    "name:ca": "Farmàcia Delgado Rica, M. Pilar",
+    "ref": "3624031",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:26 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6633127852,
+  "lat": 41.4303910,
+  "lon": 2.1811297,
+  "tags": {
+    "addr:housenumber": "138",
+    "addr:postcode": "08016",
+    "addr:street": "Passeig de Fabra i Puig",
+    "brand": "Humana",
+    "brand:wikidata": "Q1636581",
+    "brand:wikipedia": "de:Humana People to People",
+    "name": "Humana",
+    "name:ca": "Humana",
+    "phone": "+34932777855",
+    "second_hand": "only",
+    "shop": "charity"
+  }
+},
+{
+  "type": "node",
+  "id": 6635895086,
+  "lat": 41.4283530,
+  "lon": 2.1839915,
+  "tags": {
+    "amenity": "bank",
+    "brand": "Caixabank",
+    "brand:-2021": "Bankia",
+    "brand:website": "https://caixabank.es",
+    "brand:wikidata": "Q847225",
+    "brand:wikidata:-2021": "Q806807",
+    "brand:wikipedia": "es:CaixaBank",
+    "brand:wikipedia:-2021": "es:Bankia",
+    "contact:website": "https://www.caixabank.es",
+    "name": "Caixabank",
+    "name:-2021": "Bankia",
+    "operator": "Caixabank",
+    "operator:-2021": "Bankia",
+    "operator:wikidata": "Q847225",
+    "operator:wikidata:-2021": "Q806807",
+    "operator:wikipedia": "es:CaixaBank",
+    "operator:wikipedia:-2021": "es:Bankia"
+  }
+},
+{
+  "type": "node",
+  "id": 6635908386,
+  "lat": 41.4285385,
+  "lon": 2.1838771,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "regional",
+    "name": "Acuario",
+    "opening_hours": "Mo-Fr 07:30-19:30"
+  }
+},
+{
+  "type": "node",
+  "id": 6635908485,
+  "lat": 41.4289931,
+  "lon": 2.1843214,
+  "tags": {
+    "amenity": "bar",
+    "check_date": "2026-01-08",
+    "name": "Café Entrepans"
+  }
+},
+{
+  "type": "node",
+  "id": 6635908486,
+  "lat": 41.4283317,
+  "lon": 2.1840019,
+  "tags": {
+    "amenity": "atm",
+    "opening_hours": "24/7",
+    "operator": "Bankia"
+  }
+},
+{
+  "type": "node",
+  "id": 6635908585,
+  "lat": 41.4281834,
+  "lon": 2.1840991,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "avinguda Meridiana, 361",
+    "addr:housenumber": "361",
+    "addr:postcode": "08016",
+    "addr:street": "avinguda Meridiana",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933528404",
+    "dispensing": "yes",
+    "name": "Farmàcia Llorens Sole, Anna",
+    "opening_hours": "Mo-Fr 08:30-21:00; Sa 09:00-14:30",
+    "ref": "3624527",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:18 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 6852763985,
+  "lat": 41.4348444,
+  "lon": 2.1810194,
+  "tags": {
+    "name": "Belros",
+    "shop": "confectionery"
+  }
+},
+{
+  "type": "node",
+  "id": 6852764085,
+  "lat": 41.4351748,
+  "lon": 2.1812537,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Sprinter",
+    "shop": "sports"
+  }
+},
+{
+  "type": "node",
+  "id": 6852764185,
+  "lat": 41.4352645,
+  "lon": 2.1806551,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Desigual",
+    "name:ca": "Desigual",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 6917055285,
+  "lat": 41.4388492,
+  "lon": 2.1988964,
+  "tags": {
+    "name": "Sex Toys Center",
+    "shop": "erotic"
+  }
+},
+{
+  "type": "node",
+  "id": 7074375486,
+  "lat": 41.4267364,
+  "lon": 2.1858465,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "avinguda Meridiana, 344",
+    "addr:housenumber": "344",
+    "addr:postcode": "08027",
+    "addr:street": "avinguda Meridiana",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933118651",
+    "dispensing": "yes",
+    "name": "Farmàcia Leandro Fernández Rodríguez",
+    "ref": "3624123",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:24 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7074375487,
+  "lat": 41.4285100,
+  "lon": 2.1848103,
+  "tags": {
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 7074383685,
+  "lat": 41.4302697,
+  "lon": 2.1823969,
+  "tags": {
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 7097994285,
+  "lat": 41.4302794,
+  "lon": 2.1848372,
+  "tags": {
+    "shop": "florist"
+  }
+},
+{
+  "type": "node",
+  "id": 7098019685,
+  "lat": 41.4342822,
+  "lon": 2.1862838,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Ruben Dario, 79",
+    "addr:housenumber": "79",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Ruben Dario",
+    "amenity": "pharmacy",
+    "check_date": "2026-05-25",
+    "contact:phone": "+34933452043",
+    "dispensing": "yes",
+    "name": "Farmàcia Castellanos Vila, Xavier",
+    "opening_hours": "Mo-Fr 09:00-13:30,16:30-20:00; Sa 10:00-13:30",
+    "ref": "3624676",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:28 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7098025886,
+  "lat": 41.4340729,
+  "lon": 2.1892624,
+  "tags": {
+    "amenity": "cafe",
+    "indoor_seating": "yes",
+    "name": "El Club del Café",
+    "outdoor_seating": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 7098029585,
+  "lat": 41.4353104,
+  "lon": 2.1898789,
+  "tags": {
+    "name": "Quiosc Miquel",
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 7098029586,
+  "lat": 41.4351593,
+  "lon": 2.1897908,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Gran de Sant Andreu, 260",
+    "addr:housenumber": "260",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Gran de Sant Andreu",
+    "amenity": "pharmacy",
+    "check_date": "2026-05-25",
+    "contact:phone": "+34933452341",
+    "dispensing": "yes",
+    "name": "Farmàcia Franquesa Grau, P - Franquesa Borràs, JJ",
+    "ref": "3620744",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:24 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7098029685,
+  "lat": 41.4352988,
+  "lon": 2.1895886,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "La Madurada"
+  }
+},
+{
+  "type": "node",
+  "id": 7098029885,
+  "lat": 41.4346371,
+  "lon": 2.1890605,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Mercat, 11",
+    "addr:housenumber": "11",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Mercat",
+    "amenity": "pharmacy",
+    "check_date": "2026-05-25",
+    "contact:phone": "+34933450157",
+    "dispensing": "yes",
+    "name": "Farmàcia Mier de Teran Payro, Montserrat",
+    "ref": "3620869",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:16 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7098036986,
+  "lat": 41.4287294,
+  "lon": 2.1875262,
+  "tags": {
+    "brand": "Bonpreu",
+    "brand:wikidata": "Q11924747",
+    "brand:wikipedia": "ca:Grup Bon Preu",
+    "name": "Bonpreu",
+    "name:ca": "Bonpreu",
+    "opening_hours": "Mo-Sa 09:00-09:30",
+    "shop": "supermarket",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7098056586,
+  "lat": 41.4282473,
+  "lon": 2.1860686,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Torroella de Montgri, 23",
+    "addr:housenumber": "23",
+    "addr:postcode": "08027",
+    "addr:street": "carrer Torroella de Montgri",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933119151",
+    "dispensing": "yes",
+    "name": "Farmàcia Rastrollo Castro, M. Lluïsa",
+    "ref": "3624258",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:10 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7252964210,
+  "lat": 41.4425370,
+  "lon": 2.1908946,
+  "tags": {
+    "amenity": "fast_food",
+    "cuisine": "churro"
+  }
+},
+{
+  "type": "node",
+  "id": 7296669101,
+  "lat": 41.4419211,
+  "lon": 2.1867626,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "plaça Mossen Clapes, 9",
+    "addr:housenumber": "9",
+    "addr:postcode": "08030",
+    "addr:street": "plaça Mossèn Clapes",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933454686",
+    "dispensing": "yes",
+    "name": "Farmàcia Segui, M. Carme - Ulied, M. i C.",
+    "ref": "3623103",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:06 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7296669106,
+  "lat": 41.4435479,
+  "lon": 2.1882770,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Gran de Sant Andreu, 505",
+    "addr:housenumber": "505",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Gran de Sant Andreu",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933458544",
+    "dispensing": "yes",
+    "name": "Farmàcia Martín Blanes, Mireia",
+    "ref": "3624272",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:17 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7296669117,
+  "lat": 41.4417661,
+  "lon": 2.1921067,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Cinca, 92",
+    "addr:housenumber": "92",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Cinca",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933454008",
+    "dispensing": "yes",
+    "name": "Farmàcia Garciapons Pulido, Margarita i Patricia",
+    "ref": "3624285",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:22 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7296669135,
+  "lat": 41.4419889,
+  "lon": 2.1896830,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Palomar, 28",
+    "addr:housenumber": "28",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Palomar",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933461493",
+    "dispensing": "yes",
+    "name": "Farmàcia Zayas Costa, Montserrat",
+    "ref": "3620716",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:00 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323048426,
+  "lat": 41.4379565,
+  "lon": 2.1806439,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "avinguda Rio de Janeiro, 65",
+    "addr:housenumber": "65",
+    "addr:postcode": "08016",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933595347",
+    "dispensing": "yes",
+    "name": "Farmàcia Guillen Rodríguez, Consol",
+    "name:ca": "Farmàcia Guillen Rodríguez, Consol",
+    "ref": "3624117",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:20 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323148401,
+  "lat": 41.4401181,
+  "lon": 2.1863728,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Bartrina, 7",
+    "addr:housenumber": "7",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Bartrina",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933452844",
+    "dispensing": "yes",
+    "name": "Farmàcia Aguiló Juanola, E - Busquet Aguiló, S",
+    "ref": "3624003",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:34 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323148402,
+  "lat": 41.4356252,
+  "lon": 2.1850486,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Pons I Gallarza, 92",
+    "addr:housenumber": "92",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Pons I Gallarza",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933450667",
+    "dispensing": "yes",
+    "name": "Farmàcia Busquet Masip, Carles",
+    "ref": "3620581",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:30 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323148403,
+  "lat": 41.4392596,
+  "lon": 2.1930942,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Fernando Pessoa, 9",
+    "addr:housenumber": "9",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Fernando Pessoa",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933462560",
+    "dispensing": "yes",
+    "name": "Farmàcia Teixidó Casals, Josefa",
+    "ref": "3624440",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:04 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323148404,
+  "lat": 41.4373945,
+  "lon": 2.1851172,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "avinguda Meridiana, 510",
+    "addr:housenumber": "510",
+    "addr:postcode": "08030",
+    "addr:street": "avinguda Meridiana",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933451342",
+    "dispensing": "yes",
+    "name": "Farmàcia Subietas Mesalles, Susanna",
+    "ref": "3622148",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:04 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323148407,
+  "lat": 41.4363384,
+  "lon": 2.1866183,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Jorba, 27",
+    "addr:housenumber": "27",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Jorba",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933451061",
+    "dispensing": "yes",
+    "name": "Farmàcia Pellicer López, O. - Miralles Roset, M.",
+    "ref": "3623911",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:13 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323148408,
+  "lat": 41.4386917,
+  "lon": 2.1889134,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Gran de Sant Andreu, 368",
+    "addr:housenumber": "368",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Gran de Sant Andreu",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933457145",
+    "dispensing": "yes",
+    "name": "Farmàcia Reales Naveira, Anna M.",
+    "ref": "3623924",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:10 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323148409,
+  "lat": 41.4346327,
+  "lon": 2.1921021,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Segre, 19",
+    "addr:housenumber": "19",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Segre",
+    "amenity": "pharmacy",
+    "check_date": "2026-05-25",
+    "contact:phone": "+34933454741",
+    "dispensing": "yes",
+    "name": "Farmàcia Mendez García, Otilia",
+    "ref": "3623511",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:16 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323198179,
+  "lat": 41.4318735,
+  "lon": 2.1928920,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Doctor Santponç, 103",
+    "addr:housenumber": "103",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Doctor Santponç",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933467604",
+    "dispensing": "yes",
+    "name": "Farmàcia Sabaté Faura, Jaume",
+    "ref": "3621982",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:08 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323198180,
+  "lat": 41.4278144,
+  "lon": 2.1824477,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Pardo, 17",
+    "addr:housenumber": "17",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Pardo",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933528403",
+    "dispensing": "yes",
+    "name": "Farmàcia Labarta Brustenga, Georgina",
+    "ref": "3622145",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:19 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323198181,
+  "lat": 41.4299525,
+  "lon": 2.1921963,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "rambla de L'Onze de Setembre, 37",
+    "addr:housenumber": "37",
+    "addr:postcode": "08030",
+    "addr:street": "rambla de L'Onze de Setembre",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933469602",
+    "dispensing": "yes",
+    "name": "Farmàcia Solà Casanovas, Mercedes",
+    "ref": "3624843",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:05 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7323198182,
+  "lat": 41.4297373,
+  "lon": 2.1872007,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "carrer Camil Fabra, 5",
+    "addr:housenumber": "5",
+    "addr:postcode": "08030",
+    "addr:street": "carrer Camil Fabra",
+    "amenity": "pharmacy",
+    "contact:phone": "+34933469906",
+    "dispensing": "yes",
+    "name": "Farmàcia Terré Hernández, Immaculada",
+    "opening_hours": "Mo-Fr 09:00-13:30,16:30-20:00; Sa 09:00-13:30",
+    "ref": "3623613",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:03 AM +0000",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 7323198184,
+  "lat": 41.4327563,
+  "lon": 2.1857262,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:full": "plaça de Les Palmeres, 9",
+    "addr:housenumber": "9",
+    "addr:postcode": "08030",
+    "addr:street": "plaça de Les Palmeres",
+    "amenity": "pharmacy",
+    "check_date": "2026-05-25",
+    "contact:phone": "+34933467855",
+    "dispensing": "yes",
+    "healthcare": "pharmacy",
+    "name": "Farmàcia Almirall Ferran, Blanca",
+    "name:ca": "Farmàcia Almirall Ferran, Blanca",
+    "opening_hours": "Mo-Fr 09:00-14:00,16:30-20:00; Sa 09:00-13:30",
+    "ref": "3620715",
+    "source": "Generalitat de Catalunya",
+    "source:date": "03/11/2020 07:58:34 AM +0000"
+  }
+},
+{
+  "type": "node",
+  "id": 7599478286,
+  "lat": 41.4263557,
+  "lon": 2.1825823,
+  "tags": {
+    "amenity": "clinic",
+    "name": "Centre Mèdic Congrés"
+  }
+},
+{
+  "type": "node",
+  "id": 7621695685,
+  "lat": 41.4427461,
+  "lon": 2.1843361,
+  "tags": {
+    "addr:postcode": "08016",
+    "amenity": "bar",
+    "cuisine": "breakfast;coffee_shop;spanish;tapas",
+    "name": "Los Tres Pinos",
+    "opening_hours": "Mo-Tu, Th-Su 08:30-23:00"
+  }
+},
+{
+  "type": "node",
+  "id": 7889306385,
+  "lat": 41.4287771,
+  "lon": 2.1818036,
+  "tags": {
+    "amenity": "dentist",
+    "check_date": "2025-02-23",
+    "name": "Dentisalut"
+  }
+},
+{
+  "type": "node",
+  "id": 7987200487,
+  "lat": 41.4294111,
+  "lon": 2.1809019,
+  "tags": {
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 7987244985,
+  "lat": 41.4295988,
+  "lon": 2.1816241,
+  "tags": {
+    "name": "Sanchez Hipertextil",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 7987264985,
+  "lat": 41.4300087,
+  "lon": 2.1859994,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "51",
+    "addr:postcode": "08030",
+    "addr:street": "Rambla de Fabra i Puig",
+    "amenity": "restaurant",
+    "cuisine": "regional;fish",
+    "name": "Cal Pesca",
+    "name:ca": "Cal Pesca",
+    "phone": "+34 932650542",
+    "website": "https://www.grupoangelita.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 7987264987,
+  "lat": 41.4300090,
+  "lon": 2.1864932,
+  "tags": {
+    "brand": "BonÀrea",
+    "brand:wikidata": "Q11924743",
+    "brand:wikipedia": "ca:Grup Alimentari Guissona",
+    "name": "BonÀrea",
+    "ref": "42488",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 7987297985,
+  "lat": 41.4300858,
+  "lon": 2.1888615,
+  "tags": {
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 7987297986,
+  "lat": 41.4299667,
+  "lon": 2.1896547,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Ca l'Albert",
+    "name:ca": "Ca l'Albert"
+  }
+},
+{
+  "type": "node",
+  "id": 7987379788,
+  "lat": 41.4258992,
+  "lon": 2.1908208,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Montferri",
+    "name:ca": "Montferri"
+  }
+},
+{
+  "type": "node",
+  "id": 8615244064,
+  "lat": 41.4285496,
+  "lon": 2.1903896,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "29",
+    "addr:postcode": "08030",
+    "addr:street": "Gran de Sant Andreu",
+    "name": "Graneria de Sant Andreu",
+    "name:ca": "Graneria de Sant Andreu",
+    "opening_hours": "Mo-Fr 09:00-20:30; Sa 09:30-14:00",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "phone": "+34 93 360 29 20",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 8625983703,
+  "lat": 41.4390179,
+  "lon": 2.1830223,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Bar Restaurant Mamá"
+  }
+},
+{
+  "type": "node",
+  "id": 8650669218,
+  "lat": 41.4304576,
+  "lon": 2.1909729,
+  "tags": {
+    "check_date:opening_hours": "2026-03-27",
+    "name": "Espai Gràfic. Botiga oficial UE Sant Andreu",
+    "name:ca": "Espai Gràfic. Botiga oficial UE Sant Andreu",
+    "opening_hours:signed": "no",
+    "shop": "gift"
+  }
+},
+{
+  "type": "node",
+  "id": 8650747717,
+  "lat": 41.4378802,
+  "lon": 2.1888429,
+  "tags": {
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 8651646479,
+  "lat": 41.4370770,
+  "lon": 2.1897019,
+  "tags": {
+    "amenity": "pharmacy",
+    "name": "Farmàcia Guinart",
+    "wikidata": "Q24344651",
+    "wikimedia_commons": "Category:Farmàcia Guinart",
+    "wikipedia": "ca:Farmàcia Guinart"
+  }
+},
+{
+  "type": "node",
+  "id": 8733833142,
+  "lat": 41.4286546,
+  "lon": 2.1905776,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "peruvian",
+    "name": "Retablo de Kelly"
+  }
+},
+{
+  "type": "node",
+  "id": 9166699797,
+  "lat": 41.4359507,
+  "lon": 2.1898238,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "15",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Malats",
+    "name": "Parlem Telecom (Sant Andreu)",
+    "opening_hours": "Mo-Fr 10:00-13:30,17:00-20:30; Sa 10:00-14:00",
+    "operator": "Parlem Telecom",
+    "phone": "+34936771111",
+    "shop": "mobile_phone",
+    "website": "https://parlem.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 9216019517,
+  "lat": 41.4434212,
+  "lon": 2.1902607,
+  "tags": {
+    "amenity": "pharmacy",
+    "name": "Sonia Pérez Sáez"
+  }
+},
+{
+  "type": "node",
+  "id": 9280030330,
+  "lat": 41.4357724,
+  "lon": 2.1908356,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "12",
+    "addr:postcode": "08030",
+    "addr:street": "Plaça d'Orfila",
+    "all_you_can_eat": "yes",
+    "amenity": "restaurant",
+    "cuisine": "japanese;sushi",
+    "delivery": "yes",
+    "indoor_seating": "yes",
+    "name": "Shokudo II",
+    "opening_hours": "Tu-Su 13:00-14:00,20:00-24:00",
+    "outdoor_seating": "no",
+    "payment:edenred_card": "yes",
+    "phone": "+34 936 84 68 44",
+    "reservation": "recommended",
+    "smoking": "no",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "toilets:access": "customers"
+  }
+},
+{
+  "type": "node",
+  "id": 9399116417,
+  "lat": 41.4381097,
+  "lon": 2.1908792,
+  "tags": {
+    "amenity": "post_office"
+  }
+},
+{
+  "type": "node",
+  "id": 9399116517,
+  "lat": 41.4348893,
+  "lon": 2.1917898,
+  "tags": {
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 9529551945,
+  "lat": 41.4339839,
+  "lon": 2.1901568,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "1-9",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Sant Adrià",
+    "amenity": "bank",
+    "atm": "yes",
+    "brand": "Kutxabank",
+    "brand:wikidata": "Q5139377",
+    "brand:wikipedia": "en:Kutxabank",
+    "name": "Kutxabank",
+    "opening_hours": "Mo-We,Fr 08:30-14:00; Th 08:30-14:00,16:45-19:15"
+  }
+},
+{
+  "type": "node",
+  "id": 9590970242,
+  "lat": 41.4457877,
+  "lon": 2.1835820,
+  "tags": {
+    "amenity": "pharmacy"
+  }
+},
+{
+  "type": "node",
+  "id": 9624360849,
+  "lat": 41.4356517,
+  "lon": 2.1903254,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "14B",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de l'Ajuntament",
+    "air_conditioning": "yes",
+    "check_date": "2024-08-30",
+    "email": "indra.standreu@gmail.com",
+    "name": "Indra Sant Andreu",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "payment:mastercard": "yes",
+    "payment:visa": "yes",
+    "phone": "+34933113513",
+    "shop": "jewelry",
+    "stroller": "yes",
+    "website": "https://www.indrastandreu.es/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9799002717,
+  "lat": 41.4299646,
+  "lon": 2.1879343,
+  "tags": {
+    "brand": "Lidl",
+    "brand:website": "https://www.lidl.es",
+    "brand:wikidata": "Q151954",
+    "name": "Lidl",
+    "opening_hours": "Mo-Sa 09:00-21:00",
+    "shop": "supermarket",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 9869760222,
+  "lat": 41.4311336,
+  "lon": 2.1832215,
+  "tags": {
+    "amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 9869760226,
+  "lat": 41.4310693,
+  "lon": 2.1830359,
+  "tags": {
+    "shop": "ticket",
+    "vending": "public_transport_tickets"
+  }
+},
+{
+  "type": "node",
+  "id": 9869760719,
+  "lat": 41.4310483,
+  "lon": 2.1831010,
+  "tags": {
+    "amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 9869795017,
+  "lat": 41.4310126,
+  "lon": 2.1857893,
+  "tags": {
+    "name": "Fleca Irlanda",
+    "name:ca": "Fleca Irlanda",
+    "opening_hours": "Mo-Fr 06:30-19:30; Sa 06:30-13:30",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 10039857017,
+  "lat": 41.4283624,
+  "lon": 2.1946917,
+  "tags": {
+    "name": "Mercadona",
+    "name:ca": "Mercadona",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 10548891309,
+  "lat": 41.4345143,
+  "lon": 2.1921859,
+  "tags": {
+    "addr:postcode": "08030",
+    "mobile": "+34659182672",
+    "name": "Lampisteria Segre",
+    "phone": "+34930025733",
+    "shop": "hardware"
+  }
+},
+{
+  "type": "node",
+  "id": 10584967783,
+  "lat": 41.4320393,
+  "lon": 2.1838933,
+  "tags": {
+    "addr:housenumber": "102",
+    "addr:street": "Carrer de Sòcrates",
+    "amenity": "restaurant",
+    "name": "Chez Lola",
+    "opening_hours": "Mo, Tu 13:00-16:00; We-Fr 09:00-16:00"
+  }
+},
+{
+  "type": "node",
+  "id": 10592013705,
+  "lat": 41.4299670,
+  "lon": 2.1874923,
+  "tags": {
+    "addr:housenumber": "33",
+    "addr:postcode": "08030",
+    "amenity": "restaurant",
+    "cuisine": "lebanese",
+    "diet:vegan": "yes",
+    "name": "Fattoush"
+  }
+},
+{
+  "type": "node",
+  "id": 10594441205,
+  "lat": 41.4304927,
+  "lon": 2.1855621,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "92",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer del Llenguadoc",
+    "amenity": "restaurant",
+    "cuisine": "coffee_shop",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "name": "Üla Café Cafetería",
+    "opening_hours": "Tu-Su,PH 08:00-20:00",
+    "website": "http://www.ulacafe.es"
+  }
+},
+{
+  "type": "node",
+  "id": 10697545505,
+  "lat": 41.4342344,
+  "lon": 2.1881155,
+  "tags": {
+    "addr:housenumber": "36",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Rubén Darío",
+    "amenity": "cafe",
+    "check_date": "2026-05-06",
+    "check_date:opening_hours": "2026-05-06",
+    "contact:instagram": "fikacoffeebcn",
+    "email": "fikacoffeecorner@gmail.com",
+    "name:en": "FIKA",
+    "opening_hours": "Mo-Fr 08:30-12:50, 16:30-19:50; Sa 09:00-12:50; Su off",
+    "phone": "+34623387588",
+    "website": "https://fikabcn.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 10719488403,
+  "lat": 41.4393125,
+  "lon": 2.1896852,
+  "tags": {
+    "amenity": "cafe",
+    "name": "Bracafé"
+  }
+},
+{
+  "type": "node",
+  "id": 10719489219,
+  "lat": 41.4377960,
+  "lon": 2.1906165,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "17",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Joan Torras",
+    "amenity": "cafe",
+    "name": "Bracafè",
+    "opening_hours": "7:00-22:00"
+  }
+},
+{
+  "type": "node",
+  "id": 10719499473,
+  "lat": 41.4296624,
+  "lon": 2.1924372,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "56",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Sant Mateu",
+    "name": "Súper",
+    "opening_hours": "9-22h.",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 10719509616,
+  "lat": 41.4391070,
+  "lon": 2.1886245,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "389",
+    "addr:postcode": "08030",
+    "addr:street": "Gran de Sant Andreu",
+    "amenity": "cafe",
+    "cuisine": "coffee_shop",
+    "name": "El Rebost de la Laura"
+  }
+},
+{
+  "type": "node",
+  "id": 10719511606,
+  "lat": 41.4390363,
+  "lon": 2.1886368,
+  "tags": {
+    "addr:postcode": "08030",
+    "amenity": "cafe",
+    "name": "Bracafé",
+    "opening_hours": "7-22h"
+  }
+},
+{
+  "type": "node",
+  "id": 10733368722,
+  "lat": 41.4302451,
+  "lon": 2.1865899,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "64",
+    "addr:postcode": "08030",
+    "addr:street": "Rambla de Fabra i Puig",
+    "name": "Cariñena Cicles",
+    "phone": "+34933117601",
+    "service:bicycle:ebike": "yes",
+    "service:bicycle:parts": "yes",
+    "service:bicycle:rental": "yes",
+    "service:bicycle:repair": "yes",
+    "service:bicycle:retail": "yes",
+    "service:bicycle:sales": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 10761173505,
+  "lat": 41.4356963,
+  "lon": 2.1846213,
+  "tags": {
+    "amenity": "bar",
+    "name": "Casa Li"
+  }
+},
+{
+  "type": "node",
+  "id": 10926005011,
+  "lat": 41.4347630,
+  "lon": 2.1886465,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2026-05-25",
+    "name": "La terrassa de mercadal"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691110,
+  "lat": 41.4410193,
+  "lon": 2.1833570,
+  "tags": {
+    "addr:housenumber": "103",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Nou Estil",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691111,
+  "lat": 41.4409369,
+  "lon": 2.1832618,
+  "tags": {
+    "addr:housenumber": "103",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Perruqueria Norma",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691113,
+  "lat": 41.4388420,
+  "lon": 2.1812066,
+  "tags": {
+    "addr:housenumber": "79",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "female": "yes",
+    "male": "yes",
+    "name": "Marona",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691114,
+  "lat": 41.4409731,
+  "lon": 2.1833074,
+  "tags": {
+    "addr:housenumber": "103",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "amenity": "pub",
+    "name": "Bar Cobas"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691115,
+  "lat": 41.4349890,
+  "lon": 2.1807298,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Marco Aldany",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691116,
+  "lat": 41.4349668,
+  "lon": 2.1809390,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Querol",
+    "shop": "shoes"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691117,
+  "lat": 41.4349448,
+  "lon": 2.1810383,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "beauty": "nails",
+    "name": "Beauty Nails",
+    "shop": "beauty"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691118,
+  "lat": 41.4353168,
+  "lon": 2.1807673,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Casa Móvil",
+    "shop": "mobile_phone"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691119,
+  "lat": 41.4349689,
+  "lon": 2.1806467,
+  "tags": {
+    "addr:housenumber": "42",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "name": "Lefties",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691121,
+  "lat": 41.4305539,
+  "lon": 2.1822184,
+  "tags": {
+    "addr:housenumber": "1",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "male": "yes",
+    "name": "Palace",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11048691122,
+  "lat": 41.4307168,
+  "lon": 2.1820535,
+  "tags": {
+    "addr:housenumber": "5",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "male": "yes",
+    "name": "Perruqueria",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11055410322,
+  "lat": 41.4482260,
+  "lon": 2.1988280,
+  "tags": {
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "AMBici",
+    "brand:wikidata": "Q117066760",
+    "capacity": "20",
+    "fee": "yes",
+    "name": "AMB - Baró de Viver",
+    "network": "AMBici",
+    "network:wikidata": "Q117066760",
+    "operator": "Transports Metropolitans de Barcelona",
+    "operator:short": "TMB",
+    "operator:wikidata": "Q1778212",
+    "ref": "34940",
+    "rental": "ebike",
+    "website": "https://www.ambici.cat/ca/"
+  }
+},
+{
+  "type": "node",
+  "id": 11079293431,
+  "lat": 41.4420798,
+  "lon": 2.1930986,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "26",
+    "ebike": "yes",
+    "name": "258 - Fernando Pessoa 41",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "258"
+  }
+},
+{
+  "type": "node",
+  "id": 11079312169,
+  "lat": 41.4481324,
+  "lon": 2.1985915,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "38",
+    "ebike": "yes",
+    "name": "459 - Pg. Santa Coloma 105",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "459"
+  }
+},
+{
+  "type": "node",
+  "id": 11135990405,
+  "lat": 41.4268032,
+  "lon": 2.1858267,
+  "tags": {
+    "addr:housenumber": "346",
+    "addr:postcode": "08027",
+    "addr:street": "Avinguda Meridiana",
+    "contact:facebook": "Gravats-a-l-Instant-SCP-244539548909123",
+    "contact:instagram": "gravatsalinstant",
+    "email": "gravats@gravats.com",
+    "mobile": "+34615429654",
+    "name:en": "GRAVATS A L'INSTANT S.C.P.",
+    "phone": "+34933114725",
+    "shop": "hardware",
+    "website": "https://gravats.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11146333214,
+  "lat": 41.4361571,
+  "lon": 2.1825087,
+  "tags": {
+    "amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 11146333219,
+  "lat": 41.4358211,
+  "lon": 2.1823875,
+  "tags": {
+    "amenity": "cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 11146333250,
+  "lat": 41.4357816,
+  "lon": 2.1823717,
+  "tags": {
+    "name": "Lloguer de gandules / Sunbed hire",
+    "payment:cards": "no",
+    "payment:cash": "yes",
+    "shop": "rental"
+  }
+},
+{
+  "type": "node",
+  "id": 11155398206,
+  "lat": 41.4296093,
+  "lon": 2.1825003,
+  "tags": {
+    "name": "Les herbes",
+    "shop": "herbalist"
+  }
+},
+{
+  "type": "node",
+  "id": 11155462405,
+  "lat": 41.4423578,
+  "lon": 2.1833239,
+  "tags": {
+    "shop": "newsagent"
+  }
+},
+{
+  "type": "node",
+  "id": 11173517837,
+  "lat": 41.4376155,
+  "lon": 2.1916968,
+  "tags": {
+    "addr:housenumber": "28",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Joan Torras",
+    "amenity": "restaurant",
+    "cuisine": "asian;chinese;japanese;sushi",
+    "email": "info.sushify@gmail.com",
+    "internet_access": "wlan",
+    "name": "Sushify",
+    "opening_hours": "Tu-Su 13:00-17:00, 20:00-00:00",
+    "phone": "+34932327539",
+    "website": "https://sushify.es/"
+  }
+},
+{
+  "type": "node",
+  "id": 11297395969,
+  "lat": 41.4347333,
+  "lon": 2.1895089,
+  "tags": {
+    "check_date": "2026-05-25",
+    "name": "Guifré",
+    "shop": "pastry"
+  }
+},
+{
+  "type": "node",
+  "id": 11306831870,
+  "lat": 41.4421389,
+  "lon": 2.1928521,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "41",
+    "addr:postcode": "08030",
+    "addr:street": "Fernando Pessoa",
+    "email": "info@sotomuebles.com",
+    "mobile": "+34 658766520",
+    "name": "Muebles Soto",
+    "opening_hours": "Mo-Fr 10:00-14:00; Mo-Fr 17:00-20:30",
+    "payment:coins": "yes",
+    "payment:mastercard": "yes",
+    "payment:notes": "yes",
+    "payment:visa": "yes",
+    "payment:visa_debit": "yes",
+    "phone": "+34 933454126",
+    "shop": "furniture",
+    "website": "https://sotomuebles.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11306832763,
+  "lat": 41.4419903,
+  "lon": 2.1921082,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "120",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer del Cinca",
+    "amenity": "clinic",
+    "healthcare": "physiotherapist",
+    "mobile": "+34 693551958",
+    "name": "L'equilibri del cos",
+    "phone": "+34 935124220",
+    "website": "https://lequilibridelcos.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 11306848319,
+  "lat": 41.4418214,
+  "lon": 2.1921139,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "108",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer del Cinca",
+    "amenity": "clinic",
+    "contact:whatsapp": "+34 644910793",
+    "healthcare": "podiatrist",
+    "name": "Centro de podología",
+    "opening_hours": "Mo-Fr 09:00-13:00; Mo-Tu 15:00-19:00; Th 15:00-19:00",
+    "phone": "+34 933458527",
+    "website": "https://www.podologiaflorencianorestoy.es/"
+  }
+},
+{
+  "type": "node",
+  "id": 11306858662,
+  "lat": 41.4418775,
+  "lon": 2.1921238,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "110",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer del Cinca",
+    "amenity": "restaurant",
+    "delivery": "no",
+    "name": "L'illa",
+    "opening_hours": "Mo-Sa 07:30-23:00; Su 09:00-23:00",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11432014982,
+  "lat": 41.4344232,
+  "lon": 2.1884172,
+  "tags": {
+    "amenity": "marketplace",
+    "name": "La Galeria. Mercat de Sant Andreu"
+  }
+},
+{
+  "type": "node",
+  "id": 11446290895,
+  "lat": 41.4300425,
+  "lon": 2.1850480,
+  "tags": {
+    "addr:housenumber": "67",
+    "addr:street": "Rambla de Fabra i Puig",
+    "amenity": "cafe",
+    "check_date": "2026-01-07",
+    "cuisine": "coffee_shop;ice_cream",
+    "name": "Nonno Cafe & Gelato",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11449116369,
+  "lat": 41.4484259,
+  "lon": 2.1841333,
+  "tags": {
+    "name": "Consum",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 11522033069,
+  "lat": 41.4429438,
+  "lon": 2.1855607,
+  "tags": {
+    "addr:housenumber": "135",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "amenity": "restaurant",
+    "name": "A Garrotxa"
+  }
+},
+{
+  "type": "node",
+  "id": 11534857325,
+  "lat": 41.4316383,
+  "lon": 2.1835547,
+  "tags": {
+    "check_date": "2024-01-20",
+    "indoor_seating": "yes",
+    "name": "Vivari",
+    "outdoor_seating": "yes",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 11534866314,
+  "lat": 41.4349283,
+  "lon": 2.1808490,
+  "tags": {
+    "amenity": "fast_food",
+    "brand": "Pans & Company",
+    "brand:wikidata": "Q11697586",
+    "check_date": "2026-01-08",
+    "check_date:opening_hours": "2026-01-08",
+    "cuisine": "sandwich",
+    "level": "1",
+    "name": "Pans & Company",
+    "opening_hours": "Mo-Th 09:00-23:00; Fr,Sa 09:00-23:30; Su 10:00-23:00",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11534866315,
+  "lat": 41.4348916,
+  "lon": 2.1810122,
+  "tags": {
+    "amenity": "restaurant",
+    "brand": "Foster's Hollywood",
+    "brand:wikidata": "Q5864366",
+    "check_date": "2024-01-20",
+    "cuisine": "american",
+    "level": "1",
+    "name": "Foster's Hollywood"
+  }
+},
+{
+  "type": "node",
+  "id": 11534866316,
+  "lat": 41.4352936,
+  "lon": 2.1814755,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2024-01-20",
+    "cuisine": "american",
+    "level": "1",
+    "name": "Goiko"
+  }
+},
+{
+  "type": "node",
+  "id": 11534866317,
+  "lat": 41.4352212,
+  "lon": 2.1805645,
+  "tags": {
+    "amenity": "ice_cream",
+    "brand": "Llaollao",
+    "brand:wikidata": "Q12163048",
+    "check_date": "2024-01-20",
+    "cuisine": "frozen_yogurt",
+    "level": "1",
+    "name": "Llaollao"
+  }
+},
+{
+  "type": "node",
+  "id": 11687291211,
+  "lat": 41.4416369,
+  "lon": 2.1976180,
+  "tags": {
+    "brand": "Gato Preto",
+    "brand:wikidata": "Q112673244",
+    "level": "1",
+    "name": "Gato Preto",
+    "shop": "interior_decoration"
+  }
+},
+{
+  "type": "node",
+  "id": 11691713149,
+  "lat": 41.4292921,
+  "lon": 2.1938022,
+  "tags": {
+    "amenity": "dentist",
+    "healthcare": "dentist",
+    "name": "Clínica Dental Buenas Nuevas"
+  }
+},
+{
+  "type": "node",
+  "id": 11691773643,
+  "lat": 41.4287638,
+  "lon": 2.1832138,
+  "tags": {
+    "name": "Hair Salon",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11691773644,
+  "lat": 41.4283617,
+  "lon": 2.1937388,
+  "tags": {
+    "amenity": "fast_food",
+    "cuisine": "pizza",
+    "name": "Döner Pizza",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 11691779819,
+  "lat": 41.4289063,
+  "lon": 2.1937686,
+  "tags": {
+    "name": "Climadan",
+    "shop": "houseware"
+  }
+},
+{
+  "type": "node",
+  "id": 11964642745,
+  "lat": 41.4300133,
+  "lon": 2.1857615,
+  "tags": {
+    "name": "consum",
+    "opening_hours": "Mo-Sa 09:00-21:30",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 11964651999,
+  "lat": 41.4300430,
+  "lon": 2.1849692,
+  "tags": {
+    "name": "MacxiPa",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 11981113808,
+  "lat": 41.4289725,
+  "lon": 2.1824505,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "49",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Pardo",
+    "amenity": "atm",
+    "cash_in": "yes",
+    "cash_out": "yes",
+    "check_date": "2025-04-09",
+    "contact:email": "support@shitcoins.club",
+    "contact:facebook": "https://www.facebook.com/shitcoins.club",
+    "contact:instagram": "https://www.instagram.com/shitcoinsclub",
+    "contact:telegram": "https://t.me/shitcoinsclub",
+    "contact:twitter": "https://twitter.com/BitomatCom",
+    "currency:CHF": "yes",
+    "currency:ETH": "yes",
+    "currency:EUR": "yes",
+    "currency:GBP": "yes",
+    "currency:HUF": "yes",
+    "currency:LTC": "yes",
+    "currency:RON": "yes",
+    "currency:USD": "yes",
+    "currency:USDC": "yes",
+    "currency:USDT": "yes",
+    "currency:XBT": "yes",
+    "image": "https://shitcoins.club/resources/img/atms/ES/bitcoin%20atm%20carrer%20de%20grampa8.jpg",
+    "indoor": "yes",
+    "level": "0",
+    "name": "Bitcoin ATM - Shitcoins.club",
+    "opening_hours": "24/7",
+    "operator": "Shitcoins.club",
+    "payment:cash": "yes",
+    "payment:lightning": "no",
+    "payment:lightning_contactless": "no",
+    "payment:onchain": "yes",
+    "phone": "+34 644 94 69 54",
+    "url": "https://coinatmradar.com/bitcoin_atm/61226/bitcoin-atm-shitcoins-club-barcelona-bitomat-carrer-de-pardo/",
+    "website": "https://shitcoins.club/localizacion-atm/cajero-autom%C3%A1tico-bitcoin-barcelona-carrer-de-pardo"
+  }
+},
+{
+  "type": "node",
+  "id": 12239237001,
+  "lat": 41.4300793,
+  "lon": 2.1822855,
+  "tags": {
+    "amenity": "restaurant",
+    "indoor_seating": "yes",
+    "name": "Arashi",
+    "outdoor_seating": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 12239457001,
+  "lat": 41.4381691,
+  "lon": 2.1807348,
+  "tags": {
+    "name": "Mercadona",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 12241562601,
+  "lat": 41.4427350,
+  "lon": 2.1853427,
+  "tags": {
+    "name": "charter",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 12529169447,
+  "lat": 41.4300173,
+  "lon": 2.1861430,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "49",
+    "addr:postcode": "08030",
+    "addr:street": "Rambla de Fabra i Puig",
+    "amenity": "restaurant",
+    "cuisine": "chinese",
+    "name": "Shanghai",
+    "phone": "+34 933458188"
+  }
+},
+{
+  "type": "node",
+  "id": 12733626122,
+  "lat": 41.4281212,
+  "lon": 2.1808866,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "14",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Vèlia",
+    "addr:unit": "4",
+    "currency:EUR": "yes",
+    "currency:USD": "yes",
+    "name": "Directia Travel",
+    "opening_hours": "Mo-Fr 09:00-20:00",
+    "operator": "Tuk Tuk Travel, S.L.",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+34910059646",
+    "shop": "travel_agency",
+    "website": "https://directiatravel.com"
+  }
+},
+{
+  "type": "node",
+  "id": 12733626123,
+  "lat": 41.4285003,
+  "lon": 2.1809001,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "22",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Vèlia",
+    "amenity": "cafe",
+    "cuisine": "cafe",
+    "indoor_seating": "yes",
+    "name": "Venecia",
+    "outdoor_seating": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12757141452,
+  "lat": 41.4318427,
+  "lon": 2.1892296,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "145",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "contact:facebook": "https://www.facebook.com/cerrajerosbarcelonamikey/",
+    "email": "info@cerrajerosantandreu24h.es",
+    "name": "Cerrajeros Barcelona - Mikey 24 Horas",
+    "opening_hours": "24/7",
+    "payment:bank_transfer": "yes",
+    "payment:bizum": "yes",
+    "payment:cards": "yes",
+    "payment:cash": "yes",
+    "phone": "+34 634 01 93 09",
+    "shop": "locksmith",
+    "start_date": "2024-01-01",
+    "website": "https://cerrajerosantandreu24h.es"
+  }
+},
+{
+  "type": "node",
+  "id": 12811251701,
+  "lat": 41.4275091,
+  "lon": 2.1845470,
+  "tags": {
+    "name": "PrimaPrix",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "node",
+  "id": 12837149601,
+  "lat": 41.4365989,
+  "lon": 2.1898158,
+  "tags": {
+    "addr:housenumber": "292",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "contact:instagram": "rereadsantandreu",
+    "name": "Re-Read",
+    "shop": "books"
+  }
+},
+{
+  "type": "node",
+  "id": 12849546033,
+  "lat": 41.4296779,
+  "lon": 2.1897706,
+  "tags": {
+    "addr:housenumber": "75",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "amenity": "fast_food",
+    "branch": "Aloha Sant Andreu",
+    "brand": "Aloha Poké",
+    "brand:wikidata": "Q95691125",
+    "cuisine": "poke",
+    "name": "Aloha Poké",
+    "phone": "+34938247060",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13056397095,
+  "lat": 41.4346419,
+  "lon": 2.1894997,
+  "tags": {
+    "addr:housenumber": "231",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "amenity": "fast_food",
+    "cuisine": "burger;sandwich",
+    "diet:vegan": "yes",
+    "mobile": "+34654478099",
+    "name": "Frankfurt Sant Andreu",
+    "opening_hours": "Su-Th 12:00-23:00; Fr-Sa 12:00-00:00"
+  }
+},
+{
+  "type": "node",
+  "id": 13056397096,
+  "lat": 41.4337603,
+  "lon": 2.1894599,
+  "tags": {
+    "addr:housenumber": "210",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "amenity": "fast_food",
+    "cuisine": "burger",
+    "diet:vegan": "yes",
+    "name": "La Tropa",
+    "phone": "+34931585737",
+    "website": "https://latropa.net/"
+  }
+},
+{
+  "type": "node",
+  "id": 13112522702,
+  "lat": 41.4399676,
+  "lon": 2.1977503,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "italian_pizza",
+    "internet_access": "wlan",
+    "name": "Ginos",
+    "phone": "+34935219182",
+    "self_service": "no",
+    "website:menu": "https://carta.ginos.es/?restaurant=1041"
+  }
+},
+{
+  "type": "node",
+  "id": 13114550701,
+  "lat": 41.4409849,
+  "lon": 2.1983012,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Udon"
+  }
+},
+{
+  "type": "node",
+  "id": 13114610101,
+  "lat": 41.4410961,
+  "lon": 2.1984183,
+  "tags": {
+    "amenity": "restaurant",
+    "contact:facebook": "UDONAsianFoodES",
+    "contact:instagram": "udon__es",
+    "cuisine": "japanese",
+    "email": "maquinista@udon.es",
+    "internet_access": "wlan",
+    "name": "Udon",
+    "phone": "+34933608042",
+    "self_service": "no",
+    "website": "https://www.udon.com/",
+    "website:menu": "https://order.udon.com/ca/food/"
+  }
+},
+{
+  "type": "node",
+  "id": 13123270701,
+  "lat": 41.4374053,
+  "lon": 2.1891970,
+  "tags": {
+    "addr:housenumber": "327",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "contact:facebook": "foristeriaeljardidenpep",
+    "contact:instagram": "floristeriaeljardiden",
+    "email": "jardidenpep@gmail.com",
+    "phone": "+34934530924",
+    "shop": "florist",
+    "website": "https://floristeriaeljardidenpep.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13183379518,
+  "lat": 41.4306989,
+  "lon": 2.1889919,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Restaurant l'Andreuenc"
+  }
+},
+{
+  "type": "node",
+  "id": 13194405101,
+  "lat": 41.4396731,
+  "lon": 2.1988107,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "burger;italian;mediterranean;mexican",
+    "name": "ENJOY IT",
+    "phone": "+34937445551",
+    "website": "https://www.enjoyitrestaurant.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13234868393,
+  "lat": 41.4319062,
+  "lon": 2.1807284,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:district": "Sant Andreu",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer Velià",
+    "addr:subdistrict": "Fabra i Puig",
+    "name": "Infernal Forge",
+    "opening_hours": "Tu-Th 10:00-13:30,16:30-20:30; Fr-Sa 10:00-13:30,16:30-21:00; PH closed",
+    "shop": "games",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13243138837,
+  "lat": 41.4355660,
+  "lon": 2.1807522,
+  "tags": {
+    "addr:postcode": "08016",
+    "air_conditioning": "yes",
+    "alt_name": "Kentucky Fried Chicken",
+    "amenity": "fast_food",
+    "brand": "KFC",
+    "cuisine": "chicken",
+    "delivery": "yes",
+    "drive_through": "no",
+    "indoor_seating": "yes",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "name": "KFC",
+    "opening_hours": "Mo-Th 12:00-23:00; Fr,Sa 11:30-23:30; Su 11:30-23:00",
+    "smoking": "no",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "toilets:access": "customers",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13247989264,
+  "lat": 41.4352012,
+  "lon": 2.1814534,
+  "tags": {
+    "air_conditioning": "yes",
+    "all_you_can_eat": "yes",
+    "amenity": "restaurant",
+    "cuisine": "sushi;japanese",
+    "drive_through": "no",
+    "name": "Sushiko",
+    "opening_hours": "13:00-17:00,20:00-24:00",
+    "outdoor_seating": "yes",
+    "payment:edenred_card": "no",
+    "smoking": "no",
+    "toilets": "yes",
+    "toilets:access": "customers"
+  }
+},
+{
+  "type": "node",
+  "id": 13250016122,
+  "lat": 41.4349060,
+  "lon": 2.1805790,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "42",
+    "addr:postcode": "08016",
+    "addr:street": "Avinguda de Rio de Janeiro",
+    "amenity": "restaurant",
+    "contact:facebook": "casacarmenrestaurant",
+    "contact:instagram": "casacarmenrestaurant",
+    "cuisine": "mediterranean",
+    "email": "som@casacarmenrestaurant.com",
+    "name": "Casa Carmen",
+    "opening_hours": "Mo-Th 12:30-23:00,Fr-Sa 12:30-00:00,Su 12:30-23:30",
+    "payment:edenred_card": "yes",
+    "phone": "+34931315592",
+    "website": "https://casacarmenrestaurant.com/restaurantes/som/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13371268701,
+  "lat": 41.4255782,
+  "lon": 2.1899504,
+  "tags": {
+    "mobile": "+34665658283",
+    "name": "Juia Jewels",
+    "shop": "jewelry",
+    "website": "https://juiajewels.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13393261771,
+  "lat": 41.4438908,
+  "lon": 2.1918610,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:street": "Passatge de Marta Mata",
+    "amenity": "cafe",
+    "name": "Casernes Terraza Bar"
+  }
+},
+{
+  "type": "node",
+  "id": 13424489667,
+  "lat": 41.4464530,
+  "lon": 2.1852845,
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "442",
+    "addr:postcode": "08016",
+    "addr:street": "Via Favència",
+    "amenity": "bar",
+    "min_age": "0",
+    "name": "Bar Gisela"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480437,
+  "lat": 41.4378060,
+  "lon": 2.1903194,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Autos Conchita",
+    "shop": "car"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480438,
+  "lat": 41.4293606,
+  "lon": 2.1840628,
+  "tags": {
+    "check_date": "2026-01-08",
+    "name": "Vision-Prix",
+    "shop": "optician"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480439,
+  "lat": 41.4294521,
+  "lon": 2.1839963,
+  "tags": {
+    "amenity": "cafe",
+    "brand": "365",
+    "check_date": "2026-01-08",
+    "cuisine": "coffee_shop",
+    "name": "365",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480440,
+  "lat": 41.4295176,
+  "lon": 2.1839579,
+  "tags": {
+    "check_date": "2026-01-08",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480441,
+  "lat": 41.4296566,
+  "lon": 2.1838900,
+  "tags": {
+    "brand": "Granier",
+    "brand:wikidata": "Q102311169",
+    "check_date": "2026-01-08",
+    "name": "Granier",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480444,
+  "lat": 41.4352482,
+  "lon": 2.1915598,
+  "tags": {
+    "amenity": "ice_cream",
+    "brand": "Jijonenca",
+    "brand:wikidata": "Q109332228",
+    "check_date": "2026-01-06",
+    "name": "Jijonenca"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480445,
+  "lat": 41.4302664,
+  "lon": 2.1870545,
+  "tags": {
+    "check_date": "2026-01-07",
+    "name": "Turris",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480446,
+  "lat": 41.4316887,
+  "lon": 2.1894733,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2026-01-06",
+    "name": "Massamara"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480447,
+  "lat": 41.4319625,
+  "lon": 2.1892130,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Bosanova",
+    "shop": "clothes"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480448,
+  "lat": 41.4321306,
+  "lon": 2.1891648,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Mario Gonzalo",
+    "shop": "butcher"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480449,
+  "lat": 41.4331736,
+  "lon": 2.1894671,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Bazar El Regalo",
+    "shop": "variety_store"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480450,
+  "lat": 41.4335060,
+  "lon": 2.1892488,
+  "tags": {
+    "amenity": "bank",
+    "brand": "Caixabank",
+    "brand:wikidata": "Q847225",
+    "check_date": "2026-01-06",
+    "name": "Caixabank"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480451,
+  "lat": 41.4340183,
+  "lon": 2.1898351,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Alam Fruites i Verdures",
+    "shop": "greengrocer"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480452,
+  "lat": 41.4302546,
+  "lon": 2.1878235,
+  "tags": {
+    "check_date": "2026-01-07",
+    "ref": "157",
+    "shop": "tobacco"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480453,
+  "lat": 41.4357514,
+  "lon": 2.1913563,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2026-01-06",
+    "name": "Vivari"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480454,
+  "lat": 41.4362415,
+  "lon": 2.1909321,
+  "tags": {
+    "amenity": "cafe",
+    "brand": "365",
+    "check_date": "2026-01-10",
+    "cuisine": "coffee_shop",
+    "name": "365",
+    "takeaway": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480455,
+  "lat": 41.4364784,
+  "lon": 2.1909930,
+  "tags": {
+    "amenity": "dentist",
+    "check_date": "2026-01-06",
+    "healthcare": "dentist",
+    "name": "Clinica Dental"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480456,
+  "lat": 41.4369930,
+  "lon": 2.1909454,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2026-01-06",
+    "name": "El Taller"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480457,
+  "lat": 41.4375123,
+  "lon": 2.1909279,
+  "tags": {
+    "amenity": "bank",
+    "brand": "BBVA",
+    "brand:wikidata": "Q806189",
+    "check_date": "2026-01-06",
+    "name": "BBVA",
+    "official_name": "Banco Bilbao Vizcaya Argentaria"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480458,
+  "lat": 41.4378113,
+  "lon": 2.1907227,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Fábregas",
+    "shop": "optician"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480459,
+  "lat": 41.4369312,
+  "lon": 2.1895573,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Ferretería Nuria",
+    "shop": "hardware"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480460,
+  "lat": 41.4377932,
+  "lon": 2.1899534,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Pá Artesá Del Vallés",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480461,
+  "lat": 41.4375241,
+  "lon": 2.1898941,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2026-01-06",
+    "name": "Cafetería tres"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480462,
+  "lat": 41.4375107,
+  "lon": 2.1896327,
+  "tags": {
+    "amenity": "pub",
+    "check_date": "2026-01-06",
+    "name": "Hyde Park",
+    "theme": "irish"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480463,
+  "lat": 41.4374039,
+  "lon": 2.1894635,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "Carn + carn",
+    "shop": "butcher"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480464,
+  "lat": 41.4372978,
+  "lon": 2.1895553,
+  "tags": {
+    "check_date": "2026-01-06",
+    "name": "French Kiss",
+    "shop": "beauty"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480465,
+  "lat": 41.4371809,
+  "lon": 2.1894036,
+  "tags": {
+    "amenity": "fast_food",
+    "check_date": "2026-01-06",
+    "cuisine": "pizza",
+    "name": "Sapri Pizza"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480466,
+  "lat": 41.4292851,
+  "lon": 2.1841168,
+  "tags": {
+    "amenity": "pub",
+    "check_date": "2026-01-08",
+    "name": "Al Meu BB"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480467,
+  "lat": 41.4371796,
+  "lon": 2.1909510,
+  "tags": {
+    "check_date": "2026-01-07",
+    "name": "La Casa Gran",
+    "shop": "hardware"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480469,
+  "lat": 41.4313570,
+  "lon": 2.1892926,
+  "tags": {
+    "amenity": "cafe",
+    "check_date": "2026-01-07",
+    "name": "Ruta Gallega"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480470,
+  "lat": 41.4313954,
+  "lon": 2.1892745,
+  "tags": {
+    "check_date": "2026-01-07",
+    "name": "El Peix De Sant Andreu",
+    "shop": "seafood"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480471,
+  "lat": 41.4312286,
+  "lon": 2.1888912,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2026-03-25",
+    "check_date:opening_hours": "2026-03-25",
+    "name": "Lagar",
+    "opening_hours": "Mo-Fr 09:00-16:00"
+  }
+},
+{
+  "type": "node",
+  "id": 13444480472,
+  "lat": 41.4315770,
+  "lon": 2.1914480,
+  "tags": {
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "bar": "yes",
+    "check_date": "2026-03-26",
+    "check_date:opening_hours": "2026-03-26",
+    "cuisine": "local",
+    "name": "La Tapadera de Sant Andreu",
+    "opening_hours": "Mo-Sa 13:00-16:00",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 13540473902,
+  "lat": 41.4306530,
+  "lon": 2.1818214,
+  "tags": {
+    "addr:housenumber": "6",
+    "addr:postcode": "08016",
+    "addr:street": "Carrer de Manuel Sancho",
+    "check_date": "2026-02-10",
+    "check_date:opening_hours": "2026-02-10",
+    "contact:facebook": "jocandrolbcn",
+    "contact:instagram": "jocandrol",
+    "contact:twitter": "joc_rol",
+    "name": "Joc & Rol",
+    "opening_hours": "We-Sa 10:30-13:30, 17:00-20:00",
+    "phone": "+34937605382",
+    "shop": "toys"
+  }
+},
+{
+  "type": "node",
+  "id": 13586590506,
+  "lat": 41.4373137,
+  "lon": 2.1909722,
+  "tags": {
+    "name": "MacxiPa",
+    "opening_hours": "Mo-Sa 06:00-21:30; Su 07:00-15:00",
+    "shop": "bakery"
+  }
+},
+{
+  "type": "node",
+  "id": 13688432602,
+  "lat": 41.4311411,
+  "lon": 2.1922450,
+  "tags": {
+    "addr:housenumber": "47",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Liuva",
+    "amenity": "restaurant",
+    "cuisine": "local",
+    "name": "El celler dels avis",
+    "phone": "+34933453647"
+  }
+},
+{
+  "type": "node",
+  "id": 13711952001,
+  "lat": 41.4300284,
+  "lon": 2.1809465,
+  "tags": {
+    "addr:housenumber": "34-36",
+    "addr:street": "Carrer de Vèlia",
+    "name": "CBD Side - Fabra i Puig",
+    "opening_hours": "Mo-Sa 10:30-14:30, 17:00-21:00",
+    "phone": "+34936046859",
+    "shop": "tobacco",
+    "website": "https://somossiders.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13766819901,
+  "lat": 41.4299718,
+  "lon": 2.1874278,
+  "tags": {
+    "addr:housenumber": "33",
+    "addr:postcode": "08030",
+    "addr:street": "Rambla de Fabra i Puig",
+    "amenity": "restaurant",
+    "cuisine": "local",
+    "email": "hola@santopaladar.es",
+    "name": "Santo Paladar",
+    "opening_hours": "Mo, Th-Sa 12:30-16:00, 19:00-23:00; Su 12:00-18:00",
+    "website": "https://www.santopaladar.es/"
+  }
+},
+{
+  "type": "node",
+  "id": 13830742137,
+  "lat": 41.4323483,
+  "lon": 2.1929838,
+  "tags": {
+    "amenity": "restaurant",
+    "name": "Blue Bro's Pizza"
+  }
+},
+{
+  "type": "node",
+  "id": 13947281201,
+  "lat": 41.4306844,
+  "lon": 2.1869832,
+  "tags": {
+    "addr:housenumber": "49",
+    "addr:street": "Carrer del Llenguadoc",
+    "check_date": "2026-06-17",
+    "name": "Espai de Joc",
+    "shop": "toys"
+  }
+},
+{
+  "type": "node",
+  "id": 13971048620,
+  "lat": 41.4338991,
+  "lon": 2.1896891,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "23",
+    "ebike": "yes",
+    "ele": "27",
+    "name": "257 - Sant Adrià 2",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "257"
+  }
+},
+{
+  "type": "node",
+  "id": 13971231529,
+  "lat": 41.4354439,
+  "lon": 2.1948545,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "24",
+    "ebike": "yes",
+    "name": "515 - Sant Adrià 43",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "515"
+  }
+},
+{
+  "type": "node",
+  "id": 13971231549,
+  "lat": 41.4433021,
+  "lon": 2.1813795,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "30",
+    "ebike": "yes",
+    "name": "466 - Pablo Iglesias 21",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "466"
+  }
+},
+{
+  "type": "node",
+  "id": 13971231555,
+  "lat": 41.4467063,
+  "lon": 2.1849315,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "28",
+    "ebike": "yes",
+    "name": "462 - Palamós 33",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "462"
+  }
+},
+{
+  "type": "node",
+  "id": 13971231556,
+  "lat": 41.4423162,
+  "lon": 2.1855256,
+  "tags": {
+    "addr:city": "Barcelona",
+    "amenity": "bicycle_rental",
+    "bicycle_rental": "docking_station",
+    "brand": "bicing",
+    "brand:wikidata": "Q1833385",
+    "brand:wikipedia": "ca:Bicing",
+    "capacity": "28",
+    "ebike": "yes",
+    "name": "461 - Av. Rio de Janeiro 118",
+    "network": "bicing",
+    "network:wikidata": "Q1833385",
+    "network:wikipedia": "ca:Bicing",
+    "operator": "Pedalem Barcelona",
+    "operator:type": "private",
+    "operator:wikidata": "Q123614695",
+    "ref": "461"
+  }
+},
+{
+  "type": "way",
+  "id": 35168882,
+  "center": {
+    "lat": 41.4407729,
+    "lon": 2.1980553
+  },
+  "tags": {
+    "addr:housenumber": "2",
+    "addr:street": "Passeig de Potosí",
+    "contact:facebook": "WESTFIELDLAMAQUINISTA",
+    "contact:instagram": "westfieldlamaquinista",
+    "internet_access": "wlan",
+    "internet_access:fee": "no",
+    "landuse": "retail",
+    "name": "La Maquinista",
+    "name:ca": "La Maquinista",
+    "opening_hours": "Mo-Sa 09:00-21:00; Su 12:00-00:00",
+    "phone": "+34933608971",
+    "shop": "mall",
+    "toilets": "yes",
+    "website": "https://www.lamaquinista.com",
+    "wheelchair": "yes",
+    "wikidata": "Q5964224",
+    "wikimedia_commons": "Category:La Maquinista (shopping mall)",
+    "wikipedia": "ca:Westfield La Maquinista"
+  }
+},
+{
+  "type": "way",
+  "id": 36007267,
+  "center": {
+    "lat": 41.4347738,
+    "lon": 2.1883938
+  },
+  "tags": {
+    "amenity": "marketplace",
+    "building": "retail",
+    "building:levels": "1",
+    "name": "Mercat de Sant Andreu",
+    "name:ca": "Mercat de Sant Andreu",
+    "wikidata": "Q18004763",
+    "wikimedia_commons": "Category:Mercat de Sant Andreu",
+    "wikipedia": "ca:Mercat de Sant Andreu"
+  }
+},
+{
+  "type": "way",
+  "id": 82608128,
+  "center": {
+    "lat": 41.4352324,
+    "lon": 2.1808835
+  },
+  "tags": {
+    "check_date": "2024-01-20",
+    "name": "Centre Comercial SOM Multiespai",
+    "old_name": "Heron City",
+    "shop": "mall",
+    "short_name": "SOM Multiespai",
+    "toilets": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 82608130,
+  "center": {
+    "lat": 41.4362468,
+    "lon": 2.1814500
+  },
+  "tags": {
+    "building": "retail",
+    "name": "El Corte Inglés (Can Dragó)",
+    "opening_hours": "Su-Fr 09:00-21:00",
+    "shop": "department_store"
+  }
+},
+{
+  "type": "way",
+  "id": 115308174,
+  "center": {
+    "lat": 41.4342621,
+    "lon": 2.1911943
+  },
+  "tags": {
+    "access": "yes",
+    "addr:housenumber": "24-32",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer del Segre",
+    "alt_name": "Can Fabra",
+    "amenity": "library",
+    "building": "civic",
+    "building:levels": "4",
+    "building:use": "public",
+    "name": "Biblioteca Ignasi Iglésias - Can Fabra",
+    "note": "bib. pub. Districte",
+    "old_name": "Can Fabra",
+    "operator": "Diputació de Barcelona, Consorci de Biblioteques de Barcelona",
+    "toilets:wheelchair": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q28466612",
+    "wikimedia_commons": "Category:Biblioteca Ignasi Iglésias-Can Fabra",
+    "wikipedia": "ca:Biblioteca Ignasi Iglésias-Can Fabra"
+  }
+},
+{
+  "type": "way",
+  "id": 115317630,
+  "center": {
+    "lat": 41.4280452,
+    "lon": 2.1853948
+  },
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "350-356",
+    "addr:postcode": "08027",
+    "addr:street": "Avinguda Meridiana",
+    "branch": "Meridiana",
+    "brand": "Hipercor",
+    "brand:wikidata": "Q191574",
+    "brand:wikipedia": "es:Hipercor",
+    "building": "retail",
+    "building:levels": "16",
+    "building:levels:underground": "4",
+    "name": "Hipercor",
+    "name:ca": "Hipercor",
+    "shop": "supermarket",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 174662625,
+  "center": {
+    "lat": 41.4471374,
+    "lon": 2.1835082
+  },
+  "tags": {
+    "amenity": "clinic",
+    "emergency": "no",
+    "name": "Centre d'Atenció Primària Chafarinas",
+    "opening_hours": "Mo-Fr 08:00-20:00; Sa 09:00-14:00",
+    "phone": "+34933542222",
+    "short_name": "CAP Chafarinas"
+  }
+},
+{
+  "type": "way",
+  "id": 226311000,
+  "center": {
+    "lat": 41.4483810,
+    "lon": 2.1840607
+  },
+  "tags": {
+    "amenity": "marketplace",
+    "building": "retail",
+    "building:levels": "2",
+    "building:levels:underground": "1",
+    "name": "Mercat de la Trinitat",
+    "name:ca": "Mercat de la Trinitat"
+  }
+},
+{
+  "type": "way",
+  "id": 231812034,
+  "center": {
+    "lat": 41.4430828,
+    "lon": 2.1925962
+  },
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "47",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Fernando Pessoa",
+    "amenity": "clinic",
+    "building": "yes",
+    "emergency": "yes",
+    "healthcare": "clinic",
+    "name": "CUAP Casernes",
+    "note": "24h Urgencies",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 262758551,
+  "center": {
+    "lat": 41.4398870,
+    "lon": 2.1818734
+  },
+  "tags": {
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "Centre d'Atenció Primària Rio de Janeiro",
+    "short_name": "CAP Rio de Janeiro"
+  }
+},
+{
+  "type": "way",
+  "id": 297092736,
+  "center": {
+    "lat": 41.4267595,
+    "lon": 2.1864069
+  },
+  "tags": {
+    "building": "retail",
+    "building:levels": "3",
+    "name": "Outlet El Corte Inglés",
+    "shop": "department_store",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 442602279,
+  "center": {
+    "lat": 41.4492319,
+    "lon": 2.1908161
+  },
+  "tags": {
+    "amenity": "library",
+    "building": "public",
+    "contact:facebook": "https://www.facebook.com/bibtrinitatvella",
+    "contact:twitter": "bibliotequesbcn",
+    "email": "b.barcelona.tv@diba.cat",
+    "name": "Biblioteca Trinitat Vella. José Barbero",
+    "opening_hours": "Mo,Fr 16:00-20:30; Tu-Th 10:00-14:00,16:00-20:30; Sa 10:00-14:00",
+    "operator": "Ajuntament de Barcelona",
+    "phone": "+34 936762968",
+    "website": "https://www.barcelona.cat/bibtrinitatvella",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 619213975,
+  "center": {
+    "lat": 41.4421167,
+    "lon": 2.1987499
+  },
+  "tags": {
+    "brand": "Carrefour",
+    "brand:wikidata": "Q217599",
+    "brand:wikipedia": "fr:Carrefour (enseigne)",
+    "building": "yes",
+    "email": "silvia_ferrer_fernandez@carrefour.com",
+    "mobile": "+34652671398",
+    "name": "Carrefour",
+    "name:ca": "Carrefour",
+    "shop": "supermarket"
+  }
+},
+{
+  "type": "way",
+  "id": 659868597,
+  "center": {
+    "lat": 41.4257255,
+    "lon": 2.1829649
+  },
+  "tags": {
+    "amenity": "restaurant",
+    "building:levels": "1",
+    "building:part": "yes",
+    "name": "Tasca i Vins"
+  }
+},
+{
+  "type": "way",
+  "id": 665346739,
+  "center": {
+    "lat": 41.4331787,
+    "lon": 2.1913114
+  },
+  "tags": {
+    "addr:housenumber": "20I",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Sant Adrià",
+    "building:levels": "2",
+    "name": "Sala de Calderes (MUHBA)",
+    "operator": "MUHBA",
+    "tourism": "museum"
+  }
+},
+{
+  "type": "way",
+  "id": 665352779,
+  "center": {
+    "lat": 41.4288809,
+    "lon": 2.1843893
+  },
+  "tags": {
+    "building": "yes",
+    "check_date": "2026-01-08",
+    "name": "Zamora Floristas",
+    "shop": "florist"
+  }
+},
+{
+  "type": "way",
+  "id": 665900164,
+  "center": {
+    "lat": 41.4357272,
+    "lon": 2.1902951
+  },
+  "tags": {
+    "air_conditioning": "yes",
+    "building": "yes",
+    "building:levels": "3",
+    "fashion_accessories": "yes",
+    "payment:cash": "yes",
+    "payment:contactless": "yes",
+    "payment:credit_cards": "yes",
+    "payment:mastercard": "yes",
+    "payment:visa": "yes",
+    "payment:visa_electron": "yes",
+    "phone": "+34 933113513",
+    "shop": "gift",
+    "stroller": "yes",
+    "website": "https://www.indrastandreu.es/",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 671917214,
+  "center": {
+    "lat": 41.4439507,
+    "lon": 2.1880685
+  },
+  "tags": {
+    "addr:housenumber": "513B",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer Gran de Sant Andreu",
+    "amenity": "fuel",
+    "brand": "Repsol",
+    "brand:wikidata": "Q174747",
+    "brand:wikipedia": "es:Repsol",
+    "landuse": "retail",
+    "name": "Repsol",
+    "name:ca": "Repsol",
+    "operator": "Repsol"
+  }
+},
+{
+  "type": "way",
+  "id": 693564814,
+  "center": {
+    "lat": 41.4327907,
+    "lon": 2.1873232
+  },
+  "tags": {
+    "building": "house",
+    "building:levels": "2",
+    "name": "Alberg Coroleu House",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 1021407157,
+  "center": {
+    "lat": 41.4439277,
+    "lon": 2.1881863
+  },
+  "tags": {
+    "building": "yes",
+    "opening_hours": "Mo-Su 08:00-21:00",
+    "operator": "Repsol",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "relation",
+  "id": 7430691,
+  "center": {
+    "lat": 41.4365752,
+    "lon": 2.1929393
+  },
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "12",
+    "addr:postcode": "08030",
+    "addr:street": "Plaça de l'Estació",
+    "amenity": "clinic",
+    "healthcare": "clinic",
+    "name": "Clínica Sant Jordi",
+    "name:ca": "Clínica Sant Jordi",
+    "phone": "+34 935 04 71 00",
+    "type": "multipolygon",
+    "website": "https://clinicasantjordi.com/"
+  }
+},
+{
+  "type": "relation",
+  "id": 7431327,
+  "center": {
+    "lat": 41.4304760,
+    "lon": 2.1884547
+  },
+  "tags": {
+    "addr:city": "Barcelona",
+    "addr:housenumber": "50",
+    "addr:postcode": "08030",
+    "addr:street": "Carrer de Neopàtria",
+    "amenity": "theatre",
+    "building": "public",
+    "building:levels": "2",
+    "building:levels:underground": "2",
+    "name": "Sant Andreu Teatre",
+    "name:ca": "Sant Andreu Teatre",
+    "phone": "+34 933457930",
+    "short_name": "SAT",
+    "type": "multipolygon",
+    "website": "https://www.sat-teatre.cat/",
+    "wheelchair": "yes",
+    "wikidata": "Q11946900",
+    "wikipedia": "ca:Sant Andreu Teatre"
+  }
+},
+{
+  "type": "relation",
+  "id": 8259898,
+  "center": {
+    "lat": 41.4474790,
+    "lon": 2.1884292
+  },
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Meroil",
+    "brand:wikidata": "Q62292559",
+    "building": "roof",
+    "fuel:lpg": "yes",
+    "name": "Meroil",
+    "name:fr": "Station Service Gaz GPL",
+    "type": "multipolygon"
+  }
+}
+
+  ]
+}

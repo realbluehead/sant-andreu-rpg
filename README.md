@@ -42,6 +42,10 @@ Per regenerar el mapa després d'actualitzar `data/osm.json`:
 python3 build_map.py
 ```
 
+## Establiments
+
+Els bars, cafeteries, forns, farmàcies, restaurants, supermercats i altres comerços d'OpenStreetMap (`data/pois.json`) surten al mapa amb una icona pixel art segons el tipus: una cervesa als bars, una tassa de cafè a les cafeteries, una creu verda a les farmàcies, coberts als restaurants, etc. Quan t'hi acostes, el nom de l'establiment apareix al panell de dalt.
+
 ## NPCs i vida
 
 - **20 policies en moto** fan la ronda pels carrers del barri, amb les llums blaves i vermelles enceses.

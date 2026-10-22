@@ -491,6 +491,55 @@ graph = {"car": build_graph(CAR_NET), "bike": build_graph(BIKE_NET)}
 for k, gph in graph.items():
     print(f"  xarxa {k}: {len(gph['nodes'])} cruïlles, {len(gph['edges'])} trams")
 
+# --- 9. Establiments (icones) -------------------------------------------
+POI_CATS = {
+    "beer": {"amenity": ["bar", "pub", "biergarten"]},
+    "coffee": {"amenity": ["cafe"]},
+    "bread": {"shop": ["bakery", "pastry", "confectionery"]},
+    "pharmacy": {"amenity": ["pharmacy"]},
+    "food": {"amenity": ["restaurant"]},
+    "burger": {"amenity": ["fast_food"]},
+    "icecream": {"amenity": ["ice_cream"], "shop": ["ice_cream"]},
+    "cart": {"shop": ["supermarket", "convenience", "greengrocer", "butcher", "deli", "seafood", "frozen_food",
+                      "alcohol", "beverages", "galician", "dairy", "cheese", "health_food"]},
+    "health": {"amenity": ["clinic", "doctors", "dentist", "hospital"]},
+    "bank": {"amenity": ["bank", "atm"]},
+    "scissors": {"shop": ["hairdresser", "beauty", "barber", "cosmetics"]},
+    "shirt": {"shop": ["clothes", "shoes", "fashion", "boutique", "jewelry", "bag"]},
+    "book": {"shop": ["books", "stationery", "newsagent"], "amenity": ["library"]},
+    "bike": {"amenity": ["bicycle_rental"], "shop": ["bicycle"]},
+    "fuel": {"amenity": ["fuel"]},
+    "film": {"amenity": ["cinema", "theatre"]},
+    "bed": {"tourism": ["hotel", "hostel"]},
+    "phone": {"shop": ["mobile_phone", "telecommunication", "electronics", "computer"]},
+}
+
+
+def poi_category(t):
+    for cat, rules in POI_CATS.items():
+        for key, vals in rules.items():
+            if t.get(key) in vals:
+                return cat
+    return "shop" if t.get("shop") else None
+
+
+pois = []
+pois_path = os.path.join(HERE, "data", "pois.json")
+if os.path.exists(pois_path):
+    seen_poi = set()
+    for el in json.load(open(pois_path))["elements"]:
+        t = el.get("tags", {})
+        cat = poi_category(t)
+        c = el if el["type"] == "node" else el.get("center")
+        if not cat or not c:
+            continue
+        x, y = proj(c["lat"], c["lon"])
+        if not (0 <= x < WIDTH and 0 <= y < HEIGHT) or (el["type"], el["id"]) in seen_poi:
+            continue
+        seen_poi.add((el["type"], el["id"]))
+        pois.append({"c": cat, "n": t.get("name", ""), "x": round(x, 1), "y": round(y, 1)})
+print(f"  {len(pois)} establiments")
+
 # --- Sortida -------------------------------------------------------------
 os.makedirs(OUT, exist_ok=True)
 header = struct.pack("<4sHH", b"SAPM", WIDTH, HEIGHT)
@@ -504,7 +553,7 @@ json.dump({
     "width": WIDTH, "height": HEIGHT, "metersPerTile": M_PER_TILE,
     "bbox": [S, W, N, E], "start": [round(start[0], 1), round(start[1], 1)],
     "boundary": [[[round(x, 1), round(y, 1)] for x, y in r] for r in boundary],
-    "streets": list(streets.values()), "places": places, "graph": graph,
+    "streets": list(streets.values()), "places": places, "graph": graph, "pois": pois,
     "attribution": "© OpenStreetMap contributors (ODbL)",
 }, open(os.path.join(OUT, "map.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 print("Fet:", os.path.getsize(os.path.join(OUT, "map.bin")), "bytes map.bin,",

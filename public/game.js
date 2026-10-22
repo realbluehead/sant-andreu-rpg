@@ -1,7 +1,7 @@
 // Sant Andreu RPG — mapa pixel art de Sant Andreu de Palomar fet amb dades d'OpenStreetMap.
 "use strict";
 
-const DATA_VERSION = 2;  // augmenta-ho quan es regenerin map.bin / map.json
+const DATA_VERSION = 3;  // augmenta-ho quan es regenerin map.bin / map.json
 const TS = 16;          // píxels per tile
 const CHUNK = 32;       // tiles per chunk
 const CHUNK_CACHE = 70;
@@ -708,6 +708,7 @@ function draw() {
     list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * k, Math.round(o.y) - 23 * k, false, k]);
   }
   pushNpcSprites(list, camX, camY, vw, vh, k);
+  pushPoiSprites(list, camX, camY, vw, vh, k);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -1060,6 +1061,8 @@ function updateOnline() {
     : "Sense connexió";
 }
 
+const escapeHtml = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
 // HUD
 const hud = document.getElementById("location-text");
 let hudTimer = 0, lastHud = "";
@@ -1070,12 +1073,14 @@ function updateHud(dt) {
   const tx = state.player.x / TS, ty = state.player.y / TS;
   const street = nearestStreet(tx, ty);
   const place = nearestPlace(tx, ty);
+  const poi = nearestPoi(tx, ty);
+  const placeText = poi ? (poi.name !== poi.label ? `${poi.name} (${poi.label})` : poi.name) : place?.name;
   const inside = !(g(Math.floor(tx), Math.floor(ty)) & OUTSIDE);
   const m = state.meta.metersPerTile;
   const [S, Wl, N, E] = state.meta.bbox;
   const lat = N - (ty / state.H) * (N - S), lon = Wl + (tx / state.W) * (E - Wl);
   const html = `<div class="street">${street ?? (inside ? "Sant Andreu de Palomar" : "Fora del barri")}</div>` +
-    `<div class="place">${place ? "> " + place.name : ""}</div>` +
+    `<div class="place">${placeText ? "> " + escapeHtml(placeText) : ""}</div>` +
     `<div class="meta">${inside ? "Sant Andreu de Palomar" : "Fora del barri"} · ${lat.toFixed(5)}, ${lon.toFixed(5)}${state.noclip ? " · FANTASMA" : ""}</div>`;
   if (html !== lastHud) { hud.innerHTML = html; lastHud = html; }
 }
@@ -1248,6 +1253,7 @@ async function main() {
   bindTouchControls();
   bindChat();
   initNPCs(state.meta.graph);
+  initPois();
   bindNpcUi();
   net.connect();
   document.getElementById("loading").classList.add("hidden");

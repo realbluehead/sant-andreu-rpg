@@ -42,6 +42,16 @@
   #money i.vault { border-radius: 2px; background: linear-gradient(#0f766e 0 30%, #5eead4 30% 40%, #0f766e 40% 100%); }
   #wallet.bump, #bank.bump { animation: bump .35s steps(3); }
   #banner.bank { color: #5eead4; }
+  #banner.beer { color: #fbbf24; }
+  #banner.coffee { color: #d6b38a; }
+  #drunk { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 8px; }
+  #drunk .lbl { color: #fbbf24; }
+  #drunk .bar { flex: 1; min-width: 60px; max-width: 110px; height: 8px; background: #2a1d0a; border: 2px solid #0b0d1f; box-shadow: 0 0 0 1px #f4f1e8;
+    background-image: repeating-linear-gradient(90deg, transparent 0 calc(5% - 1px), rgba(0,0,0,.35) calc(5% - 1px) 5%); }
+  #drunk .bar i { display: block; height: 100%; width: 0; background: #f59e0b; transition: width .3s; }
+  #drunk.high .bar i { background: #fb7185; }
+  #drunk .val { color: var(--text); min-width: 40px; }
+  #drunk.bump { animation: bump .35s steps(3); }
   #banner.rob { color: #ff6b6b; border-color: #dc2626; }
   @keyframes bump { 50% { transform: scale(1.25); } }
   #treasure { margin-top: 4px; font-size: 8px; color: #fde68a; }
@@ -178,6 +188,7 @@
   <div id="location-text"><div class="street">…</div><div class="place"></div><div class="meta"></div></div>
   <div id="online" class="offline"><i></i><span>Connectant…</span></div>
   <div id="hp"><span class="lbl">VIDA</span><div class="bar"><i></i></div><span class="val">100/100</span></div>
+  <div id="drunk" title="Embriaguesa: puja amb cerveses als bars, baixa amb cafès"><span class="lbl">EMBRIAGUESA</span><div class="bar"><i></i></div><span class="val">0/20</span></div>
   <div id="money">
     <span id="wallet" title="Monedes que portes a sobre (te les poden robar)"><i class="coin"></i>A sobre <b>0</b></span>
     <span id="bank" title="Monedes assegurades al banc"><i class="vault"></i>Banc <b>0</b></span>
@@ -234,11 +245,12 @@
 <div id="toast" class="panel hidden"></div>
 <div id="attribution">Dades © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL)</div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=17"></script>
-<script src="npcs.js?v=17"></script>
-<script src="pois.js?v=17"></script>
-<script src="animals.js?v=17"></script>
-<script src="coins.js?v=17"></script>
-<script src="thieves.js?v=17"></script>
+<script src="game.js?v=18"></script>
+<script src="npcs.js?v=18"></script>
+<script src="pois.js?v=18"></script>
+<script src="animals.js?v=18"></script>
+<script src="coins.js?v=18"></script>
+<script src="thieves.js?v=18"></script>
+<script src="drinks.js?v=18"></script>
 </body>
 </html>

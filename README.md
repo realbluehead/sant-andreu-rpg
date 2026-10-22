@@ -54,6 +54,12 @@ Els punts on poden aparèixer els genera `build_map.py` a `server/src/spawns.jso
 
 Les monedes que recull van a la **cartera** ("A sobre"). Si passes per un **banc o caixer** queden **assegurades** ("Banc") i ja no te les poden robar.
 
+## Bars, cafeteries i embriaguesa
+
+Tens un nivell d'**embriaguesa** de 0 a 20. Cada vegada que entres a un **bar** i portes monedes, pagues 1 moneda i et prens una cervesa (+1). Com més embriagat vas, més **ziga-zaga** fas en caminar. Només baixa prenent **cafès** a les cafeteries (1 moneda, -3).
+
+La posició, l'embriaguesa i les monedes es guarden al navegador: en recarregar tornes on eres.
+
 ## Lladres
 
 Hi ha **90 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m i sense cap edifici pel mig) et persegueixen, una mica més lents que tu. Si t'atrapen et roben totes les monedes que portes a sobre; les del banc no. Si t'allunyes prou o els perds de vista, es rendeixen. Els lladres són locals: cada jugador té els seus i només el persegueixen a ell.

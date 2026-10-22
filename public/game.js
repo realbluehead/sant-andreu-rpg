@@ -617,6 +617,21 @@ function findWalkable(tx, ty) {
   }
   return [tx, ty];
 }
+// Posició guardada al navegador per tornar al mateix lloc en recarregar
+const POS_KEY = "santandreu-rpg-pos";
+function loadPosition() {
+  try {
+    const p = JSON.parse(localStorage.getItem(POS_KEY) || "null");
+    if (p && Number.isFinite(p.x) && Number.isFinite(p.y) && p.x >= 0 && p.y >= 0 && p.x < state.W && p.y < state.H) return [p.x, p.y];
+  } catch { /* sense emmagatzematge */ }
+  return null;
+}
+function savePosition() {
+  try {
+    localStorage.setItem(POS_KEY, JSON.stringify({ x: +((state.player.x - TS / 2) / TS).toFixed(2), y: +((state.player.y - TS + 2) / TS).toFixed(2) }));
+  } catch { /* sense emmagatzematge */ }
+}
+
 function placePlayer(tx, ty) {
   const [x, y] = findWalkable(Math.round(tx), Math.round(ty));
   state.player.x = x * TS + TS / 2;
@@ -645,6 +660,7 @@ function update(dt) {
   const joy = state.joy;
   if (!frozen && joy.active && Math.hypot(joy.x, joy.y) > 0.2) { dx = joy.x; dy = joy.y; }
   pl.moving = dx !== 0 || dy !== 0;
+  if (pl.moving) [dx, dy] = drunkWobble(dx, dy); // com més embriagat, més ziga-zaga
   if (pl.moving) {
     state.follow = true;
     const running = k.has("ShiftLeft") || k.has("ShiftRight") || state.touchRun;
@@ -1285,11 +1301,14 @@ async function main() {
   };
   buildLabels();
   buildMinimap();
-  placePlayer(...state.meta.start);
+  const saved = loadPosition();
+  placePlayer(...(saved || state.meta.start));
   const z = ZOOMS[state.zoomIdx];
   state.cam.x = state.player.x - canvas.width / dpr / z / 2;
   state.cam.y = state.player.y - canvas.height / dpr / z / 2;
   bindInput();
+  setInterval(savePosition, 2000);
+  addEventListener("pagehide", savePosition);
   bindAvatarPanel();
   bindTouchControls();
   bindChat();
@@ -1298,6 +1317,7 @@ async function main() {
   initAnimals();
   initCoins();
   initThieves();
+  initDrinks();
   bindNpcUi();
   net.connect();
   document.getElementById("loading").classList.add("hidden");
@@ -1311,6 +1331,7 @@ async function main() {
     updateAnimals(dt);
     updateCoins(dt);
     updateThieves(dt);
+    updateDrinks(dt);
     tickBubbles(dt);
     draw();
     drawMinimap();

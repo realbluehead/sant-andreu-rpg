@@ -32,6 +32,12 @@
   #online i { width: 7px; height: 7px; background: #4ade80; box-shadow: 0 0 0 1px #0b0d1f; }
   #online.offline { color: var(--muted); }
   #online.offline i { background: #6b7280; }
+  #coins { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 12px; color: #facc15; }
+  #coins i { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fef9c3 0 18%, #facc15 22% 60%, #b45309 64%);
+    box-shadow: 0 0 0 2px #1a1420; }
+  #coins.bump { animation: bump .35s steps(3); }
+  @keyframes bump { 50% { transform: scale(1.25); } }
+  #treasure { margin-top: 4px; font-size: 8px; color: #fde68a; }
   #hp { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 8px; }
   #hp .lbl { color: #ff8a8a; }
   #hp .bar { flex: 1; min-width: 90px; max-width: 160px; height: 10px; background: #3a1420; border: 2px solid #0b0d1f; box-shadow: 0 0 0 1px #f4f1e8; }
@@ -165,6 +171,8 @@
   <div id="location-text"><div class="street">…</div><div class="place"></div><div class="meta"></div></div>
   <div id="online" class="offline"><i></i><span>Connectant…</span></div>
   <div id="hp"><span class="lbl">VIDA</span><div class="bar"><i></i></div><span class="val">100/100</span></div>
+  <div id="coins" title="Monedes recollides"><i></i><span>0</span></div>
+  <div id="treasure" class="hidden"></div>
 </div>
 <div id="minimap-wrap" class="panel"><div class="title">SANT ANDREU DE PALOMAR</div><canvas id="minimap"></canvas></div>
 <div id="help" class="panel">
@@ -216,9 +224,10 @@
 <div id="toast" class="panel hidden"></div>
 <div id="attribution">Dades © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL)</div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=13"></script>
-<script src="npcs.js?v=13"></script>
-<script src="pois.js?v=13"></script>
-<script src="animals.js?v=13"></script>
+<script src="game.js?v=14"></script>
+<script src="npcs.js?v=14"></script>
+<script src="pois.js?v=14"></script>
+<script src="animals.js?v=14"></script>
+<script src="coins.js?v=14"></script>
 </body>
 </html>

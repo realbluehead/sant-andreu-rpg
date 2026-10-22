@@ -540,6 +540,26 @@ if os.path.exists(pois_path):
         pois.append({"c": cat, "n": t.get("name", ""), "x": round(x, 1), "y": round(y, 1)})
 print(f"  {len(pois)} establiments")
 
+# --- 10. Punts on poden aparèixer monedes (per al servidor) -------------
+# Tiles caminables dins del barri, sense arbres ni fonts, triats de manera repartida.
+SPAWN_TILES = {GROUND, GRASS, PARK, SIDEWALK, PLAZA, SCHOOLYARD, DIRT, SAND, CONCRETE}
+candidates = []
+for ty in range(1, HEIGHT - 1):
+    for tx in range(1, WIDTH - 1):
+        k = ty * WIDTH + tx
+        g = ground[k]
+        if g & OUTSIDE or g not in SPAWN_TILES or decor[k] in (D_TREE, D_TREE2, D_FOUNTAIN):
+            continue
+        # que els veïns també siguin caminables (evita racons impossibles)
+        if all((ground[k + d] & 127) < BUILDING_BASE and (ground[k + d] & 127) not in (WATER, POOL)
+               for d in (-1, 1, -WIDTH, WIDTH)):
+            candidates.append((tx, ty))
+candidates.sort(key=lambda c: h("spawn", c[0], c[1]))
+spawns = [[tx, ty] for tx, ty in candidates[:3000]]
+os.makedirs(os.path.join(HERE, "server", "src"), exist_ok=True)
+json.dump(spawns, open(os.path.join(HERE, "server", "src", "spawns.json"), "w"), separators=(",", ":"))
+print(f"  {len(spawns)} punts per a monedes (de {len(candidates)} possibles)")
+
 # --- Sortida -------------------------------------------------------------
 os.makedirs(OUT, exist_ok=True)
 header = struct.pack("<4sHH", b"SAPM", WIDTH, HEIGHT)

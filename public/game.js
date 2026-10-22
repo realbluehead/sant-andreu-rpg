@@ -718,6 +718,7 @@ function draw() {
   pushNpcSprites(list, camX, camY, vw, vh, k);
   pushPoiSprites(list, camX, camY, vw, vh, k);
   pushAnimalSprites(list, camX, camY, vw, vh, k);
+  pushCoinSprites(list, camX, camY, vw, vh, k);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -737,6 +738,7 @@ function draw() {
   drawAnimalBubbles(camX, camY, z);
   drawPlayerName(camX, camY, z);
   drawNpcOverlay(camX, camY, z);
+  drawTreasurePointer(camX, camY, z);
 }
 
 function drawPlayerName(camX, camY, z) {
@@ -1004,6 +1006,7 @@ const net = {
     ws.onmessage = (e) => { try { this.onMessage(JSON.parse(e.data)); } catch { /* missatge invàlid */ } };
     ws.onclose = () => {
       this.connected = false; this.others.clear(); this.ws = null;
+      coinsOnDisconnect();
       updateOnline();
       this.reconnect();
     };
@@ -1025,6 +1028,7 @@ const net = {
     this.others.set(p.id, { ...p, tx: p.x, ty: p.y, anim: 0, frame: 0, sprites: makeHeroSet(p.look) });
   },
   onMessage(m) {
+    coinsOnMessage(m);
     if (m.t === "welcome") {
       this.id = m.id; this.connected = true; this.others.clear();
       for (const p of m.players) this.addOther(p);
@@ -1094,6 +1098,7 @@ function updateHud(dt) {
     `<div class="place">${placeText ? "> " + escapeHtml(placeText) : ""}</div>` +
     `<div class="meta">${inside ? "Sant Andreu de Palomar" : "Fora del barri"} · ${lat.toFixed(5)}, ${lon.toFixed(5)}${state.noclip ? " · FANTASMA" : ""}</div>`;
   if (html !== lastHud) { hud.innerHTML = html; lastHud = html; }
+  updateTreasureHud();
 }
 
 const toastEl = document.getElementById("toast");
@@ -1266,6 +1271,7 @@ async function main() {
   initNPCs(state.meta.graph);
   initPois();
   initAnimals();
+  initCoins();
   bindNpcUi();
   net.connect();
   document.getElementById("loading").classList.add("hidden");
@@ -1277,6 +1283,7 @@ async function main() {
     update(dt);
     updateNPCs(dt);
     updateAnimals(dt);
+    updateCoins();
     tickBubbles(dt);
     draw();
     drawMinimap();

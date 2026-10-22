@@ -1,12 +1,19 @@
 // Servidor multijugador de Sant Andreu RPG: una sala única (Durable Object) que
 // reenvia posicions i aspecte dels avatars a tots els connectats via WebSocket.
+// També gestiona les monedes compartides: n'apareix una cada 5 s en un lloc accessible
+// (fins a 50 alhora) i quan algú l'agafa desapareix per a tothom.
 import { DurableObject } from "cloudflare:workers";
+import SPAWNS from "./spawns.json"; // tiles caminables dins del barri (generats per build_map.py)
 
 const ROOM_NAME = "sant-andreu";
 const MAX_PLAYERS = 150;
 const MAX_MSG = 1024;
 const MAX_SAY = 30;
 const SAY_COOLDOWN_MS = 1000;
+const MAX_COINS = 50;
+const COIN_EVERY_MS = 5000;
+const TS = 16;              // píxels per tile al client
+const PICK_RADIUS = 3;      // tiles de marge (latència) per validar que el jugador és a prop
 const ALLOWED_ORIGINS = [/^https:\/\/realbluehead\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
 
 const COLOR = /^#[0-9a-f]{6}$/i;
@@ -39,6 +46,40 @@ export class Room extends DurableObject {
     return new Response(null, { status: 101, webSocket: client });
   }
 
+  // --- Monedes -----------------------------------------------------------
+  async loadCoins() {
+    if (this.coins) return;
+    const stored = await this.ctx.storage.get(["coins", "nextCoinId"]);
+    this.coins = stored.get("coins") || [];
+    this.nextCoinId = stored.get("nextCoinId") || 1;
+  }
+  async saveCoins() {
+    await this.ctx.storage.put({ coins: this.coins, nextCoinId: this.nextCoinId });
+  }
+  async ensureAlarm() {
+    if ((await this.ctx.storage.getAlarm()) == null) await this.ctx.storage.setAlarm(Date.now() + COIN_EVERY_MS);
+  }
+  // Cada 5 s, mentre hi hagi algú connectat, apareix una moneda nova
+  async alarm() {
+    const players = this.ctx.getWebSockets().filter((ws) => ws.deserializeAttachment()?.p).length;
+    if (!players) return; // ningú connectat: no tornem a programar l'alarma
+    await this.loadCoins();
+    if (this.coins.length < MAX_COINS) {
+      const taken = new Set(this.coins.map((c) => c.x + "," + c.y));
+      for (let i = 0; i < 20; i++) {
+        const [tx, ty] = SPAWNS[(Math.random() * SPAWNS.length) | 0];
+        const x = tx + 0.5, y = ty + 0.5;
+        if (taken.has(x + "," + y)) continue;
+        const coin = { id: this.nextCoinId++, x, y };
+        this.coins.push(coin);
+        await this.saveCoins();
+        this.broadcast({ t: "coin", c: coin });
+        break;
+      }
+    }
+    await this.ctx.storage.setAlarm(Date.now() + COIN_EVERY_MS);
+  }
+
   broadcast(msg, except) {
     const data = JSON.stringify(msg);
     for (const ws of this.ctx.getWebSockets()) {
@@ -49,7 +90,7 @@ export class Room extends DurableObject {
     }
   }
 
-  webSocketMessage(ws, raw) {
+  async webSocketMessage(ws, raw) {
     if (typeof raw !== "string" || raw.length > MAX_MSG) return;
     let m;
     try { m = JSON.parse(raw); } catch { return; }
@@ -64,7 +105,9 @@ export class Room extends DurableObject {
         .filter((o) => o !== ws)
         .map((o) => o.deserializeAttachment()?.p)
         .filter(Boolean);
-      ws.send(JSON.stringify({ t: "welcome", id: a.id, players }));
+      await this.loadCoins();
+      ws.send(JSON.stringify({ t: "welcome", id: a.id, players, coins: this.coins, maxCoins: MAX_COINS }));
+      await this.ensureAlarm();
       this.broadcast(isNew ? { t: "join", p: a.p } : { t: "look", id: a.id, look }, ws);
     } else if (!a.p) {
       return;
@@ -72,6 +115,20 @@ export class Room extends DurableObject {
       Object.assign(a.p, cleanPos(m));
       ws.serializeAttachment(a);
       this.broadcast({ t: "move", id: a.id, x: a.p.x, y: a.p.y, dir: a.p.dir, moving: a.p.moving }, ws);
+    } else if (m.t === "take") {
+      await this.loadCoins();
+      const i = this.coins.findIndex((c) => c.id === m.id);
+      if (i < 0) return; // algú se l'ha endut abans
+      const c = this.coins[i];
+      if (Number.isFinite(m.x) && Number.isFinite(m.y)) Object.assign(a.p, cleanPos({ ...a.p, x: m.x, y: m.y }));
+      if (Math.hypot(a.p.x / TS - c.x, a.p.y / TS - c.y) > PICK_RADIUS) return;
+      this.coins.splice(i, 1);
+      await this.saveCoins();
+      a.coins = (a.coins || 0) + 1;
+      ws.serializeAttachment(a);
+      const msg = { t: "taken", id: c.id, by: a.id };
+      ws.send(JSON.stringify(msg));
+      this.broadcast(msg, ws);
     } else if (m.t === "say") {
       const text = String(m.text ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, MAX_SAY);
       const now = Date.now();

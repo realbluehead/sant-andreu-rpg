@@ -46,6 +46,12 @@ python3 build_map.py
 
 Els bars, cafeteries, forns, farmàcies, restaurants, supermercats i altres comerços d'OpenStreetMap (`data/pois.json`) surten al mapa amb una icona pixel art segons el tipus: una cervesa als bars, una tassa de cafè a les cafeteries, una creu verda a les farmàcies, coberts als restaurants, etc. Quan t'hi acostes, el nom de l'establiment apareix al panell de dalt.
 
+## Monedes
+
+Cada 5 segons el servidor fa aparèixer una moneda en un lloc accessible del barri (fins a 50 alhora). Les monedes són compartides: quan algú n'agafa una, desapareix per a tothom. El comptador de monedes surt al panell de dalt, i una fletxa a la vora de la pantalla indica a quants metres és el tresor més proper (al minimapa no surten).
+
+Els punts on poden aparèixer els genera `build_map.py` a `server/src/spawns.json`.
+
 ## NPCs i vida
 
 - **10 policies en moto** fan la ronda pels carrers del barri, amb les llums blaves i vermelles enceses.

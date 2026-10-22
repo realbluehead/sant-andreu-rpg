@@ -88,7 +88,7 @@ async function loadConfig() {
 const TS = 16;          // píxels per tile
 const CHUNK = 32;       // tiles per chunk
 const CHUNK_CACHE = 70;
-const ZOOMS = [0.5, 1, 2, 3, 4, 6];
+const ZOOMS = [0.5, 1, 2];
 const HERO_SCREEN_SCALE = 3; // mida fixa de l'avatar (equival al zoom ×3)
 
 // Ids de tiles (han de coincidir amb build_map.py)
@@ -501,7 +501,7 @@ function makeFountain() {
 // Estat
 const state = {
   W: 0, H: 0, ground: null, decor: null, meta: null,
-  zoomIdx: 3, cam: { x: 0, y: 0 }, follow: true,
+  zoomIdx: 2, cam: { x: 0, y: 0 }, follow: true,
   player: { x: 0, y: 0, dir: "down", frame: 0, anim: 0, moving: false },
   keys: new Set(), noclip: false, showLabels: true, showMinimap: true, look: loadLook(), editing: false, chatting: false, bubble: null,
   joy: { active: false, x: 0, y: 0 }, touchRun: false,
@@ -851,11 +851,13 @@ function draw() {
     if (o.x < camX - 64 || o.x > camX + vw + 64 || o.y < camY - 64 || o.y > camY + vh + 96) continue;
     list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * k, Math.round(o.y) - 23 * k, false, k]);
   }
-  pushNpcSprites(list, camX, camY, vw, vh, k);
+  // Els NPCs (vehicles, ultres, animals, lladres) s'escalen amb el mapa; rètols i monedes no
+  const kw = 1;
+  pushNpcSprites(list, camX, camY, vw, vh, kw);
   pushPoiSprites(list, camX, camY, vw, vh, k);
-  pushAnimalSprites(list, camX, camY, vw, vh, k);
+  pushAnimalSprites(list, camX, camY, vw, vh, kw);
   pushCoinSprites(list, camX, camY, vw, vh, k);
-  pushThiefSprites(list, camX, camY, vw, vh, k);
+  pushThiefSprites(list, camX, camY, vw, vh, kw);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -894,7 +896,8 @@ function tickBubbles(dt) {
   if (state.bubble && (state.bubble.ttl -= dt) <= 0) state.bubble = null;
   for (const o of net.others.values()) if (o.bubble && (o.bubble.ttl -= dt) <= 0) o.bubble = null;
 }
-function drawBubble(b, x, y, camX, camY, z) {
+// spriteH = alçada en pantalla del personatge que parla (per defecte, la de l'avatar)
+function drawBubble(b, x, y, camX, camY, z, spriteH = HERO_SCREEN_SCALE * 24 * dpr) {
   if (!b) return;
   const fs = Math.round(8 * dpr);
   ctx.font = `${fs}px "Press Start 2P", monospace`;
@@ -902,7 +905,7 @@ function drawBubble(b, x, y, camX, camY, z) {
   const pad = 6 * dpr, tail = 5 * dpr, bw = 2 * dpr;
   const w = Math.ceil(ctx.measureText(b.text).width) + pad * 2, h = fs + pad * 2;
   const sx = Math.round((x - camX) * z);
-  const bottom = Math.round((y - camY) * z - (HERO_SCREEN_SCALE * 24 + 10) * dpr - fs / 2 - 4 * dpr - 6 * dpr);
+  const bottom = Math.round((y - camY) * z - spriteH - 10 * dpr - fs / 2 - 4 * dpr - 6 * dpr);
   const left = Math.round(sx - w / 2), top = bottom - tail - h;
   ctx.save();
   ctx.globalAlpha = Math.min(1, b.ttl / 0.4);
@@ -980,7 +983,7 @@ function drawNameTag(rawName, x, y, camX, camY, z, color) {
 }
 
 function drawLabels(camX, camY, z) {
-  const fs = Math.round(8 * dpr * (ZOOMS[state.zoomIdx] >= 3 ? 1.25 : 1));
+  const fs = Math.round(8 * dpr * (ZOOMS[state.zoomIdx] >= 2 ? 1.25 : 1));
   ctx.font = `${fs}px "Press Start 2P", monospace`;
   ctx.textBaseline = "middle";
   if ("fontVariantLigatures" in ctx) ctx.fontVariantLigatures = "none";

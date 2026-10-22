@@ -170,5 +170,5 @@ function pushThiefSprites(list, camX, camY, vw, vh, k) {
 }
 
 function drawThiefOverlay(camX, camY, z) {
-  for (const t of thieves.list) if (t.say) drawBubble(t.say, t.x, t.y, camX, camY, z);
+  for (const t of thieves.list) if (t.say) drawBubble(t.say, t.x, t.y, camX, camY, z, 14 * z);
 }

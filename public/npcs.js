@@ -445,7 +445,7 @@ function pushGangSprites(list, camX, camY, vw, vh, k) {
 function drawGangOverlay(camX, camY, z) {
   for (const g of npcs.gangs) {
     if (!g.active) continue;
-    for (const m of g.members) if (m.say) drawBubble(m.say, m.x, m.y, camX, camY, z);
+    for (const m of g.members) if (m.say) drawBubble(m.say, m.x, m.y, camX, camY, z, 14 * z);
   }
 }
 

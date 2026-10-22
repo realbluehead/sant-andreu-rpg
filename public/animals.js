@@ -155,9 +155,8 @@ function pushAnimalSprites(list, camX, camY, vw, vh, k) {
 }
 
 function drawAnimalBubbles(camX, camY, z) {
-  const k = HERO_SCREEN_SCALE / ZOOMS[state.zoomIdx];
   for (const a of animals.list) {
-    if (a.say) drawBubble(a.say, a.x, a.y + 14 * k, camX, camY, z);
+    if (a.say) drawBubble(a.say, a.x, a.y, camX, camY, z, (a.kind === "dog" ? 6 : 2) * z); // els animals s'escalen amb el mapa
   }
 }
 

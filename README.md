@@ -18,7 +18,7 @@ Obre <http://localhost:8737>.
 |---|---|
 | Fletxes / WASD | caminar |
 | Shift | córrer |
-| + / − o roda del ratolí | zoom (també amb els botons de dalt a la dreta) |
+| + / − o roda del ratolí | zoom de ×0,5 a ×2 (també amb els botons de dalt a la dreta); el teu avatar sempre té la mateixa mida i la resta de personatges s'escalen amb el mapa |
 | Arrossegar | moure la càmera |
 | C | centrar la càmera |
 | M | minimapa (clic sobre un punt blau per saber quin jugador és i a quina distància) |

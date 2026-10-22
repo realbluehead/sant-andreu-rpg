@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Sant Andreu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #10121f; --panel: #1d2142; --panel-2: #262b55; --border: #3b4285; --text: #f4f1e8; --muted: #9aa3c7;
+    --accent: #ffd35a; --ok: #4ade80; --warn: #fb923c; --err: #f87171; --changed: #7dd3fc;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; background: rgba(16,18,31,.94); backdrop-filter: blur(6px);
+    border-bottom: 2px solid var(--border); padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+  h1 { font: 13px "Press Start 2P", monospace; color: var(--accent); margin: 0; letter-spacing: .5px; }
+  .status { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+  .status.dirty .dot { background: var(--changed); }
+  .status.unpub .dot { background: var(--warn); }
+  .actions { margin-left: auto; display: flex; flex-wrap: wrap; gap: 8px; }
+  button, .btn { font: 600 13px system-ui, sans-serif; color: var(--text); background: var(--panel-2); border: 2px solid var(--border);
+    border-radius: 6px; padding: 8px 12px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  button:hover:not(:disabled), .btn:hover { border-color: var(--text); }
+  button:disabled { opacity: .4; cursor: default; }
+  button.primary { background: var(--accent); color: #1d2142; border-color: var(--accent); }
+  button.publish { background: #14532d; border-color: var(--ok); }
+  main { max-width: 1180px; margin: 0 auto; padding: 18px 16px 60px; }
+  .intro { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+  .intro code { color: var(--text); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+  section { background: var(--panel); border: 2px solid var(--border); border-radius: 8px; padding: 14px; }
+  section h2 { margin: 0 0 10px; font: 10px "Press Start 2P", monospace; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+  section h2 .ic { font-size: 16px; }
+  .field { padding: 8px 0; border-top: 1px solid rgba(255,255,255,.06); }
+  .field:first-of-type { border-top: 0; }
+  .field .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .field label { font-weight: 600; font-size: 13px; }
+  .field .help { color: var(--muted); font-size: 11.5px; }
+  .field.changed label::after { content: " ●"; color: var(--changed); }
+  .row { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+  input[type=range] { flex: 1; accent-color: var(--accent); }
+  input[type=number] { width: 84px; font: 13px ui-monospace, monospace; color: var(--text); background: #11142c; border: 2px solid var(--border);
+    border-radius: 5px; padding: 4px 6px; text-align: right; }
+  input[type=number]:focus { outline: none; border-color: var(--accent); }
+  .unit { color: var(--muted); font-size: 11.5px; min-width: 64px; }
+  .def { font-size: 11px; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline dotted; }
+  .switch { position: relative; width: 44px; height: 24px; flex: none; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch span { position: absolute; inset: 0; background: #11142c; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; transition: .15s; }
+  .switch span::before { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--muted); transition: .15s; }
+  .switch input:checked + span { background: #14532d; border-color: var(--ok); }
+  .switch input:checked + span::before { transform: translateX(20px); background: var(--ok); }
+  .msg { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background: var(--panel); border: 2px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; max-width: min(640px, calc(100vw - 32px)); white-space: pre-wrap; font-size: 13px; box-shadow: 0 8px 30px rgba(0,0,0,.5); }
+  .msg.ok { border-color: var(--ok); } .msg.err { border-color: var(--err); }
+  .hidden { display: none !important; }
+  @media (max-width: 600px) { .actions { margin-left: 0; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>ADMIN · SANT ANDREU RPG</h1>
+  <div id="status" class="status"><i class="dot"></i><span>Carregant…</span></div>
+  <div class="actions">
+    <a class="btn" href="http://localhost:8737/" target="_blank" rel="noopener">▶ Joc en local</a>
+    <button id="revert" type="button" disabled>Desfer canvis</button>
+    <button id="defaults" type="button">Valors per defecte</button>
+    <button id="save" class="primary" type="button" disabled>Desar (⌘S)</button>
+    <button id="publish" class="publish" type="button">Publicar a GitHub</button>
+  </div>
+</header>
+<main>
+  <p class="intro">Edita els paràmetres del joc. <b>Desar</b> escriu <code>public/config.json</code> (el joc en local ho agafa en recarregar).
+    <b>Publicar</b> fa un commit només d'aquest fitxer i el puja a GitHub: la web s'actualitza en un minut i el servidor de monedes i xat també.</p>
+  <div id="grid" class="grid"></div>
+</main>
+<div id="msg" class="msg hidden"></div>
+<script>
+"use strict";
+const api = (path, opts = {}) => fetch(path, { ...opts, headers: { "x-admin": "1", "content-type": "application/json", ...(opts.headers || {}) } })
+  .then(async (r) => ({ ok: r.ok, data: await r.json() }));
+
+let schema = null, saved = null, current = null, git = null;
+const clone = (o) => JSON.parse(JSON.stringify(o));
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+function toast(text, kind = "ok", ms = 3500) {
+  const el = document.getElementById("msg");
+  el.textContent = text; el.className = `msg ${kind}`;
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.add("hidden"), ms);
+}
+
+function render() {
+  const grid = document.getElementById("grid");
+  grid.textContent = "";
+  for (const sec of schema.sections) {
+    const s = document.createElement("section");
+    s.innerHTML = `<h2><span class="ic"></span><span></span></h2>`;
+    s.querySelector(".ic").textContent = sec.icon;
+    s.querySelector("h2 span:last-child").textContent = sec.title;
+    for (const f of sec.fields) s.appendChild(renderField(sec, f));
+    grid.appendChild(s);
+  }
+  refresh();
+}
+
+function renderField(sec, f) {
+  const id = `${sec.key}.${f.key}`;
+  const el = document.createElement("div");
+  el.className = "field"; el.dataset.id = id;
+  const top = document.createElement("div"); top.className = "top";
+  const label = document.createElement("label"); label.textContent = f.label; label.htmlFor = id;
+  const def = document.createElement("button"); def.type = "button"; def.className = "def";
+  def.textContent = `per defecte: ${f.type === "bool" ? (f.default ? "sí" : "no") : f.default}`;
+  def.onclick = () => set(sec.key, f.key, f.default);
+  top.append(label, def);
+  el.appendChild(top);
+  if (f.help) { const h = document.createElement("div"); h.className = "help"; h.textContent = f.help; el.appendChild(h); }
+  const row = document.createElement("div"); row.className = "row";
+  if (f.type === "bool") {
+    row.innerHTML = `<label class="switch"><input type="checkbox"><span></span></label>`;
+    const cb = row.querySelector("input"); cb.id = id;
+    cb.onchange = () => set(sec.key, f.key, cb.checked);
+  } else {
+    const range = document.createElement("input"); range.type = "range";
+    const num = document.createElement("input"); num.type = "number"; num.id = id;
+    for (const i of [range, num]) { i.min = f.min; i.max = f.max; i.step = f.step; }
+    range.oninput = () => set(sec.key, f.key, Number(range.value));
+    num.onchange = () => set(sec.key, f.key, Number(num.value));
+    const unit = document.createElement("span"); unit.className = "unit"; unit.textContent = f.unit || "";
+    row.append(range, num, unit);
+  }
+  el.appendChild(row);
+  return el;
+}
+
+function set(sec, key, value) {
+  current[sec][key] = value;
+  refresh();
+}
+
+function refresh() {
+  for (const sec of schema.sections) for (const f of sec.fields) {
+    const el = document.querySelector(`[data-id="${sec.key}.${f.key}"]`);
+    const v = current[sec.key][f.key];
+    if (f.type === "bool") el.querySelector("input").checked = v;
+    else el.querySelectorAll("input").forEach((i) => { if (document.activeElement !== i) i.value = v; });
+    el.classList.toggle("changed", v !== saved[sec.key][f.key]);
+  }
+  const dirty = !same(current, saved);
+  document.getElementById("save").disabled = !dirty;
+  document.getElementById("revert").disabled = !dirty;
+  const st = document.getElementById("status");
+  st.className = "status" + (dirty ? " dirty" : git.dirty || git.unpushed ? " unpub" : "");
+  st.querySelector("span").textContent = dirty ? "Canvis sense desar"
+    : git.dirty || git.unpushed ? "Desat · pendent de publicar"
+    : `Publicat${git.last ? " · " + git.last : ""}`;
+}
+
+async function load() {
+  const r = await api("/api/state");
+  if (!r.ok) return toast(r.data.error || "No s'ha pogut carregar", "err");
+  ({ schema, git } = r.data);
+  // assegura que hi ha totes les claus de l'esquema (per si el config.json és antic)
+  const cfg = r.data.config;
+  for (const sec of schema.sections) {
+    cfg[sec.key] = cfg[sec.key] || {};
+    for (const f of sec.fields) if (!(f.key in cfg[sec.key])) cfg[sec.key][f.key] = f.default;
+  }
+  saved = clone(cfg); current = clone(cfg);
+  render();
+}
+
+async function save() {
+  const r = await api("/api/config", { method: "PUT", body: JSON.stringify(current) });
+  if (!r.ok) return toast((r.data.errors || [r.data.error]).join("\n"), "err", 7000);
+  saved = clone(r.data.config); current = clone(r.data.config);
+  const st = await api("/api/state"); git = st.data.git;
+  refresh();
+  toast("Desat a public/config.json. Recarrega el joc en local per provar-ho.");
+}
+
+document.getElementById("save").onclick = save;
+document.getElementById("revert").onclick = () => { current = clone(saved); refresh(); };
+document.getElementById("defaults").onclick = () => {
+  for (const sec of schema.sections) for (const f of sec.fields) current[sec.key][f.key] = f.default;
+  refresh();
+};
+document.getElementById("publish").onclick = async () => {
+  if (!same(current, saved)) return toast("Primer desa els canvis.", "err");
+  if (!confirm("Publicar public/config.json a GitHub? Els canvis s'aplicaran a la web per a tothom.")) return;
+  const btn = document.getElementById("publish");
+  btn.disabled = true; btn.textContent = "Publicant…";
+  const r = await api("/api/publish", { method: "POST" });
+  btn.disabled = false; btn.textContent = "Publicar a GitHub";
+  const st = await api("/api/state"); git = st.data.git; refresh();
+  toast(r.ok ? "Publicat! La web s'actualitzarà en un minut.\n\n" + r.data.log.join("\n") : "Error en publicar:\n" + (r.data.log || [r.data.error]).join("\n"), r.ok ? "ok" : "err", 9000);
+};
+addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "s") { e.preventDefault(); if (!document.getElementById("save").disabled) save(); }
+});
+addEventListener("beforeunload", (e) => { if (current && !same(current, saved)) e.preventDefault(); });
+load();
+</script>
+</body>
+</html>

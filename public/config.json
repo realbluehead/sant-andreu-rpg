@@ -1,0 +1,67 @@
+{
+  "player": {
+    "walkSpeed": 90,
+    "runSpeed": 210,
+    "maxHp": 100,
+    "hitCooldown": 1.2
+  },
+  "police": {
+    "count": 10,
+    "speed": 4.2,
+    "damage": 20,
+    "dropsCoins": true
+  },
+  "bike": {
+    "count": 24,
+    "speed": 2.6,
+    "damage": 5,
+    "dropsCoins": true
+  },
+  "scooter": {
+    "count": 14,
+    "speed": 8,
+    "damage": 30,
+    "dropsCoins": true
+  },
+  "ultras": {
+    "gangs": 2,
+    "size": 10,
+    "cycleSeconds": 300,
+    "activeSeconds": 150,
+    "speed": 1.7,
+    "damage": 25
+  },
+  "thieves": {
+    "count": 90,
+    "sight": 9,
+    "giveUp": 16,
+    "chaseSpeed": 76,
+    "robCooldown": 25
+  },
+  "animals": {
+    "cats": 16,
+    "dogs": 16,
+    "pigeonFlocks": 14,
+    "pigeonsPerFlock": 6
+  },
+  "coins": {
+    "spawnEverySeconds": 5,
+    "max": 50,
+    "dropLifeSeconds": 60
+  },
+  "bank": {
+    "radius": 2.5
+  },
+  "pharmacy": {
+    "radius": 2.5
+  },
+  "drinks": {
+    "maxLevel": 20,
+    "beerUp": 1,
+    "coffeeDown": 3,
+    "price": 1
+  },
+  "chat": {
+    "maxLength": 30
+  }
+}

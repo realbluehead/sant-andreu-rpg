@@ -6,12 +6,11 @@
 "use strict";
 
 const ANIMAL_CONFIG = {
-  cat: { count: 16, radius: 4, period: 10, moveFrac: 0.35, speedTiles: 1.2, seed: 9100,
+  cat: { radius: 4, period: 10, moveFrac: 0.35, speedTiles: 1.2, seed: 9100,
     tiles: [T.GROUND, T.PLAZA, T.PARK, T.GRASS, T.SCHOOLYARD, T.SIDEWALK] },
-  dog: { count: 16, radius: 6, period: 6, moveFrac: 0.6, speedTiles: 2.2, seed: 9300,
+  dog: { radius: 6, period: 6, moveFrac: 0.6, speedTiles: 2.2, seed: 9300,
     tiles: [T.PARK, T.GRASS, T.SIDEWALK, T.PLAZA, T.DIRT] },
 };
-const PIGEON_FLOCKS = 14, PIGEONS_PER_FLOCK = 6;
 const SOUNDS = { cat: ["Miau!", "Mrrr…", "Miaaau"], dog: ["Guau!", "Bup bup!", "Grrr…"] };
 
 const animals = { list: [], sprites: null };
@@ -53,7 +52,7 @@ function initAnimals() {
   animals.sprites = makeAnimalSprites();
   for (const [kind, cfg] of Object.entries(ANIMAL_CONFIG)) {
     const allowed = new Set(cfg.tiles);
-    for (let i = 0; i < cfg.count; i++) {
+    for (let i = 0; i < (kind === "cat" ? CFG.animals.cats : CFG.animals.dogs); i++) {
       const r = rng(cfg.seed + i * 104729);
       const home = pickHome(r, allowed);
       if (!home) continue;
@@ -66,11 +65,11 @@ function initAnimals() {
   }
   // Estols de coloms a places i parcs
   const flockTiles = new Set([T.PLAZA, T.PARK, T.GROUND]);
-  for (let f = 0; f < PIGEON_FLOCKS; f++) {
+  for (let f = 0; f < CFG.animals.pigeonFlocks; f++) {
     const r = rng(9700 + f * 7907);
     const center = pickHome(r, new Set([T.PLAZA])) || pickHome(r, flockTiles);
     if (!center) continue;
-    for (let j = 0; j < PIGEONS_PER_FLOCK; j++) {
+    for (let j = 0; j < CFG.animals.pigeonsPerFlock; j++) {
       const home = [center[0] + (r() - 0.5) * 3, center[1] + (r() - 0.5) * 2];
       if (!inBarriTile(Math.floor(home[0]), Math.floor(home[1]), flockTiles)) continue;
       animals.list.push({

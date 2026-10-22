@@ -6,13 +6,10 @@
 "use strict";
 
 const THIEF = {
-  count: 90, seed: 4400,
-  sight: 9,            // tiles: distància a la qual et veuen
-  giveUp: 16,          // tiles: si t'allunyes més, deixen de perseguir-te
+  // quantitat, vista, velocitat… són a config.json (CFG.thieves)
+  seed: 4400,
   forget: 3,           // s sense veure't abans de rendir-se
-  chaseSpeed: 76,      // px/s (tu camines a 90 i corres a 210)
   wanderSpeed: 28,     // px/s
-  robCooldown: 25,     // s que un lladre et deixa en pau després de robar-te
   tiles: [T.SIDEWALK, T.PLAZA, T.GROUND, T.PARK, T.DIRT],
 };
 const THIEF_LINES = ["Dona'm les monedes!", "Eh, tu! Vine aquí!", "No corris tant!", "Aquesta cartera és meva!"];
@@ -22,7 +19,7 @@ const thieves = { list: [] };
 function initThieves() {
   const allowed = new Set(THIEF.tiles);
   const hoodies = ["#2b2b33", "#3f3f46", "#1f2a44", "#4a3728", "#3d4a3d"];
-  for (let i = 0; i < THIEF.count; i++) {
+  for (let i = 0; i < CFG.thieves.count; i++) {
     const r = rng(THIEF.seed + i * 6151);
     const home = pickHome(r, allowed);
     if (!home) continue;
@@ -94,19 +91,19 @@ function updateThieves(dt) {
     let moved = 0;
 
     if (t.mode === "chase") {
-      const sees = dist < THIEF.giveUp * TS && lineOfSight(t.x, t.y - 8, pl.x, pl.y - 8);
+      const sees = dist < CFG.thieves.giveUp * TS && lineOfSight(t.x, t.y - 8, pl.x, pl.y - 8);
       t.unseen = sees ? 0 : t.unseen + dt;
-      if (!canChase || dist > THIEF.giveUp * TS || t.unseen > THIEF.forget) {
+      if (!canChase || dist > CFG.thieves.giveUp * TS || t.unseen > THIEF.forget) {
         t.mode = "return"; thiefSay(t, "Ja t'enxamparé…");
       } else if (Math.abs(dx) < 10 && Math.abs(dy) < 9) {
         rob(t);
       } else {
         // si s'encalla contra un edifici, prova de voltar-lo una estona
-        if (t.detour && (t.detour.t -= dt) > 0) moved = thiefStep(t, t.detour.dx, t.detour.dy, THIEF.chaseSpeed * dt);
+        if (t.detour && (t.detour.t -= dt) > 0) moved = thiefStep(t, t.detour.dx, t.detour.dy, CFG.thieves.chaseSpeed * dt);
         else {
           t.detour = null;
-          moved = thiefStep(t, dx, dy, THIEF.chaseSpeed * dt);
-          t.stuck = moved < THIEF.chaseSpeed * dt * 0.3 ? t.stuck + dt : 0;
+          moved = thiefStep(t, dx, dy, CFG.thieves.chaseSpeed * dt);
+          t.stuck = moved < CFG.thieves.chaseSpeed * dt * 0.3 ? t.stuck + dt : 0;
           if (t.stuck > 0.4) {
             const side = t.r() < 0.5 ? 1 : -1;
             t.detour = { dx: -dy * side, dy: dx * side, t: 0.8 };
@@ -141,7 +138,7 @@ function updateThieves(dt) {
         t.target = clearLine(t.home[0], t.home[1], gx, gy, t.allowed) ? [gx, gy] : t.home;
       }
       // et veu?
-      if (canChase && t.cooldown <= 0 && dist < THIEF.sight * TS && lineOfSight(t.x, t.y - 8, pl.x, pl.y - 8)) {
+      if (canChase && t.cooldown <= 0 && dist < CFG.thieves.sight * TS && lineOfSight(t.x, t.y - 8, pl.x, pl.y - 8)) {
         t.mode = "chase"; t.unseen = 0; t.target = null;
         thiefSay(t, "!", 1);
       }
@@ -154,7 +151,7 @@ function updateThieves(dt) {
 
 function rob(t) {
   const n = robWallet();
-  t.cooldown = THIEF.robCooldown;
+  t.cooldown = CFG.thieves.robCooldown;
   t.mode = "flee"; t.fleeT = 3;
   if (n > 0) {
     thiefSay(t, "Ha ha! Gràcies!");

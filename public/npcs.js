@@ -4,15 +4,13 @@
 // Si un ciclista atropella el teu avatar, perds vida.
 "use strict";
 
+// Quantitat, velocitat (tiles/s) i dany de cada tipus: CFG.police, CFG.bike i CFG.scooter (config.json).
+// Aquí només hi ha el carril (desplaçament cap a la dreta), la llargada de la ruta i la llavor.
 const NPC_CONFIG = {
-  police: { count: 10, speed: 4.2, lane: 1.3, walkSteps: 40, seed: 1000 },  // tiles/s (~30 km/h)
-  bike: { count: 24, speed: 2.6, lane: 0.6, walkSteps: 30, seed: 5000 },    // ~19 km/h
-  scooter: { count: 14, speed: 8, lane: 0.4, walkSteps: 30, seed: 8000 },   // ~58 km/h: més ràpids que tu corrent gairebé
+  police: { lane: 1.3, walkSteps: 40, seed: 1000 },
+  bike: { lane: 0.6, walkSteps: 30, seed: 5000 },
+  scooter: { lane: 0.4, walkSteps: 30, seed: 8000 },
 };
-const MAX_HP = 100, HIT_COOLDOWN = 1.2;
-const DAMAGE = { bike: 5, police: 20, ultras: 25, scooter: 30 };
-const DROPS_COINS = new Set(["bike", "police", "scooter"]); // atropellaments que et fan caure les monedes
-const HEAL_RADIUS = 2.5; // tiles al voltant d'una farmàcia
 const DEATH_TEXT = {
   bike: "Un ciclista t'ha atropellat.<br>Compte amb els carrils bici!",
   police: "Una moto de la policia t'ha atropellat.<br>Aparta't quan sentis les sirenes!",
@@ -20,7 +18,7 @@ const DEATH_TEXT = {
   scooter: "Un patinet elèctric t'ha arrollat a tota velocitat.<br>Mira bé abans de creuar!",
 };
 
-const npcs = { list: [], sprites: null, hp: MAX_HP, invuln: 0, dead: false, floaters: [], flash: 0, lastCause: "bike",
+const npcs = { list: [], sprites: null, hp: 100, invuln: 0, dead: false, floaters: [], flash: 0, lastCause: "bike",
   pharmacies: [], gangs: [] };
 
 // ---------------------------------------------------------------------------
@@ -79,18 +77,19 @@ function makeRoute(G, r, walkSteps) {
 
 function initNPCs(graph) {
   npcs.pharmacies = (state.meta.pois || []).filter((p) => p.c === "pharmacy");
+  npcs.hp = CFG.player.maxHp;
   if (!graph) return;
   npcs.sprites = makeNpcSprites();
   initGangs(graph);
   for (const [kind, cfg] of Object.entries(NPC_CONFIG)) {
     const G = prepGraph(kind === "police" ? graph.car : graph.bike);
     if (!G.nodes.length) continue;
-    for (let i = 0; i < cfg.count; i++) {
+    for (let i = 0; i < CFG[kind].count; i++) {
       const r = rng(cfg.seed + i * 7919);
       const route = makeRoute(G, r, cfg.walkSteps);
       if (route.len < 20) continue;
       npcs.list.push({
-        kind, route, speed: cfg.speed * (0.85 + r() * 0.3), lane: cfg.lane, phase: r() * route.len,
+        kind, route, speed: CFG[kind].speed * (0.85 + r() * 0.3), lane: cfg.lane, phase: r() * route.len,
         variant: kind === "police" ? 0 : i % npcs.sprites[kind].length, x: 0, y: 0, dir: "right", hidden: false,
       });
     }
@@ -132,7 +131,7 @@ function checkHits() {
   for (const n of npcs.list) {
     const hw = n.kind === "police" ? 13 : n.kind === "scooter" ? 12 : 10; // la moto és més ampla
     if (Math.abs(n.x - pl.x) < hw && Math.abs(n.y - pl.y) < 9) {
-      hurtPlayer(DAMAGE[n.kind], n, n.kind);
+      hurtPlayer(CFG[n.kind].damage, n, n.kind);
       return;
     }
   }
@@ -140,7 +139,7 @@ function checkHits() {
     if (!g.active) continue;
     for (const m of g.members) {
       if (Math.abs(m.x - pl.x) < 9 && Math.abs(m.y - pl.y) < 8) {
-        hurtPlayer(DAMAGE.ultras, m, "ultras");
+        hurtPlayer(CFG.ultras.damage, m, "ultras");
         return;
       }
     }
@@ -149,11 +148,11 @@ function checkHits() {
 
 // A prop d'una farmàcia recuperes tota la vida
 function checkPharmacy() {
-  if (npcs.hp >= MAX_HP) return;
+  if (npcs.hp >= CFG.player.maxHp) return;
   const tx = state.player.x / TS, ty = state.player.y / TS;
-  if (!npcs.pharmacies.some((p) => (p.x - tx) ** 2 + (p.y - ty) ** 2 < HEAL_RADIUS * HEAL_RADIUS)) return;
-  const gained = MAX_HP - npcs.hp;
-  npcs.hp = MAX_HP;
+  if (!npcs.pharmacies.some((p) => (p.x - tx) ** 2 + (p.y - ty) ** 2 < CFG.pharmacy.radius ** 2)) return;
+  const gained = CFG.player.maxHp - npcs.hp;
+  npcs.hp = CFG.player.maxHp;
   npcs.floaters.push({ text: `+${gained}`, t: 0, color: "#4ade80" });
   updateHpUi();
   showBanner("T'has recuperat!", "heal");
@@ -169,11 +168,11 @@ function showBanner(text, kind) {
 
 function hurtPlayer(dmg, by, cause) {
   npcs.hp = Math.max(0, npcs.hp - dmg);
-  npcs.invuln = HIT_COOLDOWN;
+  npcs.invuln = CFG.player.hitCooldown;
   npcs.flash = 0.35;
   npcs.lastCause = cause;
   npcs.floaters.push({ text: `-${dmg}`, t: 0 });
-  if (DROPS_COINS.has(cause)) dropWallet();
+  if (CFG[cause]?.dropsCoins) dropWallet(); // bicis, motos i patinets et fan caure les monedes
   // empenta: ens aparta de la trajectòria del ciclista
   const pl = state.player;
   const ax = pl.x - by.x || 1, ay = pl.y - by.y, m = Math.hypot(ax, ay) || 1;
@@ -199,7 +198,7 @@ function die() {
 
 function revive() {
   npcs.dead = false;
-  npcs.hp = MAX_HP;
+  npcs.hp = CFG.player.maxHp;
   npcs.invuln = 2.5; // uns segons de gràcia
   document.getElementById("death").classList.add("hidden");
   document.activeElement?.blur();
@@ -209,8 +208,8 @@ function revive() {
 
 function updateHpUi() {
   const el = document.getElementById("hp");
-  el.querySelector("i").style.width = `${(npcs.hp / MAX_HP) * 100}%`;
-  el.querySelector(".val").textContent = `${npcs.hp}/${MAX_HP}`;
+  el.querySelector("i").style.width = `${(npcs.hp / CFG.player.maxHp) * 100}%`;
+  el.querySelector(".val").textContent = `${npcs.hp}/${CFG.player.maxHp}`;
   el.classList.toggle("low", npcs.hp <= 30);
 }
 
@@ -368,16 +367,16 @@ function bindNpcUi() {
 // Bandes d'ultres de la UESA (Unió Esportiva Sant Andreu): grups de 10 que apareixen
 // de tant en tant i recorren el barri cantant. Si et trepitgen perds 25 punts.
 // L'horari i la ruta depenen del rellotge, així tots els jugadors les veuen igual.
-const GANG = { slots: 2, cycle: 300, active: 150, size: 10, speed: 1.7, seed: 77000 };
+const GANG_SEED = 77000;
 const GANG_CHANTS = ["UESA! UESA!", "Sant Andreu!!", "Groc i vermell!", "Oé, oé, oé!", "Som del Narcís Sala!", "Aquí manem nosaltres!"];
 
 function initGangs(graph) {
   const G = prepGraph(graph.car);
   if (!G.nodes.length) return;
-  for (let s = 0; s < GANG.slots; s++) {
-    const r = rng(GANG.seed + s * 131);
+  for (let s = 0; s < CFG.ultras.gangs; s++) {
+    const r = rng(GANG_SEED + s * 131);
     const members = [];
-    for (let i = 0; i < GANG.size; i++) {
+    for (let i = 0; i < CFG.ultras.size; i++) {
       const look = {
         ...DEFAULT_LOOK, name: "",
         skin: ["#ffe0bd", "#f1c27d", "#e0ac69", "#c68642", "#8d5524"][(r() * 5) | 0],
@@ -401,15 +400,15 @@ function initGangs(graph) {
 function updateGangs(t, dt) {
   const pl = state.player;
   for (const g of npcs.gangs) {
-    const off = g.slot * (GANG.cycle / GANG.slots);
-    const w = Math.floor((t + off) / GANG.cycle), lt = (t + off) - w * GANG.cycle;
-    g.active = lt < GANG.active;
+    const off = g.slot * (CFG.ultras.cycleSeconds / CFG.ultras.gangs);
+    const w = Math.floor((t + off) / CFG.ultras.cycleSeconds), lt = (t + off) - w * CFG.ultras.cycleSeconds;
+    g.active = lt < CFG.ultras.activeSeconds;
     if (!g.active) continue;
     if (w !== g.window) { // nova aparició: nova ruta
       g.window = w;
-      g.route = makeRoute(g.G, rng(GANG.seed + w * 7 + g.slot * 100003), 30);
+      g.route = makeRoute(g.G, rng(GANG_SEED + w * 7 + g.slot * 100003), 30);
     }
-    const n = { route: g.route, speed: GANG.speed, phase: 0, lane: 0 };
+    const n = { route: g.route, speed: CFG.ultras.speed, phase: 0, lane: 0 };
     const c = npcPos(n, lt);
     g.cx = c.x * TS; g.cy = c.y * TS + TS / 2;
     const dir = Math.abs(c.dx) > Math.abs(c.dy) ? (c.dx > 0 ? "right" : "left") : (c.dy > 0 ? "down" : "up");

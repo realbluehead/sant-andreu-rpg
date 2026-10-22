@@ -4,13 +4,13 @@
 "use strict";
 
 const DRUNK_KEY = "santandreu-rpg-drunk";
-const DRUNK_MAX = 20, BEER_UP = 1, COFFEE_DOWN = 3, DRINK_PRICE = 1;
+// Màxim, pujada per cervesa, baixada per cafè i preu: CFG.drinks (config.json)
 const DRINK_RADIUS = 2; // tiles al voltant del bar o la cafeteria
 
 const drink = { level: loadDrunk(), bars: [], cafes: [], inside: null, cooldown: 0 };
 
 function loadDrunk() {
-  try { return Math.max(0, Math.min(DRUNK_MAX, parseInt(localStorage.getItem(DRUNK_KEY) || "0", 10) || 0)); } catch { return 0; }
+  try { return Math.max(0, Math.min(CFG.drinks.maxLevel, parseInt(localStorage.getItem(DRUNK_KEY) || "0", 10) || 0)); } catch { return 0; }
 }
 function saveDrunk() {
   try { localStorage.setItem(DRUNK_KEY, String(drink.level)); } catch { /* sense emmagatzematge */ }
@@ -20,6 +20,7 @@ function initDrinks() {
   const pois = state.meta.pois || [];
   drink.bars = pois.filter((p) => p.c === "beer");
   drink.cafes = pois.filter((p) => p.c === "coffee");
+  drink.level = Math.min(drink.level, CFG.drinks.maxLevel);
   updateDrunkUi();
 }
 
@@ -40,14 +41,14 @@ function updateDrinks(dt) {
   drink.cooldown = 2;
   const name = here.n || (bar ? "el bar" : "la cafeteria");
   if (bar) {
-    if (drink.level >= DRUNK_MAX) return showBanner("Ja n'has begut prou!", "warn");
+    if (drink.level >= CFG.drinks.maxLevel) return showBanner("Ja n'has begut prou!", "warn");
     if (!pay()) return showBanner(`No portes monedes per a una cervesa`, "warn");
-    drink.level = Math.min(DRUNK_MAX, drink.level + BEER_UP);
+    drink.level = Math.min(CFG.drinks.maxLevel, drink.level + CFG.drinks.beerUp);
     showBanner(`Glup! Una cervesa a ${name}`, "beer");
   } else {
     if (drink.level <= 0) return; // sobri: no cal cafè
     if (!pay()) return showBanner(`No portes monedes per a un cafè`, "warn");
-    drink.level = Math.max(0, drink.level - COFFEE_DOWN);
+    drink.level = Math.max(0, drink.level - CFG.drinks.coffeeDown);
     showBanner(`Un cafè a ${name}. Et despertes una mica!`, "coffee");
   }
   saveDrunk();
@@ -55,17 +56,17 @@ function updateDrinks(dt) {
 }
 
 function pay() {
-  if (coins.wallet < DRINK_PRICE) return false;
-  coins.wallet -= DRINK_PRICE;
+  if (coins.wallet < CFG.drinks.price) return false;
+  coins.wallet -= CFG.drinks.price;
   saveMoney();
   updateCoinUi("wallet");
-  npcs.floaters.push({ text: `-${DRINK_PRICE}`, t: 0, color: "#facc15" });
+  npcs.floaters.push({ text: `-${CFG.drinks.price}`, t: 0, color: "#facc15" });
   return true;
 }
 
 // Desvia la direcció de la marxa: oscil·lació lenta + tremolor, proporcionals a l'embriaguesa
 function drunkWobble(dx, dy) {
-  const lvl = drink.level / DRUNK_MAX;
+  const lvl = drink.level / CFG.drinks.maxLevel;
   if (!lvl) return [dx, dy];
   const t = performance.now() / 1000;
   const ang = lvl * (1.05 * Math.sin(t * 2.3) + 0.45 * Math.sin(t * 6.7 + 1.3));
@@ -75,8 +76,8 @@ function drunkWobble(dx, dy) {
 
 function updateDrunkUi(bump) {
   const el = document.getElementById("drunk");
-  el.querySelector("i").style.width = `${(drink.level / DRUNK_MAX) * 100}%`;
-  el.querySelector(".val").textContent = `${drink.level}/${DRUNK_MAX}`;
-  el.classList.toggle("high", drink.level >= 12);
+  el.querySelector("i").style.width = `${(drink.level / CFG.drinks.maxLevel) * 100}%`;
+  el.querySelector(".val").textContent = `${drink.level}/${CFG.drinks.maxLevel}`;
+  el.classList.toggle("high", drink.level >= CFG.drinks.maxLevel * 0.6);
   if (bump) { el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
 }

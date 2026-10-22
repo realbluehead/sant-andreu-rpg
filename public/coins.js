@@ -7,11 +7,9 @@
 
 const COIN_KEY = "santandreu-rpg-coins";      // cartera (nom antic: abans només hi havia un comptador)
 const BANK_KEY = "santandreu-rpg-bank";
-const BANK_RADIUS = 2.5;                         // tiles al voltant d'un banc o caixer
 const PICK_DIST = 0.9;   // tiles
 const PENDING_MS = 2000; // temps d'espera de la confirmació del servidor
 
-const DROP_LIFE = 60;     // s que les monedes caigudes es queden a terra
 const DROP_FLY = 0.45;    // s que triguen a caure
 
 const coins = { list: new Map(), pending: new Map(), wallet: loadNum(COIN_KEY), bank: loadNum(BANK_KEY),
@@ -37,7 +35,7 @@ function initCoins() {
 function checkBank() {
   if (!coins.wallet || npcs.dead) return;
   const tx = state.player.x / TS, ty = state.player.y / TS;
-  if (!coins.banks.some((b) => (b.x - tx) ** 2 + (b.y - ty) ** 2 < BANK_RADIUS * BANK_RADIUS)) return;
+  if (!coins.banks.some((b) => (b.x - tx) ** 2 + (b.y - ty) ** 2 < CFG.bank.radius ** 2)) return;
   const n = coins.wallet;
   coins.bank += n;
   coins.wallet = 0;
@@ -113,7 +111,7 @@ function updateCoins(dt = 0) {
       npcs.floaters.push({ text: "+1", t: 0, color: "#facc15" });
     }
   }
-  coins.dropped = coins.dropped.filter((d) => !d.picked && d.t < DROP_LIFE);
+  coins.dropped = coins.dropped.filter((d) => !d.picked && d.t < CFG.coins.dropLifeSeconds);
   for (const [id, t] of coins.pending) if (now - t > PENDING_MS) coins.pending.delete(id);
   let best = null, bd = Infinity;
   for (const c of coins.list.values()) {
@@ -159,7 +157,7 @@ function pushCoinSprites(list, camX, camY, vw, vh, k) {
     list.push([y, img, Math.round(x - (img.width / 2) * s), Math.round(y - (img.height + 2) * s + bob), false, s]);
   }
   for (const d of coins.dropped) {
-    if (d.t > DROP_LIFE - 8 && Math.floor(now / 150) % 2) continue; // parpelleja abans de desaparèixer
+    if (d.t > CFG.coins.dropLifeSeconds - 8 && Math.floor(now / 150) % 2) continue; // parpelleja abans de desaparèixer
     const f = Math.min(1, d.t / DROP_FLY);
     const x = (d.x0 + (d.x - d.x0) * f) * TS, y = (d.y0 + (d.y - d.y0) * f) * TS;
     const hop = Math.sin(f * Math.PI) * 26;                 // arc en sortir volant

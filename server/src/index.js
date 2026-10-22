@@ -8,10 +8,10 @@ import SPAWNS from "./spawns.json"; // tiles caminables dins del barri (generats
 const ROOM_NAME = "sant-andreu";
 const MAX_PLAYERS = 150;
 const MAX_MSG = 1024;
-const MAX_SAY = 30;
 const SAY_COOLDOWN_MS = 1000;
-const MAX_COINS = 50;
-const COIN_EVERY_MS = 5000;
+// Valors per defecte; els de veritat es llegeixen del config.json publicat (vegeu getConfig)
+const DEFAULT_CFG = { maxSay: 30, maxCoins: 50, coinEveryMs: 5000 };
+const CONFIG_TTL_MS = 60_000;
 const TS = 16;              // píxels per tile al client
 const PICK_RADIUS = 3;      // tiles de marge (latència) per validar que el jugador és a prop
 const ALLOWED_ORIGINS = [/^https:\/\/realbluehead\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
@@ -38,6 +38,31 @@ function cleanPos(m) {
 }
 
 export class Room extends DurableObject {
+  // Llegeix config.json de GitHub Pages (com a molt un cop per minut). Així, publicar un canvi
+  // de configuració al repositori també s'aplica al servidor sense tornar-lo a desplegar.
+  async getConfig() {
+    const now = Date.now();
+    if (this.cfg && now - this.cfgAt < CONFIG_TTL_MS) return this.cfg;
+    this.cfgAt = now;
+    this.cfg = this.cfg || { ...DEFAULT_CFG };
+    try {
+      const url = this.env.CONFIG_URL;
+      if (url) {
+        const r = await fetch(`${url}?t=${Math.floor(now / CONFIG_TTL_MS)}`);
+        if (r.ok) {
+          const c = await r.json();
+          const n = (v, lo, hi, d) => (Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d);
+          this.cfg = {
+            maxSay: n(c.chat?.maxLength, 1, 200, DEFAULT_CFG.maxSay),
+            maxCoins: n(c.coins?.max, 0, 500, DEFAULT_CFG.maxCoins),
+            coinEveryMs: n(c.coins?.spawnEverySeconds, 1, 3600, 5) * 1000,
+          };
+        }
+      }
+    } catch { /* mantenim l'última configuració bona */ }
+    return this.cfg;
+  }
+
   async fetch(request) {
     if (this.ctx.getWebSockets().length >= MAX_PLAYERS) return new Response("Sala plena", { status: 503 });
     const { 0: client, 1: server } = new WebSocketPair();
@@ -57,14 +82,15 @@ export class Room extends DurableObject {
     await this.ctx.storage.put({ coins: this.coins, nextCoinId: this.nextCoinId });
   }
   async ensureAlarm() {
-    if ((await this.ctx.storage.getAlarm()) == null) await this.ctx.storage.setAlarm(Date.now() + COIN_EVERY_MS);
+    if ((await this.ctx.storage.getAlarm()) == null) await this.ctx.storage.setAlarm(Date.now() + (await this.getConfig()).coinEveryMs);
   }
   // Cada 5 s, mentre hi hagi algú connectat, apareix una moneda nova
   async alarm() {
     const players = this.ctx.getWebSockets().filter((ws) => ws.deserializeAttachment()?.p).length;
     if (!players) return; // ningú connectat: no tornem a programar l'alarma
+    const cfg = await this.getConfig();
     await this.loadCoins();
-    if (this.coins.length < MAX_COINS) {
+    if (this.coins.length < cfg.maxCoins) {
       const taken = new Set(this.coins.map((c) => c.x + "," + c.y));
       for (let i = 0; i < 20; i++) {
         const [tx, ty] = SPAWNS[(Math.random() * SPAWNS.length) | 0];
@@ -77,7 +103,7 @@ export class Room extends DurableObject {
         break;
       }
     }
-    await this.ctx.storage.setAlarm(Date.now() + COIN_EVERY_MS);
+    await this.ctx.storage.setAlarm(Date.now() + cfg.coinEveryMs);
   }
 
   broadcast(msg, except) {
@@ -106,7 +132,7 @@ export class Room extends DurableObject {
         .map((o) => o.deserializeAttachment()?.p)
         .filter(Boolean);
       await this.loadCoins();
-      ws.send(JSON.stringify({ t: "welcome", id: a.id, players, coins: this.coins, maxCoins: MAX_COINS }));
+      ws.send(JSON.stringify({ t: "welcome", id: a.id, players, coins: this.coins, maxCoins: (await this.getConfig()).maxCoins }));
       await this.ensureAlarm();
       this.broadcast(isNew ? { t: "join", p: a.p } : { t: "look", id: a.id, look }, ws);
     } else if (!a.p) {
@@ -130,7 +156,7 @@ export class Room extends DurableObject {
       ws.send(JSON.stringify(msg));
       this.broadcast(msg, ws);
     } else if (m.t === "say") {
-      const text = String(m.text ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, MAX_SAY);
+      const text = String(m.text ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, (await this.getConfig()).maxSay);
       const now = Date.now();
       if (!text || now - (a.lastSay || 0) < SAY_COOLDOWN_MS) return;
       a.lastSay = now;

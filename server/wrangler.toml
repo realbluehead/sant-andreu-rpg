@@ -10,3 +10,7 @@ class_name = "Room"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Room"]
+
+# config.json publicat a GitHub Pages (per a desenvolupament local, sobreescriu-ho a .dev.vars)
+[vars]
+CONFIG_URL = "https://realbluehead.github.io/sant-andreu-rpg/config.json"

@@ -1,7 +1,90 @@
 // Sant Andreu RPG — mapa pixel art de Sant Andreu de Palomar fet amb dades d'OpenStreetMap.
 "use strict";
 
-const DATA_VERSION = 3;  // augmenta-ho quan es regenerin map.bin / map.json
+const DATA_VERSION = 3;
+
+// Paràmetres del joc (velocitats, quantitats de NPCs, danys…). Es llegeixen de config.json,
+// que es pot editar amb l'app d'admin (admin/). Aquests valors només s'usen si no es pot carregar.
+const CFG = {
+  "player": {
+    "walkSpeed": 90,
+    "runSpeed": 210,
+    "maxHp": 100,
+    "hitCooldown": 1.2
+  },
+  "police": {
+    "count": 10,
+    "speed": 4.2,
+    "damage": 20,
+    "dropsCoins": true
+  },
+  "bike": {
+    "count": 24,
+    "speed": 2.6,
+    "damage": 5,
+    "dropsCoins": true
+  },
+  "scooter": {
+    "count": 14,
+    "speed": 8,
+    "damage": 30,
+    "dropsCoins": true
+  },
+  "ultras": {
+    "gangs": 2,
+    "size": 10,
+    "cycleSeconds": 300,
+    "activeSeconds": 150,
+    "speed": 1.7,
+    "damage": 25
+  },
+  "thieves": {
+    "count": 90,
+    "sight": 9,
+    "giveUp": 16,
+    "chaseSpeed": 76,
+    "robCooldown": 25
+  },
+  "animals": {
+    "cats": 16,
+    "dogs": 16,
+    "pigeonFlocks": 14,
+    "pigeonsPerFlock": 6
+  },
+  "coins": {
+    "spawnEverySeconds": 5,
+    "max": 50,
+    "dropLifeSeconds": 60
+  },
+  "bank": {
+    "radius": 2.5
+  },
+  "pharmacy": {
+    "radius": 2.5
+  },
+  "drinks": {
+    "maxLevel": 20,
+    "beerUp": 1,
+    "coffeeDown": 3,
+    "price": 1
+  },
+  "chat": {
+    "maxLength": 30
+  }
+};
+function mergeConfig(dst, src) {
+  for (const [k, v] of Object.entries(src || {})) {
+    if (!(k in dst)) continue;
+    if (typeof dst[k] === "object" && v && typeof v === "object") mergeConfig(dst[k], v);
+    else if (typeof dst[k] === typeof v && (typeof v !== "number" || Number.isFinite(v))) dst[k] = v;
+  }
+}
+async function loadConfig() {
+  try {
+    const r = await fetch("config.json?t=" + Date.now(), { cache: "no-store" });
+    if (r.ok) mergeConfig(CFG, await r.json());
+  } catch { /* fem servir els valors per defecte */ }
+}  // augmenta-ho quan es regenerin map.bin / map.json
 const TS = 16;          // píxels per tile
 const CHUNK = 32;       // tiles per chunk
 const CHUNK_CACHE = 70;
@@ -664,7 +747,7 @@ function update(dt) {
   if (pl.moving) {
     state.follow = true;
     const running = k.has("ShiftLeft") || k.has("ShiftRight") || state.touchRun;
-    const speed = (running ? 210 : 90) * (state.noclip ? 2 : 1);
+    const speed = (running ? CFG.player.runSpeed : CFG.player.walkSpeed) * (state.noclip ? 2 : 1);
     const mx = dx * speed * dt, my = dy * speed * dt;
     if (!collides(pl.x + mx, pl.y)) pl.x += mx;
     if (!collides(pl.x, pl.y + my)) pl.y += my;
@@ -810,20 +893,19 @@ function drawBubble(b, x, y, camX, camY, z) {
 }
 
 // Xat: Enter obre la caixa, Enter envia, Esc tanca
-const CHAT_MAX = 30;
 const chatBox = document.getElementById("chat"), chatInput = document.getElementById("chat-input");
 function toggleChat(open = !state.chatting) {
   state.chatting = open;
   state.keys.clear();
   chatBox.classList.toggle("hidden", !open);
-  if (open) { chatInput.value = ""; updateChatCount(); chatInput.focus(); }
+  if (open) { chatInput.maxLength = CFG.chat.maxLength; chatInput.value = ""; updateChatCount(); chatInput.focus(); }
   else chatInput.blur();
 }
 function updateChatCount() {
-  document.getElementById("chat-count").textContent = `${chatInput.value.length}/${CHAT_MAX}`;
+  document.getElementById("chat-count").textContent = `${chatInput.value.length}/${CFG.chat.maxLength}`;
 }
 function sendChat() {
-  const text = chatInput.value.replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, CHAT_MAX);
+  const text = chatInput.value.replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, CFG.chat.maxLength);
   if (text) {
     state.bubble = bubbleFor(text);
     net.send({ t: "say", text });
@@ -1067,7 +1149,7 @@ const net = {
       if (o) Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving });
     } else if (m.t === "say") {
       const o = this.others.get(m.id);
-      const text = String(m.text).slice(0, CHAT_MAX);
+      const text = String(m.text).slice(0, CFG.chat.maxLength);
       if (o) { o.bubble = bubbleFor(text); logChat(o.look.name, text, false); }
     } else if (m.t === "look") {
       const o = this.others.get(m.id);
@@ -1291,7 +1373,7 @@ async function loadMap() {
 
 async function main() {
   resize();
-  await loadMap();
+  await Promise.all([loadMap(), loadConfig()]);
   try { await document.fonts.load('8px "Press Start 2P"'); } catch { /* font opcional */ }
   state.sprites = {
     hero: makeHeroSet(state.look),

@@ -91,6 +91,20 @@ npm run dev      # servidor local a ws://localhost:8787/ws (el joc en local s'hi
 npm run deploy   # publica a Cloudflare (cal `npx wrangler login`)
 ```
 
+## Admin (configuració del joc)
+
+Tots els paràmetres del joc (quantitat i velocitat de NPCs, danys, lladres, animals, monedes, bars, xat…) són a `public/config.json`. Per editar-los hi ha una app d'admin local:
+
+```bash
+node admin/server.mjs
+```
+
+Obre <http://localhost:8790>. **Desar** escriu `public/config.json` (el joc en local l'agafa en recarregar) i **Publicar a GitHub** fa un commit només d'aquest fitxer i el puja. La web s'actualitza en un minut, i el servidor de Cloudflare llegeix el `config.json` publicat (com a molt un cop per minut) per a les monedes i el xat, sense haver-lo de tornar a desplegar.
+
+L'admin només escolta a `127.0.0.1` i no té dependències. Els límits i textos de cada camp són a `admin/schema.json`.
+
+Per provar el servidor en local amb la configuració local, copia `server/.dev.vars.example` a `server/.dev.vars`.
+
 ## Llicència de les dades
 
 Dades del mapa © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), disponibles sota la llicència ODbL.

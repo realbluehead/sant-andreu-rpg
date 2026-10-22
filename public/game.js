@@ -407,6 +407,7 @@ const state = {
   zoomIdx: 3, cam: { x: 0, y: 0 }, follow: true,
   player: { x: 0, y: 0, dir: "down", frame: 0, anim: 0, moving: false },
   keys: new Set(), noclip: false, showLabels: true, showMinimap: true, look: loadLook(), editing: false,
+  joy: { active: false, x: 0, y: 0 }, touchRun: false,
   labels: [], segs: [], chunks: new Map(), sprites: {},
 };
 
@@ -615,11 +616,15 @@ function update(dt) {
   if (k.has("ArrowRight") || k.has("KeyD")) dx += 1;
   if (k.has("ArrowUp") || k.has("KeyW")) dy -= 1;
   if (k.has("ArrowDown") || k.has("KeyS")) dy += 1;
+  if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
+  // joystick tàctil (analògic)
+  const joy = state.joy;
+  if (!state.editing && joy.active && Math.hypot(joy.x, joy.y) > 0.2) { dx = joy.x; dy = joy.y; }
   pl.moving = dx !== 0 || dy !== 0;
   if (pl.moving) {
     state.follow = true;
-    if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
-    const speed = (k.has("ShiftLeft") || k.has("ShiftRight") ? 210 : 90) * (state.noclip ? 2 : 1);
+    const running = k.has("ShiftLeft") || k.has("ShiftRight") || state.touchRun;
+    const speed = (running ? 210 : 90) * (state.noclip ? 2 : 1);
     const mx = dx * speed * dt, my = dy * speed * dt;
     if (!collides(pl.x + mx, pl.y)) pl.x += mx;
     if (!collides(pl.x, pl.y + my)) pl.y += my;
@@ -908,6 +913,62 @@ function setZoom(i) {
   updateZoomUi();
 }
 
+function toggleMinimap(show = !state.showMinimap) {
+  state.showMinimap = show;
+  document.getElementById("minimap-wrap").classList.toggle("hidden", !show);
+  document.getElementById("map-btn").classList.toggle("active", show);
+}
+
+// Controls tàctils: joystick virtual + botó de córrer
+function bindTouchControls() {
+  const isTouch = matchMedia("(pointer: coarse)").matches || navigator.maxTouchPoints > 0;
+  const enable = () => document.body.classList.add("touch");
+  if (isTouch) {
+    enable();
+    toggleMinimap(false); // a mòbil el minimapa ocupa massa: s'obre amb el botó MAPA
+  }
+  addEventListener("touchstart", enable, { once: true, passive: true });
+
+  const base = document.getElementById("joystick"), knob = base.querySelector(".knob");
+  const joy = state.joy;
+  let pid = null;
+  const move = (e) => {
+    const r = base.getBoundingClientRect(), R = r.width / 2;
+    let x = (e.clientX - r.left - R) / (R * 0.75), y = (e.clientY - r.top - R) / (R * 0.75);
+    const m = Math.hypot(x, y);
+    if (m > 1) { x /= m; y /= m; }
+    joy.x = x; joy.y = y;
+    knob.style.transform = `translate(${x * R * 0.75}px, ${y * R * 0.75}px)`;
+  };
+  const release = (e) => {
+    if (e.pointerId !== pid) return;
+    pid = null;
+    joy.active = false; joy.x = joy.y = 0;
+    knob.style.transform = "";
+    base.classList.remove("active");
+  };
+  base.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    pid = e.pointerId;
+    try { base.setPointerCapture(pid); } catch { /* alguns navegadors no ho permeten */ }
+    joy.active = true;
+    base.classList.add("active");
+    move(e);
+  });
+  base.addEventListener("pointermove", (e) => { if (e.pointerId === pid) move(e); });
+  base.addEventListener("pointerup", release);
+  base.addEventListener("pointercancel", release);
+
+  const run = document.getElementById("run-btn");
+  run.addEventListener("click", () => {
+    state.touchRun = !state.touchRun;
+    run.classList.toggle("active", state.touchRun);
+    run.setAttribute("aria-pressed", String(state.touchRun));
+  });
+  document.getElementById("map-btn").addEventListener("click", () => toggleMinimap());
+  document.getElementById("center-btn").addEventListener("click", () => { state.follow = true; });
+}
+
 function bindInput() {
   addEventListener("keydown", (e) => {
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
@@ -920,7 +981,7 @@ function bindInput() {
     if (e.key === "+" || e.key === "=") setZoom(state.zoomIdx + 1);
     if (e.key === "-" || e.key === "_") setZoom(state.zoomIdx - 1);
     if (e.code === "KeyC") state.follow = true;
-    if (e.code === "KeyM") { state.showMinimap = !state.showMinimap; document.getElementById("minimap-wrap").classList.toggle("hidden", !state.showMinimap); }
+    if (e.code === "KeyM") toggleMinimap();
     if (e.code === "KeyL") { state.showLabels = !state.showLabels; toast(state.showLabels ? "Rètols visibles" : "Rètols amagats"); }
     if (e.code === "KeyH") document.getElementById("help").classList.toggle("hidden");
     if (e.code === "KeyN") {
@@ -990,6 +1051,7 @@ async function main() {
   state.cam.y = state.player.y - canvas.height / dpr / z / 2;
   bindInput();
   bindAvatarPanel();
+  bindTouchControls();
   document.getElementById("loading").classList.add("hidden");
   let last = performance.now();
   const loop = (now) => {

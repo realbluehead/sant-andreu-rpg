@@ -27,6 +27,8 @@ Obre <http://localhost:8737>.
 | P | personalitzar l'avatar |
 | H | amagar l'ajuda |
 
+Al mòbil apareixen controls tàctils: un joystick per caminar, el botó **Córrer**, **MAPA** per obrir el minimapa i **CENTRAR** per tornar la càmera al personatge. També pots arrossegar el mapa amb el dit.
+
 ## Com està fet
 
 - `data/osm.json` — dades d'OpenStreetMap descarregades amb l'API d'Overpass (edificis, vies, usos del sòl, arbres, llocs).

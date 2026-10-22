@@ -5,7 +5,7 @@
 "use strict";
 
 const NPC_CONFIG = {
-  police: { count: 20, speed: 4.2, lane: 1.3, walkSteps: 40, seed: 1000 },  // tiles/s (~30 km/h)
+  police: { count: 10, speed: 4.2, lane: 1.3, walkSteps: 40, seed: 1000 },  // tiles/s (~30 km/h)
   bike: { count: 24, speed: 2.6, lane: 0.6, walkSteps: 30, seed: 5000 },    // ~19 km/h
 };
 const MAX_HP = 100, HIT_DAMAGE = 5, HIT_COOLDOWN = 1.2;

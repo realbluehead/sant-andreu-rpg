@@ -709,6 +709,7 @@ function draw() {
   }
   pushNpcSprites(list, camX, camY, vw, vh, k);
   pushPoiSprites(list, camX, camY, vw, vh, k);
+  pushAnimalSprites(list, camX, camY, vw, vh, k);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -725,6 +726,7 @@ function draw() {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (state.showLabels) drawLabels(camX, camY, z);
   drawPoiNames(camX, camY, z); // abans dels noms dels avatars, que han de quedar per sobre
+  drawAnimalBubbles(camX, camY, z);
   drawPlayerName(camX, camY, z);
   drawNpcOverlay(camX, camY, z);
 }
@@ -1255,6 +1257,7 @@ async function main() {
   bindChat();
   initNPCs(state.meta.graph);
   initPois();
+  initAnimals();
   bindNpcUi();
   net.connect();
   document.getElementById("loading").classList.add("hidden");
@@ -1265,6 +1268,7 @@ async function main() {
     if (canvas.width !== Math.floor(innerWidth * (window.devicePixelRatio || 1))) resize();
     update(dt);
     updateNPCs(dt);
+    updateAnimals(dt);
     tickBubbles(dt);
     draw();
     drawMinimap();

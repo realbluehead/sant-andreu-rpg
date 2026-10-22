@@ -48,8 +48,10 @@ Els bars, cafeteries, forns, farmàcies, restaurants, supermercats i altres come
 
 ## NPCs i vida
 
-- **20 policies en moto** fan la ronda pels carrers del barri, amb les llums blaves i vermelles enceses.
+- **10 policies en moto** fan la ronda pels carrers del barri, amb les llums blaves i vermelles enceses.
 - **24 ciclistes** circulen pels carrils bici i els carrers tranquils.
+- **Gats i gossos** passegen per places, parcs, voreres i patis interiors; si t'hi acostes potser et diuen "Miau!" o "Guau!".
+- **Estols de coloms** picotegen a les places i alcen el vol quan t'hi acostes.
 - Comences amb **100 punts de vida**. Si un ciclista t'atropella, en perds 5 (amb un segon i mig de gràcia entre cops). A 0, has mort i pots ressuscitar a la Plaça d'Orfila.
 
 Les rutes dels NPCs es generen a partir del graf de carrers d'OpenStreetMap (`graph` a `map.json`) amb una llavor fixa, i la posició depèn del rellotge: tots els jugadors veuen els mateixos NPCs al mateix lloc sense carregar el servidor.

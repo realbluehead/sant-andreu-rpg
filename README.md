@@ -44,7 +44,15 @@ python3 build_map.py
 
 ## Establiments
 
-Els bars, cafeteries, forns, farmàcies, restaurants, supermercats i altres comerços d'OpenStreetMap (`data/pois.json`) surten al mapa amb una icona pixel art segons el tipus: una cervesa als bars, una tassa de cafè a les cafeteries, una creu verda a les farmàcies, coberts als restaurants, etc. Quan t'hi acostes, el nom de l'establiment apareix al panell de dalt.
+Els comerços combinen tres fonts obertes, sense duplicats:
+
+- **OpenStreetMap** (`data/pois.json`)
+- **Cens de locals en planta baixa de l'Ajuntament de Barcelona** (2024, [Open Data BCN](https://opendata-ajuntament.barcelona.cat/data/ca/dataset/cens-locals-planta-baixa-act-economica), CC-BY 4.0) (`data/cens_locals.json`)
+- **Overture Maps** ([overturemaps.org](https://overturemaps.org), CDLA-Permissive-2.0), que també indica quins negocis han tancat (`data/overture_places.json`)
+
+Per actualitzar-les: `pip install duckdb` (per a Overture), `python3 fetch_businesses.py` i després `python3 build_map.py`.
+
+Els bars, cafeteries, forns, farmàcies, restaurants, supermercats i altres comerços surten al mapa amb una icona pixel art segons el tipus: una cervesa als bars, una tassa de cafè a les cafeteries, una creu verda a les farmàcies, coberts als restaurants, etc. Quan t'hi acostes, el nom de l'establiment apareix al panell de dalt.
 
 ## Monedes
 

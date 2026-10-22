@@ -537,8 +537,152 @@ if os.path.exists(pois_path):
         if not (0 <= x < WIDTH and 0 <= y < HEIGHT) or (el["type"], el["id"]) in seen_poi:
             continue
         seen_poi.add((el["type"], el["id"]))
-        pois.append({"c": cat, "n": t.get("name", ""), "x": round(x, 1), "y": round(y, 1)})
-print(f"  {len(pois)} establiments")
+        pois.append({"c": cat, "n": t.get("name", ""), "x": round(x, 1), "y": round(y, 1), "src": "osm"})
+n_osm = len(pois)
+
+# Fonts complementàries (vegeu fetch_businesses.py): cens de locals de l'Ajuntament (2024) i
+# Overture Maps. S'afegeixen sense duplicar: un local de la mateixa categoria a pocs metres, o
+# amb un nom semblant, es considera el mateix negoci.
+import re, unicodedata
+
+CENS_CATS = {
+    "Restaurants": "food", "serveis de menjar i begudes": "food",
+    "Serveis de menjar take away MENJAR RÀPID": "burger", "Plats preparats (no degustació)": "burger",
+    "Bars especials amb actuació / Bars musicals / Discoteques /PUB": "beer",
+    "Autoservei / Supermercat": "cart", "Grans magatzems i hipermercats": "cart", "Fruites i verdures": "cart",
+    "Carn i Porc": "cart", "Peix i marisc": "cart", "Ous i aus": "cart", "Begudes": "cart",
+    "Pa, pastisseria i làctics": "bread", "Farmàcies PARAFARMÀCIA": "pharmacy", "Sanitat i assistència": "health",
+    "Perruqueries": "scissors", "Centres d'estètica": "scissors",
+    "Vestir": "shirt", "Calçat i pell": "shirt", "Joieria, rellotgeria i bijuteria": "shirt", "Merceria": "shirt",
+    "Llibres, diaris i revistes": "book", "Xocolateries / Geladeries / Degustació": "icecream",
+    "Serveis de telecomunicacions": "phone", "Informàtica": "phone", "Locutoris": "phone",
+    "Combustibles i carburants": "fuel", "serveis d'allotjament": "bed",
+    "Drogueria i perfumeria": "shop", "Basars": "shop", "Material equipament llar": "shop", "Parament ferreteria": "shop",
+    "Joguines i esports": "shop", "Tabac i articles fumadors": "shop", "Floristeries": "shop", "Òptiques": "shop",
+    "Herbolaris, dietètica i NUTRICIÓ": "shop", "Mobles i articles fusta i metall": "shop", "Aparells domèstics": "shop",
+    "Fotografia": "shop", "Música": "shop", "Veterinaris / Mascotes": "shop",
+}
+BANK_NAME = re.compile(r"\b(BANC|BANCO|BANK|CAIXA|CAJA|BBVA|SABADELL|SANTANDER|BANKINTER|ING|IBERCAJA|UNICAJA|ABANCA|KUTXA)\b", re.I)
+CAFE_NAME = re.compile(r"\b(CAFE|CAFÈ|CAFETERIA|CAFETERÍA|COFFEE|GRANJA|XURRERIA|CHURRERIA|ORXATERIA)\b", re.I)
+
+
+def census_category(activity, name):
+    if activity.startswith("Bars"):
+        return "coffee" if CAFE_NAME.search(name) else "beer"
+    if activity == "Finances i assegurances":
+        return "bank" if BANK_NAME.search(name) else None
+    return CENS_CATS.get(activity)
+
+
+def overture_category(basic, cat):
+    k = f"{basic} {cat}"
+    rules = [("pharmacy", "pharmacy"), ("bakery", "bread"), ("pastry", "bread"), ("ice_cream", "icecream"),
+             ("coffee", "coffee"), ("cafe", "coffee"), ("tapas_bar", "food"), ("fast_food", "burger"),
+             ("burger", "burger"), ("pizza", "burger"), ("kebab", "burger"), ("sandwich", "burger"),
+             ("restaurant", "food"), ("eatery", "food"), ("pub", "beer"), ("bar", "beer"),
+             ("grocery", "cart"), ("supermarket", "cart"), ("convenience", "cart"), ("butcher", "cart"),
+             ("produce_store", "cart"), ("food_and_beverage_store", "cart"),
+             ("bank_or_credit_union", "bank"), ("atm", "bank"),
+             ("hair_salon", "scissors"), ("barber", "scissors"), ("beauty_salon", "scissors"), ("nail_salon", "scissors"),
+             ("clothing", "shirt"), ("shoe_store", "shirt"), ("jewelry", "shirt"), ("fashion", "shirt"),
+             ("bookstore", "book"), ("newsstand", "book"), ("stationery", "book"),
+             ("bicycle", "bike"), ("gas_station", "fuel"), ("cinema", "film"), ("theat", "film"),
+             ("hotel", "bed"), ("hostel", "bed"), ("mobile_phone", "phone"), ("electronics_store", "phone"),
+             ("dental", "health"), ("doctors_office", "health"), ("hospital", "health"), ("outpatient", "health"),
+             ("_store", "shop")]
+    for key, c in rules:
+        if key in k:
+            return c
+    return None
+
+
+SMALL = {"de", "del", "la", "el", "les", "els", "i", "y", "d", "l", "en", "a", "al", "los", "las"}
+
+
+def nice_name(n):
+    """'BAR L'ORFILA 9' -> 'Bar l'Orfila 9' (el cens ho té tot en majúscules)."""
+    if not n or n != n.upper():
+        return n
+    words = []
+    for i, w in enumerate(re.split(r"(\s+)", n.lower())):
+        parts = w.split("'")
+        parts = [p if (j < len(parts) - 1 and p in SMALL and i) else p[:1].upper() + p[1:] for j, p in enumerate(parts)]
+        w = "'".join(parts)
+        words.append(w if (i == 0 or w.strip().lower() not in SMALL) else w.lower())
+    return "".join(words)
+
+
+STOP = {"bar", "cafe", "cafeteria", "restaurant", "restaurante", "la", "el", "de", "del", "els", "les", "sl", "s", "l", "d", "i", "y"}
+
+
+def norm_tokens(n):
+    n = unicodedata.normalize("NFKD", n.lower()).encode("ascii", "ignore").decode()
+    return {t for t in re.split(r"[^a-z0-9]+", n) if t and t not in STOP}
+
+
+def same_name(a, b):
+    ta, tb = norm_tokens(a), norm_tokens(b)
+    if not ta or not tb:
+        return False
+    return len(ta & tb) / min(len(ta), len(tb)) >= 0.6
+
+
+M = 1 / M_PER_TILE  # tiles per metre
+
+
+def find_match(cat, name, x, y):
+    for p in pois:
+        d = math.hypot(p["x"] - x, p["y"] - y)
+        if p["c"] == cat and d < 12 * M:
+            return p
+        if name and p["n"] and d < 30 * M and same_name(p["n"], name):
+            return p
+        if name and p["n"] and d < 60 * M and norm_tokens(p["n"]) == norm_tokens(name):
+            return p
+    return None
+
+
+def add_poi(cat, name, x, y, src):
+    if not (0 <= x < WIDTH and 0 <= y < HEIGHT):
+        return
+    hit = find_match(cat, name, x, y)
+    if hit:
+        # Overture sol tenir el nom amb majúscules i minúscules ben posades i més recent
+        if name and (not hit["n"] or (src == "overture" and hit["src"] == "cens" and same_name(hit["n"], name))):
+            hit["n"] = name
+        return
+    pois.append({"c": cat, "n": name, "x": round(x, 1), "y": round(y, 1), "src": src})
+
+
+cens_path = os.path.join(HERE, "data", "cens_locals.json")
+if os.path.exists(cens_path):
+    for l in json.load(open(cens_path))["locals"]:
+        cat = census_category(l["activity"], l["name"])
+        if cat:
+            add_poi(cat, nice_name(l["name"]), *proj(l["lat"], l["lon"]), "cens")
+n_cens = len(pois) - n_osm
+
+closed = []
+ov_path = os.path.join(HERE, "data", "overture_places.json")
+if os.path.exists(ov_path):
+    for o in json.load(open(ov_path))["places"]:
+        x, y = proj(o["lat"], o["lon"])
+        if o["status"] == "permanently_closed":
+            if o["name"]:
+                closed.append((o["name"], x, y))
+            continue
+        cat = overture_category(o["basic"], o["cat"])
+        if cat and o["confidence"] >= 0.6:
+            add_poi(cat, o["name"], x, y, "overture")
+n_ov = len(pois) - n_osm - n_cens
+
+# Negocis que Overture marca com a tancats definitivament
+before = len(pois)
+pois = [p for p in pois if not (p["n"] and any(math.hypot(p["x"] - cx, p["y"] - cy) < 30 * M and same_name(p["n"], cn)
+                                                for cn, cx, cy in closed))]
+for p in pois:
+    del p["src"]
+print(f"  {len(pois)} establiments (OSM {n_osm}, cens +{n_cens}, Overture +{n_ov}, tancats -{before - len(pois)})")
 
 # --- 10. Punts on poden aparèixer monedes (per al servidor) -------------
 # Tiles caminables dins del barri, sense arbres ni fonts, triats de manera repartida.

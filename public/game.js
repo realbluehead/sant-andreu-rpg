@@ -1,7 +1,7 @@
 // Sant Andreu RPG — mapa pixel art de Sant Andreu de Palomar fet amb dades d'OpenStreetMap.
 "use strict";
 
-const DATA_VERSION = 3;
+const DATA_VERSION = 4;
 
 // Paràmetres del joc (velocitats, quantitats de NPCs, danys…). Es llegeixen de config.json,
 // que es pot editar amb l'app d'admin (admin/). Aquests valors només s'usen si no es pot carregar.

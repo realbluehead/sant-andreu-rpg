@@ -81,8 +81,9 @@ const server = createServer(async (req, res) => {
 
     if (url.pathname === "/api/config" && req.method === "PUT") {
       const { config, errors } = clean(schema, await readBody(req));
-      if (errors.length) return send(res, 400, { errors });
+      if (errors.length) { console.log("Configuració rebutjada:", errors.join(" | ")); return send(res, 400, { errors }); }
       await writeFile(CONFIG, JSON.stringify(config, null, 2) + "\n");
+      console.log(`[${new Date().toLocaleTimeString()}] Desat public/config.json`);
       return send(res, 200, { ok: true, config });
     }
 
@@ -97,6 +98,7 @@ const server = createServer(async (req, res) => {
       }
       const p = await run("git", ["push"]);
       log.push(p.out || "Res a pujar");
+      console.log(`[${new Date().toLocaleTimeString()}] Publicar: ${p.ok ? "OK" : "ERROR"}\n  ${log.join("\n  ")}`);
       return send(res, p.ok ? 200 : 500, { ok: p.ok, log });
     }
 

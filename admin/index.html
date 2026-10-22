@@ -58,6 +58,12 @@
     border-radius: 8px; padding: 10px 14px; max-width: min(640px, calc(100vw - 32px)); white-space: pre-wrap; font-size: 13px; box-shadow: 0 8px 30px rgba(0,0,0,.5); }
   .msg.ok { border-color: var(--ok); } .msg.err { border-color: var(--err); }
   .hidden { display: none !important; }
+  dialog { background: var(--panel); color: var(--text); border: 2px solid var(--border); border-radius: 10px; padding: 18px; max-width: min(440px, calc(100vw - 32px)); }
+  dialog::backdrop { background: rgba(8,9,20,.65); }
+  dialog h3 { margin: 0 0 8px; font: 11px "Press Start 2P", monospace; color: var(--accent); }
+  dialog p { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+  dialog code { color: var(--text); }
+  .dlg-actions { display: flex; justify-content: flex-end; gap: 8px; }
   @media (max-width: 600px) { .actions { margin-left: 0; } .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -79,6 +85,15 @@
   <div id="grid" class="grid"></div>
 </main>
 <div id="msg" class="msg hidden"></div>
+<dialog id="confirm">
+  <h3>Publicar a GitHub?</h3>
+  <p>Es farà un commit de <code>public/config.json</code> i es pujarà al repositori.
+    En un minut els canvis s'aplicaran a la web per a tothom.</p>
+  <div class="dlg-actions">
+    <button id="confirm-no" type="button">Cancel·lar</button>
+    <button id="confirm-yes" class="publish" type="button">Publicar</button>
+  </div>
+</dialog>
 <script>
 "use strict";
 const api = (path, opts = {}) => fetch(path, { ...opts, headers: { "x-admin": "1", "content-type": "application/json", ...(opts.headers || {}) } })
@@ -184,6 +199,18 @@ async function save() {
   toast("Desat a public/config.json. Recarrega el joc en local per provar-ho.");
 }
 
+function askConfirm() {
+  const dlg = document.getElementById("confirm");
+  return new Promise((resolve) => {
+    const done = (v) => { dlg.close(); resolve(v); };
+    document.getElementById("confirm-yes").onclick = () => done(true);
+    document.getElementById("confirm-no").onclick = () => done(false);
+    dlg.oncancel = (e) => { e.preventDefault(); done(false); };
+    dlg.showModal();
+    document.getElementById("confirm-yes").focus();
+  });
+}
+
 document.getElementById("save").onclick = save;
 document.getElementById("revert").onclick = () => { current = clone(saved); refresh(); };
 document.getElementById("defaults").onclick = () => {
@@ -192,7 +219,8 @@ document.getElementById("defaults").onclick = () => {
 };
 document.getElementById("publish").onclick = async () => {
   if (!same(current, saved)) return toast("Primer desa els canvis.", "err");
-  if (!confirm("Publicar public/config.json a GitHub? Els canvis s'aplicaran a la web per a tothom.")) return;
+  // diàleg propi: alguns navegadors integrats bloquegen confirm() i el retornen com a "no"
+  if (!(await askConfirm())) return toast("Publicació cancel·lada.", "err");
   const btn = document.getElementById("publish");
   btn.disabled = true; btn.textContent = "Publicant…";
   const r = await api("/api/publish", { method: "POST" });

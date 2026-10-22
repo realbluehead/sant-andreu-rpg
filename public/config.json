@@ -63,5 +63,12 @@
   },
   "chat": {
     "maxLength": 116
+  },
+  "magic": {
+    "ghosts": 12,
+    "zombies": 14,
+    "zombieSpeed": 45,
+    "zombieSight": 7,
+    "zombieDamage": 10
   }
 }

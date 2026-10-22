@@ -1,104 +1,535 @@
 {
   "sections": [
     {
-      "key": "player", "title": "Jugador", "icon": "🧍",
+      "key": "player",
+      "title": "Jugador",
+      "icon": "🧍",
       "fields": [
-        { "key": "walkSpeed", "label": "Velocitat caminant", "type": "number", "min": 20, "max": 400, "step": 5, "default": 90, "unit": "px/s", "help": "16 px = 1 casella = 2 m" },
-        { "key": "runSpeed", "label": "Velocitat corrent", "type": "number", "min": 20, "max": 600, "step": 5, "default": 210, "unit": "px/s" },
-        { "key": "maxHp", "label": "Vida màxima", "type": "int", "min": 1, "max": 1000, "step": 1, "default": 100, "unit": "punts" },
-        { "key": "hitCooldown", "label": "Temps de gràcia entre cops", "type": "number", "min": 0, "max": 10, "step": 0.1, "default": 1.2, "unit": "s" }
+        {
+          "key": "walkSpeed",
+          "label": "Velocitat caminant",
+          "type": "number",
+          "min": 20,
+          "max": 400,
+          "step": 5,
+          "default": 90,
+          "unit": "px/s",
+          "help": "16 px = 1 casella = 2 m"
+        },
+        {
+          "key": "runSpeed",
+          "label": "Velocitat corrent",
+          "type": "number",
+          "min": 20,
+          "max": 600,
+          "step": 5,
+          "default": 210,
+          "unit": "px/s"
+        },
+        {
+          "key": "maxHp",
+          "label": "Vida màxima",
+          "type": "int",
+          "min": 1,
+          "max": 1000,
+          "step": 1,
+          "default": 100,
+          "unit": "punts"
+        },
+        {
+          "key": "hitCooldown",
+          "label": "Temps de gràcia entre cops",
+          "type": "number",
+          "min": 0,
+          "max": 10,
+          "step": 0.1,
+          "default": 1.2,
+          "unit": "s"
+        }
       ]
     },
     {
-      "key": "police", "title": "Policies en moto", "icon": "🚓",
+      "key": "police",
+      "title": "Policies en moto",
+      "icon": "🚓",
       "fields": [
-        { "key": "count", "label": "Quantitat", "type": "int", "min": 0, "max": 200, "step": 1, "default": 10 },
-        { "key": "speed", "label": "Velocitat", "type": "number", "min": 0.5, "max": 20, "step": 0.1, "default": 4.2, "unit": "caselles/s", "help": "1 casella/s ≈ 7 km/h" },
-        { "key": "damage", "label": "Dany per atropellament", "type": "int", "min": 0, "max": 1000, "step": 1, "default": 20, "unit": "punts" },
-        { "key": "dropsCoins", "label": "Et fan caure les monedes", "type": "bool", "default": true }
+        {
+          "key": "count",
+          "label": "Quantitat",
+          "type": "int",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "default": 10
+        },
+        {
+          "key": "speed",
+          "label": "Velocitat",
+          "type": "number",
+          "min": 0.5,
+          "max": 20,
+          "step": 0.1,
+          "default": 4.2,
+          "unit": "caselles/s",
+          "help": "1 casella/s ≈ 7 km/h"
+        },
+        {
+          "key": "damage",
+          "label": "Dany per atropellament",
+          "type": "int",
+          "min": 0,
+          "max": 1000,
+          "step": 1,
+          "default": 20,
+          "unit": "punts"
+        },
+        {
+          "key": "dropsCoins",
+          "label": "Et fan caure les monedes",
+          "type": "bool",
+          "default": true
+        }
       ]
     },
     {
-      "key": "bike", "title": "Ciclistes", "icon": "🚲",
+      "key": "bike",
+      "title": "Ciclistes",
+      "icon": "🚲",
       "fields": [
-        { "key": "count", "label": "Quantitat", "type": "int", "min": 0, "max": 200, "step": 1, "default": 24 },
-        { "key": "speed", "label": "Velocitat", "type": "number", "min": 0.5, "max": 20, "step": 0.1, "default": 2.6, "unit": "caselles/s" },
-        { "key": "damage", "label": "Dany per atropellament", "type": "int", "min": 0, "max": 1000, "step": 1, "default": 5, "unit": "punts" },
-        { "key": "dropsCoins", "label": "Et fan caure les monedes", "type": "bool", "default": true }
+        {
+          "key": "count",
+          "label": "Quantitat",
+          "type": "int",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "default": 24
+        },
+        {
+          "key": "speed",
+          "label": "Velocitat",
+          "type": "number",
+          "min": 0.5,
+          "max": 20,
+          "step": 0.1,
+          "default": 2.6,
+          "unit": "caselles/s"
+        },
+        {
+          "key": "damage",
+          "label": "Dany per atropellament",
+          "type": "int",
+          "min": 0,
+          "max": 1000,
+          "step": 1,
+          "default": 5,
+          "unit": "punts"
+        },
+        {
+          "key": "dropsCoins",
+          "label": "Et fan caure les monedes",
+          "type": "bool",
+          "default": true
+        }
       ]
     },
     {
-      "key": "scooter", "title": "Patinets elèctrics", "icon": "🛴",
+      "key": "scooter",
+      "title": "Patinets elèctrics",
+      "icon": "🛴",
       "fields": [
-        { "key": "count", "label": "Quantitat", "type": "int", "min": 0, "max": 200, "step": 1, "default": 14 },
-        { "key": "speed", "label": "Velocitat", "type": "number", "min": 0.5, "max": 30, "step": 0.1, "default": 8, "unit": "caselles/s" },
-        { "key": "damage", "label": "Dany per atropellament", "type": "int", "min": 0, "max": 1000, "step": 1, "default": 30, "unit": "punts" },
-        { "key": "dropsCoins", "label": "Et fan caure les monedes", "type": "bool", "default": true }
+        {
+          "key": "count",
+          "label": "Quantitat",
+          "type": "int",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "default": 14
+        },
+        {
+          "key": "speed",
+          "label": "Velocitat",
+          "type": "number",
+          "min": 0.5,
+          "max": 30,
+          "step": 0.1,
+          "default": 8,
+          "unit": "caselles/s"
+        },
+        {
+          "key": "damage",
+          "label": "Dany per atropellament",
+          "type": "int",
+          "min": 0,
+          "max": 1000,
+          "step": 1,
+          "default": 30,
+          "unit": "punts"
+        },
+        {
+          "key": "dropsCoins",
+          "label": "Et fan caure les monedes",
+          "type": "bool",
+          "default": true
+        }
       ]
     },
     {
-      "key": "ultras", "title": "Ultres de la UESA", "icon": "🚩",
+      "key": "ultras",
+      "title": "Ultres de la UESA",
+      "icon": "🚩",
       "fields": [
-        { "key": "gangs", "label": "Bandes", "type": "int", "min": 0, "max": 10, "step": 1, "default": 2 },
-        { "key": "size", "label": "Persones per banda", "type": "int", "min": 1, "max": 40, "step": 1, "default": 10 },
-        { "key": "cycleSeconds", "label": "Cada quant apareix cada banda", "type": "int", "min": 30, "max": 7200, "step": 10, "default": 300, "unit": "s" },
-        { "key": "activeSeconds", "label": "Quanta estona hi és", "type": "int", "min": 10, "max": 7200, "step": 10, "default": 150, "unit": "s", "help": "Ha de ser menys que el cicle" },
-        { "key": "speed", "label": "Velocitat", "type": "number", "min": 0.2, "max": 10, "step": 0.1, "default": 1.7, "unit": "caselles/s" },
-        { "key": "damage", "label": "Dany si et trepitgen", "type": "int", "min": 0, "max": 1000, "step": 1, "default": 25, "unit": "punts" }
+        {
+          "key": "gangs",
+          "label": "Bandes",
+          "type": "int",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "key": "size",
+          "label": "Persones per banda",
+          "type": "int",
+          "min": 1,
+          "max": 40,
+          "step": 1,
+          "default": 10
+        },
+        {
+          "key": "cycleSeconds",
+          "label": "Cada quant apareix cada banda",
+          "type": "int",
+          "min": 30,
+          "max": 7200,
+          "step": 10,
+          "default": 300,
+          "unit": "s"
+        },
+        {
+          "key": "activeSeconds",
+          "label": "Quanta estona hi és",
+          "type": "int",
+          "min": 10,
+          "max": 7200,
+          "step": 10,
+          "default": 150,
+          "unit": "s",
+          "help": "Ha de ser menys que el cicle"
+        },
+        {
+          "key": "speed",
+          "label": "Velocitat",
+          "type": "number",
+          "min": 0.2,
+          "max": 10,
+          "step": 0.1,
+          "default": 1.7,
+          "unit": "caselles/s"
+        },
+        {
+          "key": "damage",
+          "label": "Dany si et trepitgen",
+          "type": "int",
+          "min": 0,
+          "max": 1000,
+          "step": 1,
+          "default": 25,
+          "unit": "punts"
+        }
       ]
     },
     {
-      "key": "thieves", "title": "Lladres", "icon": "🦹",
+      "key": "thieves",
+      "title": "Lladres",
+      "icon": "🦹",
       "fields": [
-        { "key": "count", "label": "Quantitat", "type": "int", "min": 0, "max": 300, "step": 1, "default": 90 },
-        { "key": "sight", "label": "Distància a la qual et veuen", "type": "number", "min": 1, "max": 40, "step": 0.5, "default": 9, "unit": "caselles" },
-        { "key": "giveUp", "label": "Distància a la qual es rendeixen", "type": "number", "min": 2, "max": 80, "step": 0.5, "default": 16, "unit": "caselles" },
-        { "key": "chaseSpeed", "label": "Velocitat perseguint", "type": "number", "min": 10, "max": 400, "step": 1, "default": 76, "unit": "px/s", "help": "Compara-ho amb la velocitat caminant del jugador" },
-        { "key": "robCooldown", "label": "Temps que et deixen en pau després de robar", "type": "int", "min": 0, "max": 600, "step": 1, "default": 25, "unit": "s" }
+        {
+          "key": "count",
+          "label": "Quantitat",
+          "type": "int",
+          "min": 0,
+          "max": 300,
+          "step": 1,
+          "default": 90
+        },
+        {
+          "key": "sight",
+          "label": "Distància a la qual et veuen",
+          "type": "number",
+          "min": 1,
+          "max": 40,
+          "step": 0.5,
+          "default": 9,
+          "unit": "caselles"
+        },
+        {
+          "key": "giveUp",
+          "label": "Distància a la qual es rendeixen",
+          "type": "number",
+          "min": 2,
+          "max": 80,
+          "step": 0.5,
+          "default": 16,
+          "unit": "caselles"
+        },
+        {
+          "key": "chaseSpeed",
+          "label": "Velocitat perseguint",
+          "type": "number",
+          "min": 10,
+          "max": 400,
+          "step": 1,
+          "default": 76,
+          "unit": "px/s",
+          "help": "Compara-ho amb la velocitat caminant del jugador"
+        },
+        {
+          "key": "robCooldown",
+          "label": "Temps que et deixen en pau després de robar",
+          "type": "int",
+          "min": 0,
+          "max": 600,
+          "step": 1,
+          "default": 25,
+          "unit": "s"
+        }
       ]
     },
     {
-      "key": "animals", "title": "Animals", "icon": "🐈",
+      "key": "magic",
+      "title": "Vila dels Bruixots",
+      "icon": "🧙",
       "fields": [
-        { "key": "cats", "label": "Gats", "type": "int", "min": 0, "max": 200, "step": 1, "default": 16 },
-        { "key": "dogs", "label": "Gossos", "type": "int", "min": 0, "max": 200, "step": 1, "default": 16 },
-        { "key": "pigeonFlocks", "label": "Estols de coloms", "type": "int", "min": 0, "max": 100, "step": 1, "default": 14 },
-        { "key": "pigeonsPerFlock", "label": "Coloms per estol", "type": "int", "min": 1, "max": 30, "step": 1, "default": 6 }
+        {
+          "key": "ghosts",
+          "label": "Fantasmes",
+          "type": "int",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 12,
+          "help": "Suren travessant parets i espanten, però no fan mal"
+        },
+        {
+          "key": "zombies",
+          "label": "Zombies",
+          "type": "int",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 14
+        },
+        {
+          "key": "zombieSpeed",
+          "label": "Velocitat dels zombies",
+          "type": "number",
+          "min": 10,
+          "max": 300,
+          "step": 1,
+          "default": 45,
+          "unit": "px/s",
+          "help": "Compara-ho amb la velocitat caminant del jugador"
+        },
+        {
+          "key": "zombieSight",
+          "label": "Distància a la qual et veuen",
+          "type": "number",
+          "min": 1,
+          "max": 30,
+          "step": 0.5,
+          "default": 7,
+          "unit": "caselles"
+        },
+        {
+          "key": "zombieDamage",
+          "label": "Dany per mossegada",
+          "type": "int",
+          "min": 0,
+          "max": 1000,
+          "step": 1,
+          "default": 10,
+          "unit": "punts"
+        }
       ]
     },
     {
-      "key": "coins", "title": "Monedes", "icon": "🪙",
+      "key": "animals",
+      "title": "Animals",
+      "icon": "🐈",
       "fields": [
-        { "key": "spawnEverySeconds", "label": "Apareix una moneda cada", "type": "number", "min": 1, "max": 3600, "step": 1, "default": 5, "unit": "s", "help": "Ho aplica el servidor (en un minut com a molt)" },
-        { "key": "max", "label": "Màxim de monedes alhora", "type": "int", "min": 0, "max": 500, "step": 1, "default": 50, "help": "Ho aplica el servidor" },
-        { "key": "dropLifeSeconds", "label": "Temps que duren les monedes caigudes", "type": "int", "min": 5, "max": 600, "step": 5, "default": 60, "unit": "s" }
+        {
+          "key": "cats",
+          "label": "Gats",
+          "type": "int",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "default": 16
+        },
+        {
+          "key": "dogs",
+          "label": "Gossos",
+          "type": "int",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "default": 16
+        },
+        {
+          "key": "pigeonFlocks",
+          "label": "Estols de coloms",
+          "type": "int",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 14
+        },
+        {
+          "key": "pigeonsPerFlock",
+          "label": "Coloms per estol",
+          "type": "int",
+          "min": 1,
+          "max": 30,
+          "step": 1,
+          "default": 6
+        }
       ]
     },
     {
-      "key": "bank", "title": "Bancs", "icon": "🏦",
+      "key": "coins",
+      "title": "Monedes",
+      "icon": "🪙",
       "fields": [
-        { "key": "radius", "label": "Distància per assegurar les monedes", "type": "number", "min": 0.5, "max": 10, "step": 0.5, "default": 2.5, "unit": "caselles" }
+        {
+          "key": "spawnEverySeconds",
+          "label": "Apareix una moneda cada",
+          "type": "number",
+          "min": 1,
+          "max": 3600,
+          "step": 1,
+          "default": 5,
+          "unit": "s",
+          "help": "Ho aplica el servidor (en un minut com a molt)"
+        },
+        {
+          "key": "max",
+          "label": "Màxim de monedes alhora",
+          "type": "int",
+          "min": 0,
+          "max": 500,
+          "step": 1,
+          "default": 50,
+          "help": "Ho aplica el servidor"
+        },
+        {
+          "key": "dropLifeSeconds",
+          "label": "Temps que duren les monedes caigudes",
+          "type": "int",
+          "min": 5,
+          "max": 600,
+          "step": 5,
+          "default": 60,
+          "unit": "s"
+        }
       ]
     },
     {
-      "key": "pharmacy", "title": "Farmàcies", "icon": "➕",
+      "key": "bank",
+      "title": "Bancs",
+      "icon": "🏦",
       "fields": [
-        { "key": "radius", "label": "Distància per curar-te", "type": "number", "min": 0.5, "max": 10, "step": 0.5, "default": 2.5, "unit": "caselles" }
+        {
+          "key": "radius",
+          "label": "Distància per assegurar les monedes",
+          "type": "number",
+          "min": 0.5,
+          "max": 10,
+          "step": 0.5,
+          "default": 2.5,
+          "unit": "caselles"
+        }
       ]
     },
     {
-      "key": "drinks", "title": "Bars i cafeteries", "icon": "🍺",
+      "key": "pharmacy",
+      "title": "Farmàcies",
+      "icon": "➕",
       "fields": [
-        { "key": "maxLevel", "label": "Embriaguesa màxima", "type": "int", "min": 1, "max": 100, "step": 1, "default": 20 },
-        { "key": "beerUp", "label": "Puja per cervesa", "type": "int", "min": 0, "max": 100, "step": 1, "default": 1 },
-        { "key": "coffeeDown", "label": "Baixa per cafè", "type": "int", "min": 0, "max": 100, "step": 1, "default": 3 },
-        { "key": "price", "label": "Preu de cada consumició", "type": "int", "min": 0, "max": 100, "step": 1, "default": 1, "unit": "monedes" }
+        {
+          "key": "radius",
+          "label": "Distància per curar-te",
+          "type": "number",
+          "min": 0.5,
+          "max": 10,
+          "step": 0.5,
+          "default": 2.5,
+          "unit": "caselles"
+        }
       ]
     },
     {
-      "key": "chat", "title": "Xat", "icon": "💬",
+      "key": "drinks",
+      "title": "Bars i cafeteries",
+      "icon": "🍺",
       "fields": [
-        { "key": "maxLength", "label": "Llargada màxima dels missatges", "type": "int", "min": 1, "max": 200, "step": 1, "default": 30, "unit": "caràcters", "help": "Ho aplica també el servidor" }
+        {
+          "key": "maxLevel",
+          "label": "Embriaguesa màxima",
+          "type": "int",
+          "min": 1,
+          "max": 100,
+          "step": 1,
+          "default": 20
+        },
+        {
+          "key": "beerUp",
+          "label": "Puja per cervesa",
+          "type": "int",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "key": "coffeeDown",
+          "label": "Baixa per cafè",
+          "type": "int",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "key": "price",
+          "label": "Preu de cada consumició",
+          "type": "int",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 1,
+          "unit": "monedes"
+        }
+      ]
+    },
+    {
+      "key": "chat",
+      "title": "Xat",
+      "icon": "💬",
+      "fields": [
+        {
+          "key": "maxLength",
+          "label": "Llargada màxima dels missatges",
+          "type": "int",
+          "min": 1,
+          "max": 200,
+          "step": 1,
+          "default": 30,
+          "unit": "caràcters",
+          "help": "Ho aplica també el servidor"
+        }
       ]
     }
   ]

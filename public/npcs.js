@@ -16,6 +16,7 @@ const DEATH_TEXT = {
   police: "Una moto de la policia t'ha atropellat.<br>Aparta't quan sentis les sirenes!",
   ultras: "Els ultres de la UESA t'han passat per sobre.<br>Quan els vegis venir, fuig!",
   scooter: "Un patinet elèctric t'ha arrollat a tota velocitat.<br>Mira bé abans de creuar!",
+  zombie: "Els zombies de la Vila dels Bruixots t'han mossegat.<br>Són lents: no et deixis atrapar!",
 };
 
 const npcs = { list: [], sprites: null, hp: 100, invuln: 0, dead: false, floaters: [], flash: 0, lastCause: "bike",

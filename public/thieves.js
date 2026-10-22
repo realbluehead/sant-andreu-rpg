@@ -13,6 +13,8 @@ const THIEF = {
   tiles: [T.SIDEWALK, T.PLAZA, T.GROUND, T.PARK, T.DIRT],
 };
 const THIEF_LINES = ["Dona'm les monedes!", "Eh, tu! Vine aquí!", "No corris tant!", "Aquesta cartera és meva!"];
+const WIZARD_LINES = ["Abracadabra... les teves monedes!", "Un encanteri per a la teva cartera!", "No t'escaparàs del meu conjur!", "Pota de gripau, monedes a la mà!"];
+const MAGIC_THEME = 0; // Vila dels Bruixots (themes.js)
 
 const thieves = { list: [] };
 
@@ -31,8 +33,15 @@ function initThieves() {
       shirt: hoodies[(r() * hoodies.length) | 0], pants: "#111116", shoes: "#2b2b33",
       extra: r() < 0.5 ? "cap" : "none", extraColor: "#111116",
     };
+    // a la Vila dels Bruixots, els lladres van de bruixot: túnica, barret en punta i sense antifaç
+    const wizard = sectorAt(Math.floor(home[0]), Math.floor(home[1])) === MAGIC_THEME;
+    if (wizard) {
+      const robe = ["#3b2a5e", "#2a2a3a", "#4a1f3a", "#1f3a4a"][(r() * 4) | 0];
+      Object.assign(look, { mask: false, shirt: robe, pants: robe, bottom: "robe", extra: "wizard", extraColor: robe,
+        hairStyle: ["long", "short", "bald"][(r() * 3) | 0], hair: ["#9a9aa0", "#d8d8d8", "#4a2b1a"][(r() * 3) | 0] });
+    }
     thieves.list.push({
-      home, allowed, sprites: makeHeroSet(look), r,
+      home, allowed, sprites: makeHeroSet(look), r, lines: wizard ? WIZARD_LINES : THIEF_LINES,
       x: home[0] * TS, y: home[1] * TS, dir: "down", frame: 0, anim: 0, moving: false,
       mode: "wander", target: null, wait: r() * 3, unseen: 0, cooldown: 0, fleeT: 0,
       stuck: 0, detour: null, say: null,
@@ -110,7 +119,7 @@ function updateThieves(dt) {
             t.stuck = 0;
           }
         }
-        if (!t.say && Math.random() < dt * 0.15) thiefSay(t, THIEF_LINES[(Math.random() * THIEF_LINES.length) | 0]);
+        if (!t.say && Math.random() < dt * 0.15) thiefSay(t, t.lines[(Math.random() * t.lines.length) | 0]);
       }
     } else if (t.mode === "flee") {
       t.fleeT -= dt;

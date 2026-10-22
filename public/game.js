@@ -70,6 +70,13 @@ const CFG = {
   },
   "chat": {
     "maxLength": 30
+  },
+  "magic": {
+    "ghosts": 12,
+    "zombies": 14,
+    "zombieSpeed": 45,
+    "zombieSight": 7,
+    "zombieDamage": 10
   }
 };
 function mergeConfig(dst, src) {
@@ -366,7 +373,8 @@ const DEFAULT_LOOK = {
 function makeHero(dir, f, look = DEFAULT_LOOK) {
   const p = new Pix(16, 24);
   const skin = hex(look.skin), hair = hex(look.hair), shirt = hex(look.shirt), shirtD = shade(shirt, -40);
-  const pants = hex(look.pants), shoe = hex(look.shoes), eye = hex("#1b1b2a"), extra = hex(look.extraColor);
+  const pants = hex(look.pants), shoe = hex(look.shoes), eye = hex(look.eyes || "#1b1b2a"), extra = hex(look.extraColor);
+  const gold = hex("#e8c040");
   const style = look.hairStyle;
   const lift = [0, 1, 0, 2][f];
   // samarreta a ratlles verticals (p. ex. la de la UESA)
@@ -384,6 +392,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
     p.rect(5, 21 - ll, 3, 2, shoe); p.rect(8, 21 - rl, 3, 2, shoe);
     p.rect(4, 11, 8, 6, shirt); p.rect(4, 16, 8, 1, shirtD);
     if (look.bottom === "skirt") { p.rect(4, 16, 8, 2, pants); p.rect(3, 18, 10, 1, pants); }
+    if (look.bottom === "robe") { p.rect(4, 16, 8, 5, shirt); p.rect(3, 18, 10, 3, shirt); p.rect(3, 20, 10, 1, shirtD); } // túnica
     const la = lift === 1 ? 1 : 0, ra = lift === 2 ? 1 : 0;
     p.rect(3, 11 + la, 1, 5, shirt); p.set(3, 16 + la, skin);
     p.rect(12, 11 + ra, 1, 5, shirt); p.set(12, 16 + ra, skin);
@@ -398,6 +407,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
       if (look.extra === "glasses") { p.rect(5, 6, 2, 2, eye); p.rect(9, 6, 2, 2, eye); p.rect(7, 6, 2, 1, eye); p.set(5, 6, hex("#9fd3ff")); p.set(9, 6, hex("#9fd3ff")); }
       if (look.extra === "cap") { p.rect(4, 1, 8, 3, extra); p.rect(3, 4, 10, 1, shade(extra, -45)); }
       if (look.mask) { p.rect(4, 6, 8, 2, hex("#111116")); p.set(6, 7, hex("#f4f1e8")); p.set(9, 7, hex("#f4f1e8")); } // antifaç
+      if (look.zombie) { p.set(5, 12 + la, skin); p.set(10, 12 + ra, skin); p.set(6, 13, shirtD); p.set(9, 15, shirtD); p.rect(7, 9, 2, 1, hex("#5a1e1e")); }
     } else {
       if (style === "long") { p.rect(4, 2, 8, 8, hair); p.rect(3, 4, 10, 9, hair); }
       else if (style === "afro") { p.rect(3, 0, 10, 10, hair); p.rect(2, 2, 12, 6, hair); }
@@ -407,6 +417,14 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
       p.rect(5, 10, 6, 1, shade(skin, -15));
       if (look.extra === "cap") p.rect(4, 1, 8, 4, extra);
     }
+    if (look.extra === "wizard") { // barret de bruixot en punta, amb l'ala sobre el front
+      const hat = shade(extra, 25);
+      p.rect(9, 0, 2, 1, hat); p.rect(8, 1, 2, 1, hat);                 // punta doblegada
+      p.rect(6, 2, 4, 1, hat); p.rect(5, 3, 6, 2, hat); p.set(7, 3, gold); // estrella
+      p.rect(4, 5, 8, 1, gold);                                          // cinta
+      p.rect(1, 6, 14, 1, shade(extra, -20));                            // ala
+      if (dir === "down") { p.set(6, 7, eye); p.set(9, 7, eye); }
+    }
   } else {
     const front = lift === 1 ? 2 : lift === 2 ? -1 : 0;
     const legA = look.bottom === "pants" ? pants : skin, legB = look.bottom === "pants" ? shade(pants, -15) : shade(skin, -15);
@@ -415,8 +433,10 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
     if (look.bottom === "shorts") p.rect(6, 17, 4, 2, pants);
     p.rect(5, 11, 6, 6, shirt); p.rect(5, 16, 6, 1, shirtD);
     if (look.bottom === "skirt") { p.rect(5, 16, 6, 2, pants); p.rect(4, 18, 8, 1, pants); }
+    if (look.bottom === "robe") { p.rect(5, 16, 6, 5, shirt); p.rect(4, 19, 8, 2, shirt); p.rect(4, 20, 8, 1, shirtD); }
     const arm = 7 + (lift === 1 ? 1 : lift === 2 ? -1 : 0);
-    p.rect(arm, 12, 2, 4, shirtD); p.set(arm, 16, skin);
+    if (look.zombie) { p.rect(8, 12, 6, 2, shirtD); p.rect(13, 12, 2, 2, skin); } // braços estirats endavant
+    else { p.rect(arm, 12, 2, 4, shirtD); p.set(arm, 16, skin); }
     p.rect(4, 3, 8, 8, skin); p.set(12, 7, skin);
     if (style === "long") { p.rect(4, 2, 8, 3, hair); p.rect(3, 4, 4, 9, hair); }
     else if (style === "afro") { p.rect(3, 0, 10, 5, hair); p.rect(2, 2, 6, 7, hair); }
@@ -426,6 +446,13 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
     if (look.extra === "glasses") { p.rect(9, 6, 3, 2, eye); p.set(10, 6, hex("#9fd3ff")); p.rect(6, 6, 3, 1, eye); }
     if (look.extra === "cap") { p.rect(4, 1, 8, 3, extra); p.rect(11, 4, 3, 1, shade(extra, -45)); }
     if (look.mask) { p.rect(7, 6, 6, 2, hex("#111116")); p.set(10, 7, hex("#f4f1e8")); }
+    if (look.extra === "wizard") {
+      const hat = shade(extra, 25);
+      p.rect(2, 0, 3, 1, hat); p.rect(4, 1, 3, 1, hat);                 // punta tirada enrere
+      p.rect(5, 2, 5, 1, hat); p.rect(5, 3, 6, 2, hat); p.set(8, 3, gold);
+      p.rect(5, 5, 7, 1, gold);
+      p.rect(3, 6, 12, 1, shade(extra, -20));
+    }
     stripes();
     if (dir === "left") { // mirall
       const q = new Pix(16, 24);
@@ -858,6 +885,7 @@ function draw() {
   pushAnimalSprites(list, camX, camY, vw, vh, kw);
   pushCoinSprites(list, camX, camY, vw, vh, k);
   pushThiefSprites(list, camX, camY, vw, vh, kw);
+  pushSpookySprites(list, camX, camY, vw, vh, kw);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -876,6 +904,7 @@ function draw() {
   drawPoiNames(camX, camY, z); // abans dels noms dels avatars, que han de quedar per sobre
   drawAnimalBubbles(camX, camY, z);
   drawThiefOverlay(camX, camY, z);
+  drawSpookyOverlay(camX, camY, z);
   drawPlayerName(camX, camY, z);
   drawNpcOverlay(camX, camY, z);
   drawTreasurePointer(camX, camY, z);
@@ -1432,6 +1461,7 @@ async function main() {
   initAnimals();
   initCoins();
   initThieves();
+  initSpooky();
   initDrinks();
   initMusic();
   bindNpcUi();
@@ -1447,6 +1477,7 @@ async function main() {
     updateAnimals(dt);
     updateCoins(dt);
     updateThieves(dt);
+    updateSpooky(dt);
     updateDrinks(dt);
     updateZone();
     tickBubbles(dt);

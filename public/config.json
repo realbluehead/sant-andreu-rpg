@@ -68,6 +68,17 @@
     "speedMultiplier": 3,
     "radius": 2
   },
+  "world": {
+    "secondsPerHour": 60,
+    "weatherDays": 2
+  },
+  "trucks": {
+    "count": 6,
+    "speed": 2.2
+  },
+  "bags": {
+    "perDay": 150
+  },
   "magic": {
     "ghosts": 12,
     "zombies": 14,

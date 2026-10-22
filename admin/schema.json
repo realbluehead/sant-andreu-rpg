@@ -465,6 +465,79 @@
       ]
     },
     {
+      "key": "world",
+      "title": "Temps i clima",
+      "icon": "🌗",
+      "fields": [
+        {
+          "key": "secondsPerHour",
+          "label": "Segons reals per hora del joc",
+          "type": "int",
+          "min": 5,
+          "max": 3600,
+          "step": 5,
+          "default": 60,
+          "unit": "s",
+          "help": "60 = cada minut és una hora (un dia dura 24 minuts)"
+        },
+        {
+          "key": "weatherDays",
+          "label": "Canvi de temps cada",
+          "type": "int",
+          "min": 1,
+          "max": 30,
+          "step": 1,
+          "default": 2,
+          "unit": "dies del joc",
+          "help": "Sol, núvols, pluja, boira o neu"
+        }
+      ]
+    },
+    {
+      "key": "trucks",
+      "title": "Camions de les escombraries",
+      "icon": "🚛",
+      "fields": [
+        {
+          "key": "count",
+          "label": "Quantitat",
+          "type": "int",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "default": 6,
+          "help": "Només surten de nit (de 22 a 6 h) i bloquegen el pas"
+        },
+        {
+          "key": "speed",
+          "label": "Velocitat",
+          "type": "number",
+          "min": 0.5,
+          "max": 10,
+          "step": 0.1,
+          "default": 2.2,
+          "unit": "caselles/s"
+        }
+      ]
+    },
+    {
+      "key": "bags",
+      "title": "Bosses d'escombraries",
+      "icon": "🗑️",
+      "fields": [
+        {
+          "key": "perDay",
+          "label": "Bosses noves cada dia",
+          "type": "int",
+          "min": 0,
+          "max": 2000,
+          "step": 10,
+          "default": 150,
+          "help": "Apareixen de 7 a 21 h i hi són fins que passa el camió. Es poden saltar amb ESPAI"
+        }
+      ]
+    },
+    {
       "key": "bank",
       "title": "Bancs",
       "icon": "🏦",

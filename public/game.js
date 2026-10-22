@@ -75,6 +75,17 @@ const CFG = {
     "speedMultiplier": 3,
     "radius": 2
   },
+  "world": {
+    "secondsPerHour": 60,
+    "weatherDays": 2
+  },
+  "trucks": {
+    "count": 6,
+    "speed": 2.2
+  },
+  "bags": {
+    "perDay": 150
+  },
   "magic": {
     "ghosts": 12,
     "zombies": 14,
@@ -584,7 +595,8 @@ function blocked(tx, ty) {
   if (tx < 0 || ty < 0 || tx >= state.W || ty >= state.H) return true;
   if (state.noclip) return false;
   const v = g(tx, ty) & 127;
-  if (v >= BUILDING_BASE || v === T.WATER || v === T.POOL) return true;
+  if (v >= BUILDING_BASE) return true;
+  if ((v === T.WATER || v === T.POOL) && state.riding) return true; // amb bici no es pot entrar a l'aigua
   const d = dec(tx, ty);
   return d === D.TREE || d === D.TREE2 || d === D.FOUNTAIN;
 }
@@ -813,7 +825,7 @@ function collides(x, y) {
   const x0 = Math.floor((x - HB.w / 2) / TS), x1 = Math.floor((x + HB.w / 2 - 1) / TS);
   const y0 = Math.floor((y - HB.h) / TS), y1 = Math.floor((y - 1) / TS);
   for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) if (blocked(tx, ty)) return true;
-  return false;
+  return !state.noclip && worldBlocks(x, y); // camions i bosses d'escombraries (world.js)
 }
 
 function update(dt) {
@@ -834,7 +846,7 @@ function update(dt) {
     state.follow = true;
     const running = k.has("ShiftLeft") || k.has("ShiftRight") || state.touchRun;
     const speed = (state.riding ? CFG.player.walkSpeed * CFG.bicing.speedMultiplier // en bici
-      : running ? CFG.player.runSpeed : CFG.player.walkSpeed) * (state.noclip ? 2 : 1);
+      : running ? CFG.player.runSpeed : CFG.player.walkSpeed) * (state.noclip ? 2 : 1) * (world.swimming ? 0.55 : 1);
     const mx = dx * speed * dt, my = dy * speed * dt;
     if (!collides(pl.x + mx, pl.y)) pl.x += mx;
     if (!collides(pl.x, pl.y + my)) pl.y += my;
@@ -876,6 +888,7 @@ function draw() {
       if (cx < 0 || cy < 0 || cx * CHUNK >= state.W || cy * CHUNK >= state.H) continue;
       ctx.drawImage(getChunk(cx, cy), cx * csz, cy * csz);
     }
+  drawWaterShimmer(camX, camY, vw, vh);
 
   // límit del barri
   ctx.save();
@@ -905,8 +918,10 @@ function draw() {
   const pl = state.player;
   // L'avatar manté sempre la mateixa mida en pantalla, independentment del zoom
   const k = HERO_SCREEN_SCALE / ZOOMS[state.zoomIdx];
-  if (state.riding) list.push([pl.y, S.rider[pl.dir][pl.moving ? pl.frame % 2 : 0], Math.round(pl.x) - 11 * k, Math.round(pl.y) - 27 * k, false, k]);
-  else list.push([pl.y, S.hero[pl.dir][pl.frame], Math.round(pl.x) - 8 * k, Math.round(pl.y) - 23 * k, false, k]);
+  // fx: alçada del salt i si neda (només es veu de cintura en amunt)
+  const fx = { lift: jumpLift() * k, swim: world.swimming };
+  if (state.riding) list.push([pl.y, S.rider[pl.dir][pl.moving ? pl.frame % 2 : 0], Math.round(pl.x) - 11 * k, Math.round(pl.y) - 27 * k, false, k, fx]);
+  else list.push([pl.y, S.hero[pl.dir][pl.frame], Math.round(pl.x) - 8 * k, Math.round(pl.y) - 23 * k, false, k, fx]);
   // Els altres jugadors i els NPCs s'escalen amb el mapa; rètols i monedes no
   const kw = 1;
   for (const o of net.others.values()) {
@@ -914,7 +929,10 @@ function draw() {
     if (o.bike) {
       o.riderSprites ||= makeRiderSet(o.look);
       list.push([o.y, o.riderSprites[o.dir][o.frame % 2], Math.round(o.x) - 11 * kw, Math.round(o.y) - 27 * kw, false, kw]);
-    } else list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * kw, Math.round(o.y) - 23 * kw, false, kw]);
+    } else {
+      const under = g(Math.floor(o.x / TS), Math.floor((o.y - 2) / TS)) & 127;
+      list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * kw, Math.round(o.y) - 23 * kw, false, kw, { swim: under === T.WATER || under === T.POOL }]);
+    }
   }
   pushNpcSprites(list, camX, camY, vw, vh, kw);
   pushPoiSprites(list, camX, camY, vw, vh, k);
@@ -923,20 +941,32 @@ function draw() {
   pushThiefSprites(list, camX, camY, vw, vh, kw);
   pushSpookySprites(list, camX, camY, vw, vh, kw);
   pushBicingSprites(list, camX, camY, vw, vh, kw);
+  pushWorldSprites(list, camX, camY, vw, vh, kw);
   list.sort((a, b) => a[0] - b[0]);
-  for (const [, img, x, y, shadow, hero] of list) {
+  for (const [, img, x, y, shadow, hero, fx] of list) {
     const s = hero || 1;
+    if (fx?.swim) { // nedant: mig cos fora de l'aigua i ones al voltant
+      const keep = 0.58, sh = img.height * keep, t = Date.now() / 300;
+      ctx.drawImage(img, 0, 0, img.width, sh, x, y + (img.height - sh) * s, img.width * s, sh * s);
+      ctx.strokeStyle = "rgba(255,255,255,.75)"; ctx.lineWidth = Math.max(1, s * 0.6);
+      ctx.beginPath();
+      ctx.ellipse(x + img.width * s / 2, y + (img.height - 1) * s, (7 + Math.sin(t)) * s, 2.5 * s, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      continue;
+    }
     if (shadow || hero) {
       ctx.fillStyle = "rgba(20,15,40,.3)";
       ctx.beginPath();
       ctx.ellipse(x + img.width * s / 2, y + (img.height - 1) * s, (hero ? 6 : 8) * s, (hero ? 2.5 : 3.5) * s, 0, 0, Math.PI * 2);
       ctx.fill();
     }
-    ctx.drawImage(img, x, y, img.width * s, img.height * s);
+    ctx.drawImage(img, x, y - (fx?.lift || 0), img.width * s, img.height * s);
   }
 
   // rètols (en espai de pantalla, nítids)
   ctx.setTransform(1, 0, 0, 1, 0, 0);
+  drawLighting(camX, camY, z, vw, vh); // nit i llums (world.js)
+  drawWeather();
   if (state.showLabels) drawLabels(camX, camY, z);
   drawPoiNames(camX, camY, z); // abans dels noms dels avatars, que han de quedar per sobre
   drawAnimalBubbles(camX, camY, z);
@@ -1394,6 +1424,7 @@ function bindInput() {
     if (e.target instanceof HTMLInputElement) return;
     if (npcs.dead) return; // a la pantalla de mort només compta el botó de ressuscitar
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
+    if (e.code === "Space" && !e.repeat && !state.editing) jump();
     if (e.code === "Escape" && state.editing) { toggleAvatarPanel(false); return; }
     if (e.code === "KeyP" && !e.repeat) { toggleAvatarPanel(); return; }
     if (e.code === "KeyR" && !e.repeat && !state.editing && !state.chatting) { toggleBike(); return; }
@@ -1498,6 +1529,7 @@ async function main() {
   initNPCs(state.meta.graph);
   initPois();
   initBicing();
+  initWorld();
   initAnimals();
   initCoins();
   initThieves();
@@ -1512,6 +1544,7 @@ async function main() {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     if (canvas.width !== Math.floor(innerWidth * (window.devicePixelRatio || 1))) resize();
+    updateWorld(dt);
     update(dt);
     updateNPCs(dt);
     updateAnimals(dt);

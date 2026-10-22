@@ -28,6 +28,7 @@
   #location .street { color: var(--accent); font-size: 12px; }
   #zone { --zone: var(--accent); display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px; padding-bottom: 6px;
     border-bottom: 2px solid var(--zone); }
+  #clock { font-size: 8px; color: #c9d4ff; margin: -2px 0 6px; }
   #zone b { font-weight: normal; font-size: 11px; color: var(--zone); }
   #zone small { font-size: 7px; color: var(--muted); }
   #zone small::before { content: "ZONA · "; }
@@ -163,6 +164,7 @@
   #chat-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(160px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
   #bike-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(212px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
   #bike-btn.dim { opacity: .45; }
+  #jump-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(264px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
   #bike-hint { left: 50%; bottom: 96px; transform: translateX(-50%); font-size: 9px; color: #ff8a80; padding: 6px 10px; z-index: 3; }
   body.touch #bike-hint { bottom: auto; top: 45%; }
   #chat { left: 50%; bottom: 40px; transform: translateX(-50%); width: min(420px, calc(100vw - 32px)); display: flex; align-items: center; gap: 8px; padding: 8px 10px; z-index: 4; }
@@ -208,6 +210,7 @@
 <canvas id="game"></canvas>
 <div id="location" class="panel">
   <div id="zone"><small></small><b></b></div>
+  <div id="clock">…</div>
   <div id="location-text"><div class="street">…</div><div class="place"></div><div class="meta"></div></div>
   <div id="online" class="offline"><i></i><span>Connectant…</span></div>
   <div id="hp"><span class="lbl">VIDA</span><div class="bar"><i></i></div><span class="val">100/100</span></div>
@@ -223,7 +226,7 @@
   <b>FLETXES / WASD</b> caminar · <b>SHIFT</b> córrer<br>
   <b>+ / −</b> o roda: zoom · arrossega: moure càmera<br>
   <b>C</b> centrar · <b>M</b> minimapa · <b>L</b> rètols<br>
-  <b>ENTER</b> parlar · <b>R</b> bici · <b>N</b> fantasma · <b>P</b> avatar · <b>B</b> música · <b>H</b> ajuda
+  <b>ESPAI</b> saltar · <b>ENTER</b> parlar · <b>R</b> bici · <b>N</b> fantasma · <b>P</b> avatar · <b>B</b> música · <b>H</b> ajuda
 </div>
 <div id="zoom" class="panel">
   <button id="zoom-out" type="button" aria-label="Allunyar">−</button>
@@ -253,6 +256,7 @@
 <button id="center-btn" class="touch-btn touch-only" type="button">CENTRAR</button>
 <button id="chat-btn" class="touch-btn touch-only" type="button">XAT</button>
 <button id="bike-btn" class="touch-btn touch-only dim" type="button">BICI</button>
+<button id="jump-btn" class="touch-btn touch-only" type="button">SALTA</button>
 <div id="bike-hint" class="panel hidden">R: agafar una bici</div>
 <div id="chat-log" aria-live="polite"></div>
 <form id="chat" class="panel hidden" autocomplete="off">
@@ -273,17 +277,18 @@
   <a href="https://opendata-ajuntament.barcelona.cat/data/ca/dataset/cens-locals-planta-baixa-act-economica" target="_blank" rel="noopener">Ajuntament de Barcelona</a> (CC-BY) ·
   <a href="https://overturemaps.org" target="_blank" rel="noopener">Overture Maps Foundation</a></div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=41"></script>
-<script src="themes.js?v=41"></script>
-<script src="roofs.js?v=41"></script>
-<script src="npcs.js?v=41"></script>
-<script src="pois.js?v=41"></script>
-<script src="animals.js?v=41"></script>
-<script src="coins.js?v=41"></script>
-<script src="thieves.js?v=41"></script>
-<script src="spooky.js?v=41"></script>
-<script src="bicing.js?v=41"></script>
-<script src="drinks.js?v=41"></script>
-<script src="music.js?v=41"></script>
+<script src="game.js?v=44"></script>
+<script src="themes.js?v=44"></script>
+<script src="roofs.js?v=44"></script>
+<script src="npcs.js?v=44"></script>
+<script src="pois.js?v=44"></script>
+<script src="animals.js?v=44"></script>
+<script src="coins.js?v=44"></script>
+<script src="thieves.js?v=44"></script>
+<script src="spooky.js?v=44"></script>
+<script src="bicing.js?v=44"></script>
+<script src="world.js?v=44"></script>
+<script src="drinks.js?v=44"></script>
+<script src="music.js?v=44"></script>
 </body>
 </html>

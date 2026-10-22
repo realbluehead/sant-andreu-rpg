@@ -23,6 +23,7 @@ Obre <http://localhost:8737>.
 | C | centrar la càmera |
 | M | minimapa (clic sobre un punt blau per saber quin jugador és i a quina distància) |
 | L | rètols de carrers i places |
+| ESPAI | saltar (per passar per sobre de les bosses d'escombraries) |
 | R | agafar o deixar una bici a una estació de Bicing |
 | N | mode fantasma (travessa edificis) |
 | P | personalitzar l'avatar |
@@ -84,6 +85,17 @@ Cada 5 segons el servidor fa aparèixer una moneda en un lloc accessible del bar
 Els punts on poden aparèixer els genera `build_map.py` a `server/src/spawns.json`.
 
 Les monedes que recull van a la **cartera** ("A sobre"). Si passes per un **banc o caixer** queden **assegurades** ("Banc") i ja no te les poden robar.
+
+## Dia, nit i temps
+
+El temps passa: **cada minut real és una hora** del joc (un dia dura 24 minuts) i tots els jugadors comparteixen el mateix rellotge. Al panell surt el dia, l'hora i el temps.
+
+- **Nit**: de 19 a 22 h es fa fosc; de nit s'encenen els fanals, les finestres i els rètols, i portes un fanalet. A les 5 comença a clarejar.
+- **Camions de les escombraries**: de 22 a 6 h circulen camions molt grans que bloquegen el pas.
+- **Bosses d'escombraries**: de 7 a 21 h es van acumulant a les voreres i no desapareixen fins que hi passa un camió. Són obstacles que es poden saltar amb **ESPAI**.
+- **Aigua**: si entres a l'aigua, nedes (més a poc a poc i sense bici).
+- **Font de Can Fabra**: té brolladors animats.
+- **Temps**: cada dos dies del joc canvia entre sol, núvols, pluja, boira o neu.
 
 ## Bicing
 

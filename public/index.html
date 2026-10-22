@@ -82,6 +82,8 @@
   .touch-only { display: none !important; }
   body.touch .touch-only { display: flex !important; }
   body.touch { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  /* Safari d'iOS no deixa escriure en camps amb user-select: none heretat */
+  body.touch input { -webkit-user-select: text; user-select: text; }
   body.touch #help, body.touch .key-hint { display: none; }
   #joystick { position: fixed; left: calc(24px + env(safe-area-inset-left)); bottom: calc(40px + env(safe-area-inset-bottom));
     width: 132px; height: 132px; border-radius: 50%; align-items: center; justify-content: center; touch-action: none;
@@ -107,6 +109,15 @@
   #chat-input:focus { outline: none; border-color: var(--accent); }
   #chat-count { font-size: 8px; color: var(--muted); min-width: 36px; text-align: right; }
   body.touch #chat { bottom: auto; top: 35%; }
+  #chat-log { position: fixed; left: 16px; bottom: 150px; width: min(340px, calc(100vw - 32px)); display: flex; flex-direction: column;
+    gap: 4px; pointer-events: none; z-index: 2; }
+  #chat-log .msg { font-size: 8px; line-height: 1.6; padding: 4px 8px; background: rgba(11,13,31,.72); color: var(--text);
+    border-left: 3px solid #9fd3ff; border-radius: 2px; transition: opacity 1s; overflow-wrap: anywhere; }
+  #chat-log .msg b { font-weight: normal; color: #9fd3ff; }
+  #chat-log .msg.mine { border-left-color: var(--accent); }
+  #chat-log .msg.mine b { color: var(--accent); }
+  #chat-log .msg.old { opacity: 0; }
+  body.touch #chat-log { bottom: 200px; }
   body.touch #minimap-wrap { bottom: auto; top: 128px; transform: scale(.75); transform-origin: top right; }
   @media (max-width: 700px) {
     #help { display: none; }
@@ -162,6 +173,7 @@
 <button id="map-btn" class="touch-btn touch-only" type="button">MAPA</button>
 <button id="center-btn" class="touch-btn touch-only" type="button">CENTRAR</button>
 <button id="chat-btn" class="touch-btn touch-only" type="button">XAT</button>
+<div id="chat-log" aria-live="polite"></div>
 <form id="chat" class="panel hidden" autocomplete="off">
   <label for="chat-input">DIR:</label>
   <input id="chat-input" maxlength="30" enterkeyhint="send" spellcheck="false" placeholder="Escriu un missatge…">
@@ -170,6 +182,6 @@
 <div id="toast" class="panel hidden"></div>
 <div id="attribution">Dades © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL)</div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js"></script>
+<script src="game.js?v=8"></script>
 </body>
 </html>

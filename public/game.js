@@ -723,19 +723,22 @@ function draw() {
 }
 
 function drawPlayerName(camX, camY, z) {
-  const now = performance.now();
   for (const o of net.others.values()) {
     drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff");
-    drawBubble(o.bubble, o.x, o.y, camX, camY, z, now);
+    drawBubble(o.bubble, o.x, o.y, camX, camY, z);
   }
   drawNameTag(state.look.name, state.player.x, state.player.y, camX, camY, z, "#ffffff");
-  drawBubble(state.bubble, state.player.x, state.player.y, camX, camY, z, now);
+  drawBubble(state.bubble, state.player.x, state.player.y, camX, camY, z);
 }
 
 // Bombolla de diàleg sobre l'avatar (per sobre de l'etiqueta del nom)
-const bubbleFor = (text) => ({ text, until: performance.now() + 4000 + text.length * 120 });
-function drawBubble(b, x, y, camX, camY, z, now) {
-  if (!b || now > b.until) return;
+const bubbleFor = (text) => ({ text, ttl: 5 + text.length * 0.15 });
+function tickBubbles(dt) {
+  if (state.bubble && (state.bubble.ttl -= dt) <= 0) state.bubble = null;
+  for (const o of net.others.values()) if (o.bubble && (o.bubble.ttl -= dt) <= 0) o.bubble = null;
+}
+function drawBubble(b, x, y, camX, camY, z) {
+  if (!b) return;
   const fs = Math.round(8 * dpr);
   ctx.font = `${fs}px "Press Start 2P", monospace`;
   ctx.textBaseline = "middle";
@@ -745,7 +748,7 @@ function drawBubble(b, x, y, camX, camY, z, now) {
   const bottom = Math.round((y - camY) * z - (HERO_SCREEN_SCALE * 24 + 10) * dpr - fs / 2 - 4 * dpr - 6 * dpr);
   const left = Math.round(sx - w / 2), top = bottom - tail - h;
   ctx.save();
-  ctx.globalAlpha = Math.min(1, (b.until - now) / 400);
+  ctx.globalAlpha = Math.min(1, b.ttl / 0.4);
   ctx.fillStyle = "#1a1420";
   ctx.fillRect(left - bw, top - bw, w + bw * 2, h + bw * 2);
   ctx.beginPath();
@@ -779,9 +782,24 @@ function sendChat() {
   if (text) {
     state.bubble = bubbleFor(text);
     net.send({ t: "say", text });
+    logChat(state.look.name, text, true);
   }
   toggleChat(false);
 }
+// Historial curt dels últims missatges (per veure qui parla encara que sigui lluny)
+const chatLog = document.getElementById("chat-log");
+function logChat(name, text, mine) {
+  const row = document.createElement("div");
+  row.className = "msg" + (mine ? " mine" : "");
+  const who = document.createElement("b");
+  who.textContent = (name.trim() || "Jugador") + ": ";
+  row.append(who, document.createTextNode(text));
+  chatLog.appendChild(row);
+  while (chatLog.children.length > 5) chatLog.firstChild.remove();
+  setTimeout(() => row.classList.add("old"), 20000);
+  setTimeout(() => row.remove(), 21000);
+}
+
 function bindChat() {
   chatBox.addEventListener("submit", (e) => { e.preventDefault(); sendChat(); });
   chatInput.addEventListener("input", updateChatCount);
@@ -1002,7 +1020,8 @@ const net = {
       if (o) Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving });
     } else if (m.t === "say") {
       const o = this.others.get(m.id);
-      if (o) o.bubble = bubbleFor(String(m.text).slice(0, CHAT_MAX));
+      const text = String(m.text).slice(0, CHAT_MAX);
+      if (o) { o.bubble = bubbleFor(text); logChat(o.look.name, text, false); }
     } else if (m.t === "look") {
       const o = this.others.get(m.id);
       if (o) { o.look = m.look; o.sprites = makeHeroSet(m.look); }
@@ -1138,8 +1157,9 @@ function bindTouchControls() {
 
 function bindInput() {
   addEventListener("keydown", (e) => {
-    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
+    // Als camps de text (xat, nom) les tecles han de funcionar normalment, espai inclòs
     if (e.target instanceof HTMLInputElement) return;
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
     if (e.code === "Escape" && state.editing) { toggleAvatarPanel(false); return; }
     if (e.code === "KeyP" && !e.repeat) { toggleAvatarPanel(); return; }
     if ((e.key === "Enter" || e.code === "KeyT") && !state.editing && !e.repeat) { e.preventDefault(); toggleChat(true); return; }
@@ -1227,7 +1247,9 @@ async function main() {
   const loop = (now) => {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
+    if (canvas.width !== Math.floor(innerWidth * (window.devicePixelRatio || 1))) resize();
     update(dt);
+    tickBubbles(dt);
     draw();
     drawMinimap();
     updateHud(dt);

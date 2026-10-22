@@ -318,6 +318,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
       p.rect(6, 11, 4, 1, shade(shirt, 50)); // coll
       if (look.extra === "glasses") { p.rect(5, 6, 2, 2, eye); p.rect(9, 6, 2, 2, eye); p.rect(7, 6, 2, 1, eye); p.set(5, 6, hex("#9fd3ff")); p.set(9, 6, hex("#9fd3ff")); }
       if (look.extra === "cap") { p.rect(4, 1, 8, 3, extra); p.rect(3, 4, 10, 1, shade(extra, -45)); }
+      if (look.mask) { p.rect(4, 6, 8, 2, hex("#111116")); p.set(6, 7, hex("#f4f1e8")); p.set(9, 7, hex("#f4f1e8")); } // antifaç
     } else {
       if (style === "long") { p.rect(4, 2, 8, 8, hair); p.rect(3, 4, 10, 9, hair); }
       else if (style === "afro") { p.rect(3, 0, 10, 10, hair); p.rect(2, 2, 12, 6, hair); }
@@ -345,6 +346,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
     p.set(10, 7, eye);
     if (look.extra === "glasses") { p.rect(9, 6, 3, 2, eye); p.set(10, 6, hex("#9fd3ff")); p.rect(6, 6, 3, 1, eye); }
     if (look.extra === "cap") { p.rect(4, 1, 8, 3, extra); p.rect(11, 4, 3, 1, shade(extra, -45)); }
+    if (look.mask) { p.rect(7, 6, 6, 2, hex("#111116")); p.set(10, 7, hex("#f4f1e8")); }
     stripes();
     if (dir === "left") { // mirall
       const q = new Pix(16, 24);
@@ -719,6 +721,7 @@ function draw() {
   pushPoiSprites(list, camX, camY, vw, vh, k);
   pushAnimalSprites(list, camX, camY, vw, vh, k);
   pushCoinSprites(list, camX, camY, vw, vh, k);
+  pushThiefSprites(list, camX, camY, vw, vh, k);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -736,6 +739,7 @@ function draw() {
   if (state.showLabels) drawLabels(camX, camY, z);
   drawPoiNames(camX, camY, z); // abans dels noms dels avatars, que han de quedar per sobre
   drawAnimalBubbles(camX, camY, z);
+  drawThiefOverlay(camX, camY, z);
   drawPlayerName(camX, camY, z);
   drawNpcOverlay(camX, camY, z);
   drawTreasurePointer(camX, camY, z);
@@ -1272,6 +1276,7 @@ async function main() {
   initPois();
   initAnimals();
   initCoins();
+  initThieves();
   bindNpcUi();
   net.connect();
   document.getElementById("loading").classList.add("hidden");
@@ -1284,6 +1289,7 @@ async function main() {
     updateNPCs(dt);
     updateAnimals(dt);
     updateCoins();
+    updateThieves(dt);
     tickBubbles(dt);
     draw();
     drawMinimap();

@@ -1,24 +1,55 @@
 // Monedes compartides: el servidor les crea (una cada 5 s, màxim 50) i quan algú n'agafa
 // una desapareix per a tothom. Aquí les dibuixem, les recollim i indiquem a quants metres
 // és el tresor més proper. Al minimapa no surten a propòsit.
+// Les monedes que recull el jugador van a la cartera (les poden robar els lladres) fins que
+// passa per un banc o caixer, on queden assegurades.
 "use strict";
 
-const COIN_KEY = "santandreu-rpg-coins";
+const COIN_KEY = "santandreu-rpg-coins";      // cartera (nom antic: abans només hi havia un comptador)
+const BANK_KEY = "santandreu-rpg-bank";
+const BANK_RADIUS = 2.5;                         // tiles al voltant d'un banc o caixer
 const PICK_DIST = 0.9;   // tiles
 const PENDING_MS = 2000; // temps d'espera de la confirmació del servidor
 
-const coins = { list: new Map(), pending: new Map(), count: loadCoinCount(), sprites: null, nearest: null };
+const coins = { list: new Map(), pending: new Map(), wallet: loadNum(COIN_KEY), bank: loadNum(BANK_KEY),
+  sprites: null, nearest: null, banks: [] };
 
-function loadCoinCount() {
-  try { return Math.max(0, parseInt(localStorage.getItem(COIN_KEY) || "0", 10) || 0); } catch { return 0; }
+function loadNum(key) {
+  try { return Math.max(0, parseInt(localStorage.getItem(key) || "0", 10) || 0); } catch { return 0; }
 }
-function saveCoinCount() {
-  try { localStorage.setItem(COIN_KEY, String(coins.count)); } catch { /* sense emmagatzematge */ }
+function saveMoney() {
+  try {
+    localStorage.setItem(COIN_KEY, String(coins.wallet));
+    localStorage.setItem(BANK_KEY, String(coins.bank));
+  } catch { /* sense emmagatzematge */ }
 }
 
 function initCoins() {
   coins.sprites = [0, 1, 2, 3].map(makeCoinFrame);
+  coins.banks = (state.meta.pois || []).filter((p) => p.c === "bank");
   updateCoinUi();
+}
+
+// Passar per un banc o caixer hi diposita tot el que portes a sobre
+function checkBank() {
+  if (!coins.wallet || npcs.dead) return;
+  const tx = state.player.x / TS, ty = state.player.y / TS;
+  if (!coins.banks.some((b) => (b.x - tx) ** 2 + (b.y - ty) ** 2 < BANK_RADIUS * BANK_RADIUS)) return;
+  const n = coins.wallet;
+  coins.bank += n;
+  coins.wallet = 0;
+  saveMoney();
+  updateCoinUi("bank");
+  showBanner(`${n} moned${n === 1 ? "a assegurada" : "es assegurades"} al banc!`, "bank");
+}
+
+// Un lladre t'ha atrapat: perds tot el que portes a sobre (el banc no es toca)
+function robWallet() {
+  const n = coins.wallet;
+  coins.wallet = 0;
+  saveMoney();
+  updateCoinUi("wallet");
+  return n;
 }
 
 // Missatges del servidor relacionats amb monedes (cridat des de net.onMessage)
@@ -32,9 +63,9 @@ function coinsOnMessage(m) {
     coins.list.delete(m.id);
     coins.pending.delete(m.id);
     if (m.by === net.id) {
-      coins.count++;
-      saveCoinCount();
-      updateCoinUi(true);
+      coins.wallet++;
+      saveMoney();
+      updateCoinUi("wallet");
       npcs.floaters.push({ text: "+1", t: 0, color: "#facc15" });
     }
   }
@@ -45,6 +76,7 @@ function coinsOnDisconnect() {
 }
 
 function updateCoins() {
+  checkBank();
   const pl = state.player, tx = pl.x / TS, ty = pl.y / TS, now = Date.now();
   for (const [id, t] of coins.pending) if (now - t > PENDING_MS) coins.pending.delete(id);
   let best = null, bd = Infinity;
@@ -60,9 +92,12 @@ function updateCoins() {
 }
 
 function updateCoinUi(bump) {
-  const el = document.getElementById("coins");
-  el.querySelector("span").textContent = coins.count;
-  if (bump) { el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
+  document.querySelector("#wallet b").textContent = coins.wallet;
+  document.querySelector("#bank b").textContent = coins.bank;
+  if (bump) {
+    const el = document.getElementById(bump);
+    el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
+  }
 }
 
 let lastTreasure = "";

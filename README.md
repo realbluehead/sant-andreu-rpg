@@ -52,6 +52,12 @@ Cada 5 segons el servidor fa aparèixer una moneda en un lloc accessible del bar
 
 Els punts on poden aparèixer els genera `build_map.py` a `server/src/spawns.json`.
 
+Les monedes que recull van a la **cartera** ("A sobre"). Si passes per un **banc o caixer** queden **assegurades** ("Banc") i ja no te les poden robar.
+
+## Lladres
+
+Hi ha **30 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m i sense cap edifici pel mig) et persegueixen, una mica més lents que tu. Si t'atrapen et roben totes les monedes que portes a sobre; les del banc no. Si t'allunyes prou o els perds de vista, es rendeixen. Els lladres són locals: cada jugador té els seus i només el persegueixen a ell.
+
 ## NPCs i vida
 
 - **10 policies en moto** fan la ronda pels carrers del barri, amb les llums blaves i vermelles enceses.

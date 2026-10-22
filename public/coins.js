@@ -11,8 +11,11 @@ const BANK_RADIUS = 2.5;                         // tiles al voltant d'un banc o
 const PICK_DIST = 0.9;   // tiles
 const PENDING_MS = 2000; // temps d'espera de la confirmació del servidor
 
+const DROP_LIFE = 60;     // s que les monedes caigudes es queden a terra
+const DROP_FLY = 0.45;    // s que triguen a caure
+
 const coins = { list: new Map(), pending: new Map(), wallet: loadNum(COIN_KEY), bank: loadNum(BANK_KEY),
-  sprites: null, nearest: null, banks: [] };
+  sprites: null, nearest: null, banks: [], dropped: [] };
 
 function loadNum(key) {
   try { return Math.max(0, parseInt(localStorage.getItem(key) || "0", 10) || 0); } catch { return 0; }
@@ -41,6 +44,27 @@ function checkBank() {
   saveMoney();
   updateCoinUi("bank");
   showBanner(`${n} moned${n === 1 ? "a assegurada" : "es assegurades"} al banc!`, "bank");
+}
+
+// T'han atropellat: les monedes que portes surten volant i queden escampades al voltant.
+// Són locals (només les veus tu) i les pots tornar a recollir abans que desapareguin.
+function dropWallet() {
+  const n = coins.wallet;
+  if (!n) return;
+  coins.wallet = 0;
+  saveMoney();
+  updateCoinUi("wallet");
+  const ox = state.player.x / TS, oy = state.player.y / TS - 0.3;
+  for (let i = 0; i < n; i++) {
+    let tx = ox, ty = oy;
+    for (let tries = 0; tries < 12; tries++) {
+      const ang = Math.random() * Math.PI * 2, d = 1.2 + Math.random() * (1.8 + Math.min(4, n / 12));
+      const x = ox + Math.cos(ang) * d, y = oy + Math.sin(ang) * d;
+      if (!thiefBlocked(Math.floor(x), Math.floor(y))) { tx = x; ty = y; break; }
+    }
+    coins.dropped.push({ x0: ox, y0: oy, x: tx, y: ty, t: 0, id: 1e6 + Math.random() * 1e6 });
+  }
+  showBanner(`T'han caigut ${n} moned${n === 1 ? "a" : "es"}! Recull-les!`, "rob");
 }
 
 // Un lladre t'ha atrapat: perds tot el que portes a sobre (el banc no es toca)
@@ -75,9 +99,21 @@ function coinsOnDisconnect() {
   coins.pending.clear();
 }
 
-function updateCoins() {
+function updateCoins(dt = 0) {
   checkBank();
   const pl = state.player, tx = pl.x / TS, ty = pl.y / TS, now = Date.now();
+  // monedes caigudes: es recullen localment, sense servidor
+  for (const d of coins.dropped) {
+    d.t += dt;
+    if (d.t > DROP_FLY && !npcs.dead && Math.hypot(d.x - tx, d.y - ty) < PICK_DIST) {
+      d.picked = true;
+      coins.wallet++;
+      saveMoney();
+      updateCoinUi("wallet");
+      npcs.floaters.push({ text: "+1", t: 0, color: "#facc15" });
+    }
+  }
+  coins.dropped = coins.dropped.filter((d) => !d.picked && d.t < DROP_LIFE);
   for (const [id, t] of coins.pending) if (now - t > PENDING_MS) coins.pending.delete(id);
   let best = null, bd = Infinity;
   for (const c of coins.list.values()) {
@@ -86,6 +122,10 @@ function updateCoins() {
       coins.pending.set(c.id, now);
       net.send({ t: "take", id: c.id, x: Math.round(pl.x), y: Math.round(pl.y) });
     }
+    if (d < bd) { bd = d; best = c; }
+  }
+  for (const c of coins.dropped) {
+    const d = Math.hypot(c.x - tx, c.y - ty);
     if (d < bd) { bd = d; best = c; }
   }
   coins.nearest = best ? { c: best, meters: Math.round(bd * state.meta.metersPerTile) } : null;
@@ -117,6 +157,15 @@ function pushCoinSprites(list, camX, camY, vw, vh, k) {
     const img = coins.sprites[Math.floor(now / 140 + c.id) % 4];
     const bob = Math.sin(now / 300 + c.id) * 2;
     list.push([y, img, Math.round(x - (img.width / 2) * s), Math.round(y - (img.height + 2) * s + bob), false, s]);
+  }
+  for (const d of coins.dropped) {
+    if (d.t > DROP_LIFE - 8 && Math.floor(now / 150) % 2) continue; // parpelleja abans de desaparèixer
+    const f = Math.min(1, d.t / DROP_FLY);
+    const x = (d.x0 + (d.x - d.x0) * f) * TS, y = (d.y0 + (d.y - d.y0) * f) * TS;
+    const hop = Math.sin(f * Math.PI) * 26;                 // arc en sortir volant
+    if (x < camX - 40 || x > camX + vw + 40 || y < camY - 60 || y > camY + vh + 40) continue;
+    const img = coins.sprites[Math.floor(now / 90 + d.id) % 4];
+    list.push([y, img, Math.round(x - (img.width / 2) * s), Math.round(y - (img.height + 2) * s - hop), false, s]);
   }
 }
 

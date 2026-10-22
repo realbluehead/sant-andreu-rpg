@@ -56,16 +56,18 @@ Les monedes que recull van a la **cartera** ("A sobre"). Si passes per un **banc
 
 ## Lladres
 
-Hi ha **30 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m i sense cap edifici pel mig) et persegueixen, una mica més lents que tu. Si t'atrapen et roben totes les monedes que portes a sobre; les del banc no. Si t'allunyes prou o els perds de vista, es rendeixen. Els lladres són locals: cada jugador té els seus i només el persegueixen a ell.
+Hi ha **90 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m i sense cap edifici pel mig) et persegueixen, una mica més lents que tu. Si t'atrapen et roben totes les monedes que portes a sobre; les del banc no. Si t'allunyes prou o els perds de vista, es rendeixen. Els lladres són locals: cada jugador té els seus i només el persegueixen a ell.
 
 ## NPCs i vida
 
 - **10 policies en moto** fan la ronda pels carrers del barri, amb les llums blaves i vermelles enceses.
 - **24 ciclistes** circulen pels carrils bici i els carrers tranquils.
+- **14 patinets elèctrics** van rapidíssim pels mateixos carrers: gairebé no els pots esquivar.
 - **Gats i gossos** passegen per places, parcs, voreres i patis interiors; si t'hi acostes potser et diuen "Miau!" o "Guau!".
 - **Estols de coloms** picotegen a les places i alcen el vol quan t'hi acostes.
 - De tant en tant apareixen **bandes de 10 ultres de la UESA** (Unió Esportiva Sant Andreu) amb samarretes grogues i vermelles i una senyera, que recorren el barri cantant. Quan n'hi ha una a prop surt un avís i al minimapa parpelleja en groc i vermell.
-- Comences amb **100 punts de vida**. Perds vida si t'atropella un ciclista (**-5**) o una moto de policia (**-20**), o si et trepitgen els ultres (**-25**), amb un segon i mig de gràcia entre cops. A 0, has mort i pots ressuscitar a la Plaça d'Orfila.
+- Comences amb **100 punts de vida**. Perds vida si t'atropella un ciclista (**-5**), una moto de policia (**-20**) o un patinet (**-30**), o si et trepitgen els ultres (**-25**), amb un segon i mig de gràcia entre cops. A 0, has mort i pots ressuscitar a la Plaça d'Orfila.
+- Quan t'atropella una bici, una moto o un patinet, **les monedes que portes a sobre cauen escampades al voltant**: les pots tornar a recollir durant un minut.
 - Si t'acostes a una **farmàcia**, recuperes tota la vida.
 
 Les rutes dels NPCs es generen a partir del graf de carrers d'OpenStreetMap (`graph` a `map.json`) amb una llavor fixa, i la posició depèn del rellotge: tots els jugadors veuen els mateixos NPCs al mateix lloc sense carregar el servidor.

@@ -1288,7 +1288,7 @@ async function main() {
     update(dt);
     updateNPCs(dt);
     updateAnimals(dt);
-    updateCoins();
+    updateCoins(dt);
     updateThieves(dt);
     tickBubbles(dt);
     draw();

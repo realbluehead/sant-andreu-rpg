@@ -1,4 +1,4 @@
-// Lladres: 30 personatges amb antifaç que ronden pel barri. Si et veuen (a prop i sense
+// Lladres: 90 personatges amb antifaç que ronden pel barri. Si et veuen (a prop i sense
 // edificis pel mig) et persegueixen una mica més lents que tu, i si t'atrapen et roben les
 // monedes que portes a sobre. Les del banc estan assegurades.
 // A diferència dels altres NPCs, els lladres són locals de cada jugador: cadascú té els
@@ -6,7 +6,7 @@
 "use strict";
 
 const THIEF = {
-  count: 30, seed: 4400,
+  count: 90, seed: 4400,
   sight: 9,            // tiles: distància a la qual et veuen
   giveUp: 16,          // tiles: si t'allunyes més, deixen de perseguir-te
   forget: 3,           // s sense veure't abans de rendir-se

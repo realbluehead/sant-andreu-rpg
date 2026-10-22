@@ -7,14 +7,17 @@
 const NPC_CONFIG = {
   police: { count: 10, speed: 4.2, lane: 1.3, walkSteps: 40, seed: 1000 },  // tiles/s (~30 km/h)
   bike: { count: 24, speed: 2.6, lane: 0.6, walkSteps: 30, seed: 5000 },    // ~19 km/h
+  scooter: { count: 14, speed: 8, lane: 0.4, walkSteps: 30, seed: 8000 },   // ~58 km/h: més ràpids que tu corrent gairebé
 };
 const MAX_HP = 100, HIT_COOLDOWN = 1.2;
-const DAMAGE = { bike: 5, police: 20, ultras: 25 };
+const DAMAGE = { bike: 5, police: 20, ultras: 25, scooter: 30 };
+const DROPS_COINS = new Set(["bike", "police", "scooter"]); // atropellaments que et fan caure les monedes
 const HEAL_RADIUS = 2.5; // tiles al voltant d'una farmàcia
 const DEATH_TEXT = {
   bike: "Un ciclista t'ha atropellat.<br>Compte amb els carrils bici!",
   police: "Una moto de la policia t'ha atropellat.<br>Aparta't quan sentis les sirenes!",
   ultras: "Els ultres de la UESA t'han passat per sobre.<br>Quan els vegis venir, fuig!",
+  scooter: "Un patinet elèctric t'ha arrollat a tota velocitat.<br>Mira bé abans de creuar!",
 };
 
 const npcs = { list: [], sprites: null, hp: MAX_HP, invuln: 0, dead: false, floaters: [], flash: 0, lastCause: "bike",
@@ -88,7 +91,7 @@ function initNPCs(graph) {
       if (route.len < 20) continue;
       npcs.list.push({
         kind, route, speed: cfg.speed * (0.85 + r() * 0.3), lane: cfg.lane, phase: r() * route.len,
-        variant: i % (kind === "police" ? 1 : npcs.sprites.bike.length), x: 0, y: 0, dir: "right", hidden: false,
+        variant: kind === "police" ? 0 : i % npcs.sprites[kind].length, x: 0, y: 0, dir: "right", hidden: false,
       });
     }
   }
@@ -127,7 +130,7 @@ function checkHits() {
   if (npcs.invuln > 0) return;
   const pl = state.player;
   for (const n of npcs.list) {
-    const hw = n.kind === "police" ? 13 : 10; // la moto és més ampla
+    const hw = n.kind === "police" ? 13 : n.kind === "scooter" ? 12 : 10; // la moto és més ampla
     if (Math.abs(n.x - pl.x) < hw && Math.abs(n.y - pl.y) < 9) {
       hurtPlayer(DAMAGE[n.kind], n, n.kind);
       return;
@@ -170,6 +173,7 @@ function hurtPlayer(dmg, by, cause) {
   npcs.flash = 0.35;
   npcs.lastCause = cause;
   npcs.floaters.push({ text: `-${dmg}`, t: 0 });
+  if (DROPS_COINS.has(cause)) dropWallet();
   // empenta: ens aparta de la trajectòria del ciclista
   const pl = state.player;
   const ax = pl.x - by.x || 1, ay = pl.y - by.y, m = Math.hypot(ax, ay) || 1;
@@ -217,8 +221,8 @@ function pushNpcSprites(list, camX, camY, vw, vh, k) {
   const flashOn = Math.floor(Date.now() / 250) % 2;
   for (const n of npcs.list) {
     if (n.x < camX - 64 || n.x > camX + vw + 64 || n.y < camY - 64 || n.y > camY + vh + 96) continue;
-    const img = n.kind === "police"
-      ? npcs.sprites.police[n.dir][flashOn]
+    const img = n.kind === "police" ? npcs.sprites.police[n.dir][flashOn]
+      : n.kind === "scooter" ? npcs.sprites.scooter[n.variant][n.dir]
       : npcs.sprites.bike[n.variant][n.dir][Math.floor(Date.now() / 160 + n.phase) % 2];
     list.push([n.y, img, Math.round(n.x - (img.width / 2) * k), Math.round(n.y - (img.height - 1) * k), false, k]);
   }
@@ -351,7 +355,8 @@ function makeNpcSprites() {
     for (const d of DIRS) set[d] = [makeCyclist(kit, d, 0), makeCyclist(kit, d, 1)];
     bike.push(set);
   }
-  return { police, bike, flag: [makeFlag(0), makeFlag(1)] };
+  const scooter = SCOOTER_RIDERS.map((look) => makeScooterSet(look));
+  return { police, bike, scooter, flag: [makeFlag(0), makeFlag(1)] };
 }
 
 function bindNpcUi() {
@@ -455,4 +460,42 @@ function makeFlag(f) {
   }
   p.outline(OUTLINE);
   return p.toCanvas();
+}
+
+// ---------------------------------------------------------------------------
+// Patinets elèctrics: un vianant dret sobre el patinet
+const SCOOTER_RIDERS = [
+  { shirt: "#22c55e", pants: "#1f2a44", hair: "#1c1414", skin: "#f1c27d", hairStyle: "short", extra: "cap", extraColor: "#111116" },
+  { shirt: "#f97316", pants: "#111116", hair: "#8b5a2b", skin: "#e0ac69", hairStyle: "long", extra: "none" },
+  { shirt: "#0ea5e9", pants: "#5d6d7e", hair: "#4a2b1a", skin: "#8d5524", hairStyle: "afro", extra: "none" },
+  { shirt: "#e11d48", pants: "#1f2a44", hair: "#d6a756", skin: "#ffe0bd", hairStyle: "ponytail", extra: "glasses" },
+].map((l) => ({ ...DEFAULT_LOOK, name: "", bottom: "pants", shoes: "#111116", ...l }));
+
+function makeScooterSet(look) {
+  const hero = makeHeroSet(look);
+  const out = {};
+  for (const d of DIRS) {
+    const cv = document.createElement("canvas");
+    cv.width = 22; cv.height = 28;
+    const c = cv.getContext("2d");
+    const p = new Pix(22, 28), deck = hex("#2b2f3a"), pole = hex("#9aa0a6"), wheel = hex("#111116"), led = hex("#4ade80");
+    if (d === "left" || d === "right") {
+      p.rect(3, 24, 16, 2, deck); p.rect(2, 26, 3, 2, wheel); p.rect(17, 26, 3, 2, wheel);
+      p.rect(18, 10, 1, 14, pole); p.rect(16, 10, 4, 1, wheel); p.set(19, 12, led);
+    } else {
+      p.rect(10, 18, 2, 10, wheel); p.rect(9, 22, 4, 3, deck);
+      p.rect(6, 12, 10, 1, wheel); p.rect(10, 12, 2, 6, pole); if (d === "down") p.set(10, 14, led);
+    }
+    p.outline(OUTLINE);
+    const parts = p.toCanvas(), body = hero[d][0];
+    const drawParts = () => {
+      if (d === "left") { c.save(); c.translate(22, 0); c.scale(-1, 1); c.drawImage(parts, 0, 0); c.restore(); }
+      else c.drawImage(parts, 0, 0);
+    };
+    // d'esquena el cos tapa el manillar; en la resta de vistes el manillar queda davant
+    if (d === "up") { drawParts(); c.drawImage(body, 3, 1); }
+    else { c.drawImage(body, 3, 1); drawParts(); }
+    out[d] = cv;
+  }
+  return out;
 }

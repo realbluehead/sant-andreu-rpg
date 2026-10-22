@@ -1,0 +1,55 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-22T10:02:41Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "relation",
+  "id": 3775146,
+  "bounds": {
+    "minlat": 41.4136767,
+    "minlon": 2.1759337,
+    "maxlat": 41.4619468,
+    "maxlon": 2.2105604
+  },
+  "tags": {
+    "admin_level": "9",
+    "boundary": "administrative",
+    "name": "Sant Andreu",
+    "name:ca": "Sant Andreu",
+    "place": "borough",
+    "population": "142598",
+    "population:date": "2020",
+    "ref": "9",
+    "type": "boundary",
+    "wikidata": "Q1650230",
+    "wikimedia_commons": "Category:Districte de Sant Andreu",
+    "wikipedia": "ca:Districte de Sant Andreu"
+  }
+},
+{
+  "type": "relation",
+  "id": 4149391,
+  "bounds": {
+    "minlat": 41.4269794,
+    "minlon": 2.1825686,
+    "maxlat": 41.4476088,
+    "maxlon": 2.1969073
+  },
+  "tags": {
+    "admin_level": "10",
+    "boundary": "administrative",
+    "name": "Sant Andreu de Palomar",
+    "name:ca": "Sant Andreu de Palomar",
+    "ref": "60",
+    "type": "boundary",
+    "wikidata": "Q990510"
+  }
+}
+
+  ]
+}

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sant Andreu RPG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --panel-bg: #1d2142;
+    --panel-border: #f4f1e8;
+    --panel-shadow: #0b0d1f;
+    --text: #f4f1e8;
+    --accent: #ffd35a;
+    --muted: #9aa3c7;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #10121f; color: var(--text);
+    font-family: "Press Start 2P", ui-monospace, monospace; font-variant-ligatures: none; }
+  canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; image-rendering: pixelated; cursor: grab; }
+  canvas#game.dragging { cursor: grabbing; }
+  .panel { position: fixed; background: var(--panel-bg); border: 3px solid var(--panel-border);
+    box-shadow: 0 0 0 3px var(--panel-shadow), 4px 4px 0 3px rgba(0,0,0,.35); border-radius: 4px;
+    padding: 10px 12px; font-size: 10px; line-height: 1.7; }
+  #location { top: 16px; left: 16px; max-width: min(460px, calc(100vw - 32px)); }
+  #location .street { color: var(--accent); font-size: 12px; }
+  #location .place { color: var(--text); }
+  #location .meta { color: var(--muted); font-size: 8px; }
+  #minimap-wrap { right: 16px; bottom: 34px; padding: 6px; }
+  #minimap { display: block; image-rendering: pixelated; cursor: crosshair; }
+  #minimap-wrap .title { font-size: 8px; color: var(--muted); margin-bottom: 4px; text-align: center; }
+  #help { left: 16px; bottom: 34px; font-size: 8px; line-height: 2; }
+  #help b { color: var(--accent); font-weight: normal; }
+  #attribution { position: fixed; right: 8px; bottom: 6px; font: 11px system-ui, sans-serif; color: #c9cbe0;
+    background: rgba(16,18,31,.7); padding: 2px 6px; border-radius: 3px; }
+  #attribution a { color: #c9cbe0; }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #10121f; z-index: 10; font-size: 12px; }
+  .hidden { display: none !important; }
+  #toast { top: 16px; left: 50%; transform: translateX(-50%); font-size: 10px; transition: opacity .3s; }
+  #zoom { top: 16px; right: 16px; display: flex; align-items: center; gap: 10px; padding: 6px; }
+  #zoom button { font: inherit; font-size: 14px; width: 34px; height: 34px; color: var(--text); background: #2c3266;
+    border: 2px solid var(--panel-border); border-radius: 3px; cursor: pointer; box-shadow: inset -2px -2px 0 #161a3a; padding: 0; }
+  #zoom button:hover:not(:disabled) { background: #3b4285; color: var(--accent); }
+  #zoom button:active:not(:disabled) { box-shadow: inset 2px 2px 0 #161a3a; }
+  #zoom button:disabled { opacity: .35; cursor: default; }
+  #zoom-level { min-width: 52px; text-align: center; font-size: 11px; color: var(--accent); }
+  #zoom-level small { display: block; font-size: 7px; color: var(--muted); margin-bottom: 3px; }
+  #avatar-btn { top: 78px; right: 16px; font: inherit; font-size: 10px; color: var(--text); cursor: pointer; padding: 9px 12px; }
+  #avatar-btn:hover { color: var(--accent); }
+  #avatar-panel { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; background: rgba(8,9,20,.55); padding: 16px; }
+  #avatar-panel .panel { position: relative; width: min(620px, 100%); max-height: calc(100vh - 32px); overflow-y: auto;
+    display: grid; grid-template-columns: 180px 1fr; gap: 18px; padding: 16px; }
+  #avatar-panel h2 { grid-column: 1 / -1; margin: 0; font-size: 13px; font-weight: normal; color: var(--accent); }
+  #avatar-side { display: flex; flex-direction: column; gap: 12px; }
+  #avatar-preview { width: 180px; height: 190px; image-rendering: pixelated; background:
+    repeating-conic-gradient(#2a3060 0 25%, #252a55 0 50%) 0 0 / 24px 24px; border: 2px solid #3b4285; border-radius: 3px; }
+  #avatar-side label { font-size: 8px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+  #avatar-name { font: inherit; font-size: 10px; padding: 8px; color: var(--text); background: #11142c; border: 2px solid var(--panel-border); border-radius: 3px; width: 100%; }
+  #avatar-name:focus { outline: none; border-color: var(--accent); }
+  #avatar-fields { display: flex; flex-direction: column; gap: 12px; }
+  #avatar-fields .label { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
+  .swatches, .choices { display: flex; flex-wrap: wrap; gap: 6px; }
+  .swatches button { width: 24px; height: 24px; border: 2px solid #0b0d1f; border-radius: 3px; cursor: pointer; padding: 0; box-shadow: inset -2px -2px 0 rgba(0,0,0,.25); }
+  .swatches button.selected { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .choices button, .avatar-actions button { font: inherit; font-size: 8px; padding: 7px 8px; color: var(--text); background: #2c3266;
+    border: 2px solid #4a5196; border-radius: 3px; cursor: pointer; }
+  .choices button:hover, .avatar-actions button:hover { border-color: var(--panel-border); }
+  .choices button.selected { background: var(--accent); color: #1d2142; border-color: var(--accent); }
+  .avatar-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+  #avatar-done { background: var(--accent); color: #1d2142; border-color: var(--accent); }
+  @media (max-width: 560px) {
+    #avatar-panel .panel { grid-template-columns: 1fr; }
+    #avatar-side { align-items: center; }
+  }
+  @media (max-width: 700px) {
+    #help { display: none; }
+    #minimap-wrap { transform: scale(.7); transform-origin: bottom right; }
+  }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="location" class="panel">
+  <div class="street">…</div>
+  <div class="place"></div>
+  <div class="meta"></div>
+</div>
+<div id="minimap-wrap" class="panel"><div class="title">SANT ANDREU DE PALOMAR</div><canvas id="minimap"></canvas></div>
+<div id="help" class="panel">
+  <b>FLETXES / WASD</b> caminar · <b>SHIFT</b> córrer<br>
+  <b>+ / −</b> o roda: zoom · arrossega: moure càmera<br>
+  <b>C</b> centrar · <b>M</b> minimapa · <b>L</b> rètols<br>
+  <b>N</b> mode fantasma · <b>P</b> avatar · <b>H</b> ajuda
+</div>
+<div id="zoom" class="panel">
+  <button id="zoom-out" type="button" aria-label="Allunyar">−</button>
+  <div id="zoom-level"><small>ZOOM</small><span>×3</span></div>
+  <button id="zoom-in" type="button" aria-label="Apropar">+</button>
+</div>
+<button id="avatar-btn" class="panel" type="button">AVATAR (P)</button>
+<div id="avatar-panel" class="hidden" role="dialog" aria-modal="true" aria-labelledby="avatar-title">
+  <div class="panel">
+    <h2 id="avatar-title">PERSONATGE</h2>
+    <div id="avatar-side">
+      <canvas id="avatar-preview" width="180" height="190"></canvas>
+      <label>Nom<input id="avatar-name" maxlength="16" autocomplete="off" spellcheck="false"></label>
+      <div class="avatar-actions">
+        <button id="avatar-random" type="button">Aleatori</button>
+        <button id="avatar-reset" type="button">Restablir</button>
+        <button id="avatar-done" type="button">Fet</button>
+      </div>
+    </div>
+    <div id="avatar-fields"></div>
+  </div>
+</div>
+<div id="toast" class="panel hidden"></div>
+<div id="attribution">Dades © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL)</div>
+<div id="loading">Carregant Sant Andreu…</div>
+<script src="game.js"></script>
+</body>
+</html>

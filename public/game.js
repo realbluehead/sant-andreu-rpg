@@ -847,12 +847,12 @@ function draw() {
   // L'avatar manté sempre la mateixa mida en pantalla, independentment del zoom
   const k = HERO_SCREEN_SCALE / ZOOMS[state.zoomIdx];
   list.push([pl.y, S.hero[pl.dir][pl.frame], Math.round(pl.x) - 8 * k, Math.round(pl.y) - 23 * k, false, k]);
+  // Els altres jugadors i els NPCs s'escalen amb el mapa; rètols i monedes no
+  const kw = 1;
   for (const o of net.others.values()) {
     if (o.x < camX - 64 || o.x > camX + vw + 64 || o.y < camY - 64 || o.y > camY + vh + 96) continue;
-    list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * k, Math.round(o.y) - 23 * k, false, k]);
+    list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * kw, Math.round(o.y) - 23 * kw, false, kw]);
   }
-  // Els NPCs (vehicles, ultres, animals, lladres) s'escalen amb el mapa; rètols i monedes no
-  const kw = 1;
   pushNpcSprites(list, camX, camY, vw, vh, kw);
   pushPoiSprites(list, camX, camY, vw, vh, k);
   pushAnimalSprites(list, camX, camY, vw, vh, kw);
@@ -883,8 +883,8 @@ function draw() {
 
 function drawPlayerName(camX, camY, z) {
   for (const o of net.others.values()) {
-    drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff");
-    drawBubble(o.bubble, o.x, o.y, camX, camY, z);
+    drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff", 24 * z); // els altres jugadors s'escalen amb el mapa
+    drawBubble(o.bubble, o.x, o.y, camX, camY, z, 24 * z);
   }
   drawNameTag(state.look.name, state.player.x, state.player.y, camX, camY, z, "#ffffff");
   drawBubble(state.bubble, state.player.x, state.player.y, camX, camY, z);
@@ -967,14 +967,14 @@ function bindChat() {
   document.getElementById("chat-btn").addEventListener("click", () => toggleChat(true));
 }
 
-function drawNameTag(rawName, x, y, camX, camY, z, color) {
+function drawNameTag(rawName, x, y, camX, camY, z, color, spriteH = HERO_SCREEN_SCALE * 24 * dpr) {
   const name = rawName.trim();
   if (!name) return;
   const pl = { x, y };
   const fs = Math.round(8 * dpr);
   ctx.font = `${fs}px "Press Start 2P", monospace`;
   ctx.textBaseline = "middle";
-  const sx = Math.round((pl.x - camX) * z), sy = Math.round((pl.y - camY) * z - (HERO_SCREEN_SCALE * 24 + 10) * dpr);
+  const sx = Math.round((pl.x - camX) * z), sy = Math.round((pl.y - camY) * z - spriteH - 10 * dpr);
   const pad = 4 * dpr, w = ctx.measureText(name).width + pad * 2, h = fs + pad * 2;
   ctx.fillStyle = "rgba(11,13,31,.75)";
   ctx.fillRect(sx - w / 2, sy - h / 2, w, h);

@@ -724,6 +724,7 @@ function draw() {
   // rètols (en espai de pantalla, nítids)
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (state.showLabels) drawLabels(camX, camY, z);
+  drawPoiNames(camX, camY, z); // abans dels noms dels avatars, que han de quedar per sobre
   drawPlayerName(camX, camY, z);
   drawNpcOverlay(camX, camY, z);
 }

@@ -235,3 +235,39 @@ function nearestPoi(tx, ty, maxDist = 4) {
   }
   return best && { name: best.n || POI_ICONS[best.c]?.label || "Botiga", label: POI_ICONS[best.c]?.label || "Botiga" };
 }
+
+// Nom de cada establiment sota la seva icona (en espai de pantalla, perquè es llegeixi nítid).
+// Els més propers al jugador tenen prioritat i s'eviten els solapaments.
+function drawPoiNames(camX, camY, z) {
+  const zoom = ZOOMS[state.zoomIdx];
+  if (zoom < 2 || !state.showLabels || !state.meta.pois) return;
+  const W = canvas.width, H = canvas.height, pl = state.player;
+  const vis = state.meta.pois.filter((p) => {
+    const sx = (p.x * TS - camX) * z, sy = (p.y * TS - camY) * z;
+    return sx > -150 && sx < W + 150 && sy > -20 && sy < H + 40;
+  }).sort((a, b) => ((a.x * TS - pl.x) ** 2 + (a.y * TS - pl.y) ** 2) - ((b.x * TS - pl.x) ** 2 + (b.y * TS - pl.y) ** 2));
+  const fs = Math.round(7 * dpr), pad = 3 * dpr;
+  ctx.font = `${fs}px "Press Start 2P", monospace`;
+  ctx.textBaseline = "middle";
+  const placed = [];
+  for (const p of vis) {
+    const name = p.n || POI_ICONS[p.c]?.label || "Botiga";
+    const sx = Math.round((p.x * TS - camX) * z), sy = Math.round((p.y * TS - camY) * z + 8 * dpr);
+    const w = Math.ceil(ctx.measureText(name).width) + pad * 2, h = fs + pad * 2;
+    const r = [sx - w / 2, sy - h / 2, w, h];
+    if (placed.some((q) => r[0] < q[0] + q[2] + 2 && r[0] + r[2] + 2 > q[0] && r[1] < q[1] + q[3] + 2 && r[1] + r[3] + 2 > q[1])) continue;
+    placed.push(r);
+    ctx.fillStyle = "rgba(11,13,31,.78)";
+    ctx.fillRect(r[0], r[1], w, h);
+    ctx.fillStyle = POI_ICONS[p.c] ? shadeCss(POI_ICONS[p.c].bg) : "#ffffff";
+    ctx.fillRect(r[0], r[1], 2 * dpr, h);
+    ctx.fillStyle = p.n ? "#ffffff" : "#c9cbe0";
+    ctx.fillText(name, r[0] + pad + dpr, sy + dpr);
+  }
+}
+
+// Color de la icona aclarit perquè es vegi sobre el fons fosc de l'etiqueta
+function shadeCss(h) {
+  const c = shade(hex(h), 60);
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}

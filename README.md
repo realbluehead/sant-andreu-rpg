@@ -25,6 +25,7 @@ Obre <http://localhost:8737>.
 | L | rètols de carrers i places |
 | N | mode fantasma (travessa edificis) |
 | P | personalitzar l'avatar |
+| Enter / T | escriure un missatge (màx. 30 caràcters) que surt en una bombolla |
 | H | amagar l'ajuda |
 
 Al mòbil apareixen controls tàctils: un joystick per caminar, el botó **Córrer**, **MAPA** per obrir el minimapa i **CENTRAR** per tornar la càmera al personatge. També pots arrossegar el mapa amb el dit.

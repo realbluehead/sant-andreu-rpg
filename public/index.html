@@ -98,6 +98,15 @@
   #map-btn, #center-btn { right: calc(132px + env(safe-area-inset-right)); font-size: 8px; width: 74px; height: 38px; }
   #map-btn { bottom: calc(108px + env(safe-area-inset-bottom)); }
   #center-btn { bottom: calc(56px + env(safe-area-inset-bottom)); }
+  #chat-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(160px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
+  #chat { left: 50%; bottom: 40px; transform: translateX(-50%); width: min(420px, calc(100vw - 32px)); display: flex; align-items: center; gap: 8px; padding: 8px 10px; z-index: 4; }
+  #chat.hidden { display: none; }
+  #chat label { font-size: 8px; color: var(--accent); white-space: nowrap; }
+  #chat-input { flex: 1; min-width: 0; font: inherit; font-size: 10px; padding: 8px; color: var(--text); background: #11142c;
+    border: 2px solid var(--panel-border); border-radius: 3px; }
+  #chat-input:focus { outline: none; border-color: var(--accent); }
+  #chat-count { font-size: 8px; color: var(--muted); min-width: 36px; text-align: right; }
+  body.touch #chat { bottom: auto; top: 35%; }
   body.touch #minimap-wrap { bottom: auto; top: 128px; transform: scale(.75); transform-origin: top right; }
   @media (max-width: 700px) {
     #help { display: none; }
@@ -125,7 +134,7 @@
   <b>FLETXES / WASD</b> caminar · <b>SHIFT</b> córrer<br>
   <b>+ / −</b> o roda: zoom · arrossega: moure càmera<br>
   <b>C</b> centrar · <b>M</b> minimapa · <b>L</b> rètols<br>
-  <b>N</b> mode fantasma · <b>P</b> avatar · <b>H</b> ajuda
+  <b>ENTER</b> parlar · <b>N</b> fantasma · <b>P</b> avatar · <b>H</b> ajuda
 </div>
 <div id="zoom" class="panel">
   <button id="zoom-out" type="button" aria-label="Allunyar">−</button>
@@ -152,6 +161,12 @@
 <button id="run-btn" class="touch-btn touch-only" type="button" aria-pressed="false">Córrer</button>
 <button id="map-btn" class="touch-btn touch-only" type="button">MAPA</button>
 <button id="center-btn" class="touch-btn touch-only" type="button">CENTRAR</button>
+<button id="chat-btn" class="touch-btn touch-only" type="button">XAT</button>
+<form id="chat" class="panel hidden" autocomplete="off">
+  <label for="chat-input">DIR:</label>
+  <input id="chat-input" maxlength="30" enterkeyhint="send" spellcheck="false" placeholder="Escriu un missatge…">
+  <span id="chat-count">0/30</span>
+</form>
 <div id="toast" class="panel hidden"></div>
 <div id="attribution">Dades © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL)</div>
 <div id="loading">Carregant Sant Andreu…</div>

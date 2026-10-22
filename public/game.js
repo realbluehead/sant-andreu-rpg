@@ -406,7 +406,7 @@ const state = {
   W: 0, H: 0, ground: null, decor: null, meta: null,
   zoomIdx: 3, cam: { x: 0, y: 0 }, follow: true,
   player: { x: 0, y: 0, dir: "down", frame: 0, anim: 0, moving: false },
-  keys: new Set(), noclip: false, showLabels: true, showMinimap: true, look: loadLook(), editing: false,
+  keys: new Set(), noclip: false, showLabels: true, showMinimap: true, look: loadLook(), editing: false, chatting: false, bubble: null,
   joy: { active: false, x: 0, y: 0 }, touchRun: false,
   labels: [], segs: [], chunks: new Map(), sprites: {},
 };
@@ -615,7 +615,7 @@ function collides(x, y) {
 }
 
 function update(dt) {
-  const k = state.editing ? new Set() : state.keys, pl = state.player;
+  const k = state.editing || state.chatting ? new Set() : state.keys, pl = state.player;
   let dx = 0, dy = 0;
   if (k.has("ArrowLeft") || k.has("KeyA")) dx -= 1;
   if (k.has("ArrowRight") || k.has("KeyD")) dx += 1;
@@ -624,7 +624,7 @@ function update(dt) {
   if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
   // joystick tàctil (analògic)
   const joy = state.joy;
-  if (!state.editing && joy.active && Math.hypot(joy.x, joy.y) > 0.2) { dx = joy.x; dy = joy.y; }
+  if (!state.editing && !state.chatting && joy.active && Math.hypot(joy.x, joy.y) > 0.2) { dx = joy.x; dy = joy.y; }
   pl.moving = dx !== 0 || dy !== 0;
   if (pl.moving) {
     state.follow = true;
@@ -723,8 +723,71 @@ function draw() {
 }
 
 function drawPlayerName(camX, camY, z) {
-  for (const o of net.others.values()) drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff");
+  const now = performance.now();
+  for (const o of net.others.values()) {
+    drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff");
+    drawBubble(o.bubble, o.x, o.y, camX, camY, z, now);
+  }
   drawNameTag(state.look.name, state.player.x, state.player.y, camX, camY, z, "#ffffff");
+  drawBubble(state.bubble, state.player.x, state.player.y, camX, camY, z, now);
+}
+
+// Bombolla de diàleg sobre l'avatar (per sobre de l'etiqueta del nom)
+const bubbleFor = (text) => ({ text, until: performance.now() + 4000 + text.length * 120 });
+function drawBubble(b, x, y, camX, camY, z, now) {
+  if (!b || now > b.until) return;
+  const fs = Math.round(8 * dpr);
+  ctx.font = `${fs}px "Press Start 2P", monospace`;
+  ctx.textBaseline = "middle";
+  const pad = 6 * dpr, tail = 5 * dpr, bw = 2 * dpr;
+  const w = Math.ceil(ctx.measureText(b.text).width) + pad * 2, h = fs + pad * 2;
+  const sx = Math.round((x - camX) * z);
+  const bottom = Math.round((y - camY) * z - (HERO_SCREEN_SCALE * 24 + 10) * dpr - fs / 2 - 4 * dpr - 6 * dpr);
+  const left = Math.round(sx - w / 2), top = bottom - tail - h;
+  ctx.save();
+  ctx.globalAlpha = Math.min(1, (b.until - now) / 400);
+  ctx.fillStyle = "#1a1420";
+  ctx.fillRect(left - bw, top - bw, w + bw * 2, h + bw * 2);
+  ctx.beginPath();
+  ctx.moveTo(sx - tail - bw, top + h); ctx.lineTo(sx, bottom + bw); ctx.lineTo(sx + tail + bw, top + h);
+  ctx.fill();
+  ctx.fillStyle = "#fbf7ea";
+  ctx.fillRect(left, top, w, h);
+  ctx.beginPath();
+  ctx.moveTo(sx - tail, top + h - 1); ctx.lineTo(sx, bottom - bw / 2); ctx.lineTo(sx + tail, top + h - 1);
+  ctx.fill();
+  ctx.fillStyle = "#1d2142";
+  ctx.fillText(b.text, left + pad, top + h / 2 + dpr);
+  ctx.restore();
+}
+
+// Xat: Enter obre la caixa, Enter envia, Esc tanca
+const CHAT_MAX = 30;
+const chatBox = document.getElementById("chat"), chatInput = document.getElementById("chat-input");
+function toggleChat(open = !state.chatting) {
+  state.chatting = open;
+  state.keys.clear();
+  chatBox.classList.toggle("hidden", !open);
+  if (open) { chatInput.value = ""; updateChatCount(); chatInput.focus(); }
+  else chatInput.blur();
+}
+function updateChatCount() {
+  document.getElementById("chat-count").textContent = `${chatInput.value.length}/${CHAT_MAX}`;
+}
+function sendChat() {
+  const text = chatInput.value.replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, CHAT_MAX);
+  if (text) {
+    state.bubble = bubbleFor(text);
+    net.send({ t: "say", text });
+  }
+  toggleChat(false);
+}
+function bindChat() {
+  chatBox.addEventListener("submit", (e) => { e.preventDefault(); sendChat(); });
+  chatInput.addEventListener("input", updateChatCount);
+  chatInput.addEventListener("keydown", (e) => { if (e.key === "Escape") toggleChat(false); });
+  chatInput.addEventListener("blur", () => { if (state.chatting) setTimeout(() => state.chatting && toggleChat(false), 150); });
+  document.getElementById("chat-btn").addEventListener("click", () => toggleChat(true));
 }
 
 function drawNameTag(rawName, x, y, camX, camY, z, color) {
@@ -937,6 +1000,9 @@ const net = {
     } else if (m.t === "move") {
       const o = this.others.get(m.id);
       if (o) Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving });
+    } else if (m.t === "say") {
+      const o = this.others.get(m.id);
+      if (o) o.bubble = bubbleFor(String(m.text).slice(0, CHAT_MAX));
     } else if (m.t === "look") {
       const o = this.others.get(m.id);
       if (o) { o.look = m.look; o.sprites = makeHeroSet(m.look); }
@@ -1076,6 +1142,7 @@ function bindInput() {
     if (e.target instanceof HTMLInputElement) return;
     if (e.code === "Escape" && state.editing) { toggleAvatarPanel(false); return; }
     if (e.code === "KeyP" && !e.repeat) { toggleAvatarPanel(); return; }
+    if ((e.key === "Enter" || e.code === "KeyT") && !state.editing && !e.repeat) { e.preventDefault(); toggleChat(true); return; }
     if (state.editing) return;
     state.keys.add(e.code);
     if (e.repeat) return;
@@ -1153,6 +1220,7 @@ async function main() {
   bindInput();
   bindAvatarPanel();
   bindTouchControls();
+  bindChat();
   net.connect();
   document.getElementById("loading").classList.add("hidden");
   let last = performance.now();

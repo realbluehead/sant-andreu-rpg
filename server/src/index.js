@@ -5,6 +5,8 @@ import { DurableObject } from "cloudflare:workers";
 const ROOM_NAME = "sant-andreu";
 const MAX_PLAYERS = 150;
 const MAX_MSG = 1024;
+const MAX_SAY = 30;
+const SAY_COOLDOWN_MS = 1000;
 const ALLOWED_ORIGINS = [/^https:\/\/realbluehead\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
 
 const COLOR = /^#[0-9a-f]{6}$/i;
@@ -70,6 +72,13 @@ export class Room extends DurableObject {
       Object.assign(a.p, cleanPos(m));
       ws.serializeAttachment(a);
       this.broadcast({ t: "move", id: a.id, x: a.p.x, y: a.p.y, dir: a.p.dir, moving: a.p.moving }, ws);
+    } else if (m.t === "say") {
+      const text = String(m.text ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, MAX_SAY);
+      const now = Date.now();
+      if (!text || now - (a.lastSay || 0) < SAY_COOLDOWN_MS) return;
+      a.lastSay = now;
+      ws.serializeAttachment(a);
+      this.broadcast({ t: "say", id: a.id, text }, ws);
     } else if (m.t === "look") {
       const look = cleanLook(m.look);
       if (!look) return;

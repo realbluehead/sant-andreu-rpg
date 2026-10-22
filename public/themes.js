@@ -1,0 +1,381 @@
+// Sis zones temàtiques del barri. Cada zona té el seu estil de tiles, teulades, façanes, arbres,
+// rètols i música. Són estils *inspirats* en sagues conegudes (sense personatges, logotips ni
+// melodies originals): noms i música són de creació pròpia.
+"use strict";
+
+const BASE_THEME = 2; // l'estil de poble "base" (game.js) és el del tema 2
+
+// ---------------------------------------------------------------------------
+// Utilitats de dibuix comunes
+function speckle(p, r, base, alts, prob) { p.noise(r, base, alts, prob); }
+function dots(p, r, n, col) { for (let i = 0; i < n; i++) p.set((r() * 16) | 0, (r() * 16) | 0, col); }
+function stamp(p, x, y, rows, col) {
+  rows.forEach((row, j) => [...row].forEach((ch, i) => { if (ch === "#") p.set(x + i, y + j, col); }));
+}
+const HEART_S = [".#.#.", "#####", ".###.", "..#.."];
+const HEART_L = [".##..##.", "########", "########", ".######.", "..####..", "...##..."];
+const heart = (p, x, y, col) => stamp(p, x, y, HEART_S, col);
+function rivets(p, col, hi) {
+  for (const [x, y] of [[1, 1], [14, 1], [1, 14], [14, 14]]) { p.set(x, y, col); p.set(x - 1 < 0 ? x : x - 1, y - 1 < 0 ? y : y - 1, hi); }
+}
+// Teules en escata amb paleta pròpia
+function scaleRoof(p, c, rowH, w) {
+  const hi = shade(c, 30), lo = shade(c, -16), edge = shade(c, -44);
+  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+    const row = Math.floor(y / rowH), yy = y % rowH, sx = (x + (row % 2) * (w / 2)) % w;
+    let col = yy >= rowH - 3 ? lo : c;
+    if (yy === 0) col = hi;
+    if (yy === rowH - 1 || (yy >= rowH - 3 && (sx === 0 || sx === w - 1))) col = edge;
+    p.set(x, y, col);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 0 · Vila dels Bruixots (inspirat en Harry Potter): pedra fosca, pissarra lila, finestres ogivals
+const MAGIC = {
+  name: "Vila dels Bruixots", style: "estil Harry Potter", color: "#c9a7ff",
+  outline: "#120c1e", curb: "#4a4452",
+  tree: { cone: true, base: "#24493d", light: "#356b57", dark: "#16302a", trunk: "#3d2a1e",
+    pineBase: "#24493d", pineLight: "#356b57", pineDark: "#16302a" },
+  sign: { frame: "#d4af37", inner: "#3a2a12", corner: "#fff2a8" },
+  ground(p, id, v, r) {
+    if (id === T.GROUND || id === T.GRASS || id === T.PARK || id === T.PITCH) {
+      speckle(p, r, hex("#3e6b4a"), [hex("#355d40"), hex("#4a7a55")], 0.35);
+      if (v === 1) { p.rect(6, 9, 4, 2, hex("#c0392b")); p.set(7, 9, hex("#f4f1e8")); p.rect(7, 11, 2, 2, hex("#e8dcc0")); } // bolet
+      if (v === 3) { p.set(3, 4, hex("#fff6a0")); p.set(12, 10, hex("#fff6a0")); }                                          // cuques de llum
+      return true;
+    }
+    if (id === T.SIDEWALK || id === T.SCHOOLYARD) { slabs(p, r, hex("#7a6f62"), v); return true; }
+    if (id === T.PLAZA || id === T.CONCRETE) { slabs(p, r, hex("#8a8792"), v); dots(p, r, 3, hex("#4f7a4a")); return true; }
+    if (id === T.ROAD || id === T.ROAD_LINE || id === T.CROSSWALK || id === T.PARKING) { cobbles(p, r, hex("#6b6470")); return true; }
+    if (id === T.FOREST) { speckle(p, r, hex("#2a4a36"), [hex("#203a2a"), hex("#365c44")], 0.4); return true; }
+    if (id === T.WATER) { speckle(p, r, hex("#2a3f6e"), [hex("#33508a")], 0.2); dots(p, r, 2, hex("#a8c8ff")); return true; }
+    return false;
+  },
+  roof(p, type, s) {
+    const c = hex(["#4a3a6e", "#2e3a5e", "#2f4f5a", "#5e2a3a"][s]);
+    // pissarra en rombes
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const d = (Math.abs((x % 8) - 3.5) + (y % 6)) % 6;
+      p.set(x, y, d < 1 ? shade(c, -35) : d < 2 ? shade(c, 20) : c);
+    }
+  },
+  facade(p, type, s, v, r) {
+    const st = hex(["#6e6a74", "#77727c", "#66626c", "#7c7682"][s]);
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const row = y >> 2, edge = y % 4 === 3 || (x + (row % 2) * 3) % 6 === 5;
+      p.set(x, y, edge ? shade(st, -30) : (r() < 0.12 ? shade(st, 10) : st));
+    }
+    if (v === 0) { // porta amb claus de ferro
+      p.rect(5, 4, 6, 12, hex("#2a1d14")); p.rect(6, 3, 4, 1, hex("#2a1d14"));
+      p.rect(6, 5, 4, 11, hex("#5a3a22")); for (const y of [7, 10, 13]) { p.set(6, y, hex("#9a9aa0")); p.set(9, y, hex("#9a9aa0")); }
+      return;
+    }
+    // finestra ogival il·luminada
+    p.rect(5, 5, 6, 9, hex("#2a1d2e")); p.rect(6, 4, 4, 1, hex("#2a1d2e")); p.set(7, 3, hex("#2a1d2e")); p.set(8, 3, hex("#2a1d2e"));
+    p.rect(6, 5, 4, 8, hex("#ffd76a")); p.rect(7, 4, 2, 1, hex("#ffd76a"));
+    p.rect(7, 5, 2, 8, hex("#e8a83a")); p.rect(6, 9, 4, 1, hex("#2a1d2e"));
+  },
+};
+
+// ---------------------------------------------------------------------------
+// 1 · La Comarca dels Turons (inspirat en El Senyor dels Anells): turons verds, palla, portes rodones
+const SHIRE = {
+  name: "La Comarca dels Turons", style: "estil El Senyor dels Anells", color: "#a8e06a",
+  outline: "#2a2414", curb: "#7a6a48",
+  tree: { base: "#3f7d32", light: "#5fa046", dark: "#2a5a24", trunk: "#5a3a22",
+    pineBase: "#4a7a2e", pineLight: "#6a9a42", pineDark: "#2e5420" },
+  sign: { frame: "#7a4e2c", inner: "#a8743c", corner: "#5a3a22", wood: true },
+  ground(p, id, v, r) {
+    if (id === T.GROUND || id === T.GRASS || id === T.PARK || id === T.PITCH) {
+      grassBase(p, r, hex("#7cb342"), v >= 2 ? 2 : 0);
+      if (v === 1) { p.set(4, 6, hex("#f6e05e")); p.set(11, 12, hex("#f6e05e")); } // botons d'or
+      return true;
+    }
+    if (id === T.SIDEWALK || id === T.SCHOOLYARD || id === T.DIRT) {
+      speckle(p, r, hex("#b08a5a"), [hex("#9a7648"), hex("#c49e6a")], 0.35);
+      return true;
+    }
+    if (id === T.ROAD || id === T.ROAD_LINE || id === T.CROSSWALK || id === T.PARKING) {
+      speckle(p, r, hex("#a07a4c"), [hex("#8e6a40"), hex("#b48a58")], 0.35);
+      p.rect(3, 0, 2, 16, hex("#86603a")); p.rect(11, 0, 2, 16, hex("#86603a")); // rodades de carro
+      return true;
+    }
+    if (id === T.PLAZA || id === T.CONCRETE) {
+      grassBase(p, r, hex("#7cb342"), 0);
+      for (const [x, y] of [[2, 2], [9, 3], [4, 9], [11, 10]]) { p.rect(x, y, 5, 4, hex("#b8ad98")); p.rect(x, y, 5, 1, hex("#d6ccb6")); p.rect(x, y + 3, 5, 1, hex("#8a8070")); }
+      return true;
+    }
+    return false;
+  },
+  roof(p, type, s, v, r) {
+    if (s % 2 === 0) { // teulada de gespa (casa-turó)
+      grassBase(p, r, hex("#6a9e3a"), 2);
+      return;
+    }
+    const c = hex(s === 1 ? "#c9a14a" : "#b88a3a"); // palla
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const k = (x * 3 + y + (hash2(x, y >> 2) % 3)) % 4;
+      p.set(x, y, y % 5 === 4 ? shade(c, -30) : k === 0 ? shade(c, -14) : k === 2 ? shade(c, 14) : c);
+    }
+  },
+  facade(p, type, s, v, r) {
+    if (s % 2 === 0) { // casa-turó amb porta rodona
+      grassBase(p, r, hex("#5f9234"), 0);
+      if (v === 0 || v === 2) {
+        const door = hex(["#3f8a3a", "#e8c040", "#c0392b", "#3f6fb5"][v === 0 ? s : (s + 1) % 4]);
+        for (let y = 0; y < 12; y++) for (let x = 0; x < 12; x++) {
+          const dx = (x - 5.5) / 6, dy = (y - 7) / 7, d = dx * dx + dy * dy;
+          if (d < 1 && y < 12) p.set(2 + x, 4 + y, d > 0.72 ? hex("#6b4426") : door);
+        }
+        p.set(8, 10, hex("#f6d55c"));
+      } else {
+        for (let y = 0; y < 6; y++) for (let x = 0; x < 6; x++) {
+          const dx = (x - 2.5) / 3, dy = (y - 2.5) / 3, d = dx * dx + dy * dy;
+          if (d < 1) p.set(5 + x, 6 + y, d > 0.55 ? hex("#6b4426") : hex("#ffe8a0"));
+        }
+      }
+      return;
+    }
+    // entramat de fusta (paret blanca amb bigues fosques)
+    p.noise(r, hex("#f0e8d4"), [hex("#e4dac2")], 0.15);
+    const beam = hex("#4a3020");
+    p.rect(0, 0, 16, 2, beam); p.rect(0, 14, 16, 2, beam); p.rect(0, 0, 2, 16, beam); p.rect(14, 0, 2, 16, beam);
+    for (let i = 0; i < 12; i++) { p.set(2 + i, 2 + i, beam); p.set(3 + i, 2 + i, beam); }
+    if (v === 1) { p.rect(5, 5, 6, 5, beam); p.rect(6, 6, 4, 3, hex("#ffe8a0")); }
+  },
+};
+
+// ---------------------------------------------------------------------------
+// 2 · Poble de l'Heroi (inspirat en Zelda): l'estil base de game.js
+const HERO = {
+  name: "Poble de l'Heroi", style: "estil Zelda", color: "#7ee08a",
+  outline: "#2a1d2e", curb: "#8a7f6a",
+  tree: {},
+  sign: null,
+};
+
+// ---------------------------------------------------------------------------
+// 3 · Districte del Vapor (steampunk): plaques de metall reblades, coure, engranatges
+const STEAM = {
+  name: "Districte del Vapor", style: "estil steampunk", color: "#e0a050",
+  outline: "#1a120c", curb: "#5a4636",
+  tree: { base: "#b5651d", light: "#d98a3a", dark: "#7a3e12", trunk: "#3a2a1e",
+    pineBase: "#8a5a2a", pineLight: "#b07a3a", pineDark: "#5a3818" },
+  sign: { frame: "#b08d57", inner: "#3a2a1e", corner: "#f0d58a", rivets: true },
+  ground(p, id, v, r) {
+    if (id === T.GROUND || id === T.CONCRETE || id === T.SCHOOLYARD) {
+      const c = hex(v % 2 ? "#7a5a42" : "#6e5240");
+      speckle(p, r, c, [shade(c, -10), shade(c, 8), hex("#8a4a2a")], 0.3);
+      p.rect(0, 0, 16, 1, shade(c, -30)); p.rect(0, 0, 1, 16, shade(c, -30)); rivets(p, hex("#c8a060"), hex("#f0d58a"));
+      if (v === 3) { // engranatge gravat
+        for (let a = 0; a < 16; a++) { const t = a / 16 * Math.PI * 2, rr = a % 2 ? 4 : 5; p.set(8 + Math.round(Math.cos(t) * rr), 8 + Math.round(Math.sin(t) * rr), shade(c, -25)); }
+      }
+      return true;
+    }
+    if (id === T.GRASS || id === T.PARK || id === T.PITCH) { grassBase(p, r, hex("#8f8a4a"), 0); return true; }
+    if (id === T.SIDEWALK) {
+      const c = hex("#b08d57");
+      speckle(p, r, c, [shade(c, -10), shade(c, 10)], 0.25);
+      p.rect(0, 7, 16, 1, shade(c, -30)); p.rect(7, 0, 1, 7, shade(c, -30)); p.rect(15, 8, 1, 8, shade(c, -30));
+      return true;
+    }
+    if (id === T.PLAZA) {
+      const c = hex("#5a5048");
+      p.fill(c);
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) if ((x + (y >> 2) * 2) % 8 === 0 || y % 4 === 0) p.set(x, y, hex("#b87333"));
+      return true;
+    }
+    if (id === T.ROAD || id === T.ROAD_LINE || id === T.CROSSWALK || id === T.PARKING) {
+      p.fill(hex("#3a3430"));
+      for (let i = 0; i < 16; i += 4) { p.rect(i, 0, 2, 16, hex("#54493f")); p.rect(0, i, 16, 1, hex("#2a2420")); }
+      return true;
+    }
+    if (id === T.WATER) { speckle(p, r, hex("#4a5a3a"), [hex("#5a6a44"), hex("#3a4a30")], 0.3); return true; }
+    return false;
+  },
+  roof(p, type, s, v, r) {
+    if (s % 2 === 0) { // coure amb verdet
+      const c = hex(s === 0 ? "#4f9a8a" : "#3f8a7a");
+      speckle(p, r, c, [hex("#6abaa8"), hex("#b87333")], 0.2);
+      for (let x = 0; x < 16; x += 4) p.rect(x, 0, 1, 16, shade(c, -30));
+    } else { // xapa ondulada rovellada
+      const c = hex("#9a5a3a");
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, x % 3 === 0 ? shade(c, -25) : x % 3 === 1 ? shade(c, 15) : (r() < 0.15 ? hex("#7a3a22") : c));
+    }
+    if (v === 1) { // xemeneia amb fum
+      p.rect(9, 3, 4, 7, hex("#3a3430")); p.rect(9, 3, 4, 1, hex("#b87333"));
+      p.set(10, 1, hex("#c8c8c8")); p.set(11, 0, hex("#e0e0e0")); p.set(12, 1, hex("#a8a8a8"));
+    }
+  },
+  facade(p, type, s, v, r) {
+    const c = hex(["#5a4a3e", "#4e4038", "#62503f", "#544438"][s]);
+    speckle(p, r, c, [shade(c, -8), shade(c, 8)], 0.2);
+    p.rect(0, 0, 16, 2, hex("#b08d57")); p.rect(0, 14, 16, 2, hex("#b08d57"));
+    for (const x of [0, 15]) for (let y = 3; y < 14; y += 3) p.set(x, y, hex("#f0d58a"));
+    if (v === 0) { // porta de ferro amb volant
+      p.rect(4, 4, 8, 10, hex("#2a2420")); p.rect(5, 5, 6, 9, hex("#4a4038"));
+      for (let a = 0; a < 12; a++) { const t = a / 12 * Math.PI * 2; p.set(8 + Math.round(Math.cos(t) * 2), 9 + Math.round(Math.sin(t) * 2), hex("#c8a060")); }
+      return;
+    }
+    // ull de bou amb vora de llautó
+    for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) {
+      const dx = (x - 3.5) / 4, dy = (y - 3.5) / 4, d = dx * dx + dy * dy;
+      if (d < 1) p.set(4 + x, 4 + y, d > 0.55 ? hex("#c8a060") : d > 0.4 ? hex("#7a5a2a") : (x + y < 6 ? hex("#ffe08a") : hex("#f0a040")));
+    }
+    if (v === 2) { p.rect(12, 2, 2, 12, hex("#6a5a4a")); p.rect(12, 7, 3, 1, hex("#b87333")); } // canonada
+  },
+};
+
+// ---------------------------------------------------------------------------
+// 4 · Racó Kawaii (inspirat en Hello Kitty): pastels, cors, llaços i quadres rosa
+const KAWAII = {
+  name: "Racó Kawaii", style: "estil Hello Kitty", color: "#ff9ccf",
+  outline: "#7a3a5e", curb: "#f7c6d9",
+  tree: { base: "#f7a8c8", light: "#ffd0e4", dark: "#e07aa8", trunk: "#a0705a",
+    pineBase: "#b8e8c8", pineLight: "#dcf6e4", pineDark: "#8ad0a8" },
+  sign: { frame: "#ffffff", inner: null, corner: "#ff6fae", bow: true, round: true },
+  ground(p, id, v, r) {
+    if (id === T.GROUND || id === T.GRASS || id === T.PARK || id === T.PITCH) {
+      speckle(p, r, hex("#b8ecc4"), [hex("#a6e2b6"), hex("#ccf4d6")], 0.3);
+      if (v === 1) heart(p, 6, 6, hex("#ff8fbf"));
+      if (v === 3) { p.set(3, 4, hex("#ffffff")); p.set(12, 11, hex("#ffffff")); p.set(9, 3, hex("#fff3a0")); }
+      return true;
+    }
+    if (id === T.SIDEWALK || id === T.SCHOOLYARD || id === T.DIRT) {
+      speckle(p, r, hex("#f7c6d9"), [hex("#f9d4e3")], 0.25);
+      for (const [x, y] of [[3, 3], [11, 4], [6, 10], [13, 12]]) p.set(x, y, hex("#ffffff"));
+      return true;
+    }
+    if (id === T.PLAZA || id === T.CONCRETE) {
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, ((x >> 2) + (y >> 2)) % 2 ? hex("#ffd6e8") : hex("#fff6fa"));
+      return true;
+    }
+    if (id === T.ROAD || id === T.ROAD_LINE || id === T.CROSSWALK || id === T.PARKING) { cobbles(p, r, hex("#c9b6e8")); return true; }
+    if (id === T.WATER || id === T.POOL) { speckle(p, r, hex("#9ad8f0"), [hex("#b4e4f6")], 0.25); dots(p, r, 2, hex("#ffffff")); return true; }
+    return false;
+  },
+  roof(p, type, s) {
+    const c = hex(["#f48fb1", "#8fd9c8", "#c39bd3", "#8ec5f0"][s]);
+    scaleRoof(p, c, 6, 6);
+    for (const [x, y] of [[3, 2], [10, 4], [6, 9], [13, 11]]) p.set(x, y, hex("#ffffff")); // pics blancs
+  },
+  facade(p, type, s, v, r) {
+    const wall = hex(["#fff6fa", "#fffaf0", "#f6f9ff", "#fdf6ff"][s]);
+    p.noise(r, wall, [shade(wall, -6)], 0.1);
+    for (let x = 0; x < 16; x++) p.set(x, 0, x % 4 < 2 ? hex("#ff8fbf") : hex("#ffffff")); // sanefa
+    p.rect(0, 1, 16, 1, hex("#ffd6e8"));
+    if (v === 0) { // porta rosa amb llaç
+      p.rect(5, 6, 6, 10, hex("#ff8fbf")); p.rect(6, 7, 4, 9, hex("#ffb3d1"));
+      p.rect(5, 3, 2, 2, hex("#ff4f9a")); p.rect(9, 3, 2, 2, hex("#ff4f9a")); p.rect(7, 4, 2, 1, hex("#ff4f9a"));
+      return;
+    }
+    // finestra en forma de cor
+    stamp(p, 4, 5, HEART_L, hex("#ff6fae"));
+    stamp(p, 5, 6, ["#..#", "####", ".##."], hex("#bfe6ff"));
+    heart(p, 1, 12, hex("#ffb3d1")); heart(p, 10, 12, hex("#ffb3d1"));
+  },
+};
+
+// ---------------------------------------------------------------------------
+// 5 · Ruta dels Monstres (inspirat en Pokémon): gespa alta, camins nets, teulades llises de colors vius
+const ROUTE = {
+  name: "Ruta dels Monstres", style: "estil Pokémon", color: "#ffe066",
+  outline: "#202830", curb: "#f0f0e8",
+  tree: { base: "#2f8a3a", light: "#58b858", dark: "#1e5a28", trunk: "#7a5030",
+    pineBase: "#2f8a3a", pineLight: "#58b858", pineDark: "#1e5a28" },
+  sign: { frame: "#3060c0", inner: null, corner: "#ffffff", thick: true },
+  ground(p, id, v, r) {
+    if (id === T.GROUND || id === T.PITCH) {
+      p.fill(hex("#78c850"));
+      for (let y = 1; y < 16; y += 4) for (let x = (y % 8 === 1 ? 1 : 3); x < 16; x += 4) p.set(x, y, hex("#90d868"));
+      return true;
+    }
+    if (id === T.GRASS || id === T.PARK || id === T.FOREST) { // herba alta
+      p.fill(hex("#58b050"));
+      for (let y = 0; y < 16; y += 4) for (let x = (y % 8) / 2; x < 16; x += 4) {
+        p.set(x, y + 3, hex("#2f7a30")); p.set(x + 1, y + 1, hex("#2f7a30")); p.set(x + 2, y + 3, hex("#2f7a30"));
+        p.set(x + 1, y + 2, hex("#3f9a3f")); p.set(x + 1, y, hex("#88d070"));
+      }
+      return true;
+    }
+    if (id === T.SIDEWALK || id === T.DIRT || id === T.SCHOOLYARD) {
+      p.fill(hex("#e8d8a8"));
+      dots(p, r, 3, hex("#d0bc88"));
+      return true;
+    }
+    if (id === T.PLAZA || id === T.CONCRETE) {
+      p.fill(hex("#d8d8d0"));
+      for (let i = 0; i < 16; i++) { p.set(i, 0, hex("#b8b8b0")); p.set(i, 8, hex("#b8b8b0")); p.set(0, i, hex("#b8b8b0")); p.set(8, i, hex("#b8b8b0")); }
+      return true;
+    }
+    if (id === T.ROAD || id === T.ROAD_LINE || id === T.CROSSWALK || id === T.PARKING) {
+      speckle(p, r, hex("#b8b8b8"), [hex("#b0b0b0"), hex("#c0c0c0")], 0.2);
+      return true;
+    }
+    if (id === T.WATER) { p.fill(hex("#5898f8")); for (let x = 0; x < 16; x += 8) p.rect(x + (v * 3) % 8, 5 + v, 4, 1, hex("#a8d0ff")); return true; }
+    return false;
+  },
+  roof(p, type, s) {
+    const c = hex(["#e04040", "#4070d0", "#40a060", "#f08030"][s]);
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, y % 4 === 3 ? shade(c, -40) : y % 4 === 0 ? shade(c, 25) : c);
+  },
+  facade(p, type, s, v) {
+    p.fill(hex("#f8f0d8"));
+    p.rect(0, 0, 16, 2, hex("#c8b890")); p.rect(0, 15, 16, 1, hex("#a89870"));
+    if (v === 0) { p.rect(5, 6, 6, 10, hex("#604830")); p.rect(6, 7, 4, 9, hex("#8a6a48")); p.rect(4, 15, 8, 1, hex("#d04040")); return; }
+    p.rect(3, 5, 10, 7, hex("#404850")); p.rect(4, 6, 8, 5, hex("#78c8f0")); p.rect(4, 6, 3, 2, hex("#c8ecff"));
+  },
+};
+
+const THEMES = [MAGIC, SHIRE, HERO, STEAM, KAWAII, ROUTE];
+
+// ---------------------------------------------------------------------------
+// Sectors: Voronoi de 6 punts repartits en una graella 2x3 sobre la zona del barri.
+// Cada casella pertany al punt més proper (també les de fora del barri, per continuïtat).
+const SECTOR_LAYOUT = [   // [fracció x, fracció y, tema]
+  [0.30, 0.17, 1], [0.70, 0.17, 3],  // nord: Comarca (parcs) · Vapor (vies i fàbriques)
+  [0.30, 0.50, 5], [0.70, 0.50, 2],  // centre: Ruta dels Monstres · Poble de l'Heroi (Plaça d'Orfila, on comences)
+  [0.30, 0.83, 0], [0.70, 0.83, 4],  // sud: Bruixots · Kawaii
+];
+
+function initThemes() {
+  const { W, H, ground } = state;
+  let x0 = W, y0 = H, x1 = 0, y1 = 0;
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    if (!(ground[y * W + x] & OUTSIDE)) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  }
+  const seeds = SECTOR_LAYOUT.map(([fx, fy, th]) => [x0 + (x1 - x0) * fx, y0 + (y1 - y0) * fy, th]);
+  const sec = new Uint8Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    let best = 0, bd = Infinity;
+    for (const [sx, sy, th] of seeds) {
+      const d = (sx - x) ** 2 + ((sy - y) * 0.9) ** 2;
+      if (d < bd) { bd = d; best = th; }
+    }
+    sec[y * W + x] = best;
+  }
+  state.sector = sec;
+  state.chunks.clear();
+}
+
+const sectorAt = (tx, ty) => {
+  if (!state.sector || tx < 0 || ty < 0 || tx >= state.W || ty >= state.H) return BASE_THEME;
+  return state.sector[ty * state.W + tx];
+};
+
+// Zona actual del jugador: rètol al HUD, avís en entrar i canvi de música
+let currentZone = -1;
+function updateZone() {
+  const th = sectorAt(Math.floor(state.player.x / TS), Math.floor(state.player.y / TS));
+  if (th === currentZone) return;
+  const first = currentZone < 0;
+  currentZone = th;
+  const t = THEMES[th], el = document.getElementById("zone");
+  el.querySelector("b").textContent = t.name;
+  el.querySelector("small").textContent = t.style;
+  el.style.setProperty("--zone", t.color);
+  if (!first) showBanner(`Has entrat a: ${t.name}`, "zone");
+  document.getElementById("banner").style.setProperty("--zone", t.color);
+  setMusicTheme(th);
+}

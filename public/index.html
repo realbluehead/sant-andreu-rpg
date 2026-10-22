@@ -26,6 +26,11 @@
     padding: 10px 12px; font-size: 10px; line-height: 1.7; }
   #location { top: 16px; left: 16px; max-width: min(460px, calc(100vw - 32px)); }
   #location .street { color: var(--accent); font-size: 12px; }
+  #zone { --zone: var(--accent); display: flex; flex-direction: column; gap: 2px; margin-bottom: 6px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--zone); }
+  #zone b { font-weight: normal; font-size: 11px; color: var(--zone); }
+  #zone small { font-size: 7px; color: var(--muted); }
+  #zone small::before { content: "ZONA · "; }
   #location .place { color: var(--text); }
   #location .meta { color: var(--muted); font-size: 8px; }
   #online { display: flex; align-items: center; gap: 6px; font-size: 8px; color: #9fd3ff; margin-top: 2px; }
@@ -42,6 +47,7 @@
   #money i.vault { border-radius: 2px; background: linear-gradient(#0f766e 0 30%, #5eead4 30% 40%, #0f766e 40% 100%); }
   #wallet.bump, #bank.bump { animation: bump .35s steps(3); }
   #banner.bank { color: #5eead4; }
+  #banner.zone { color: var(--zone, #ffd35a); border-color: var(--zone, #ffd35a); font-size: 13px; }
   #banner.beer { color: #fbbf24; }
   #banner.coffee { color: #d6b38a; }
   #drunk { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 8px; }
@@ -197,6 +203,7 @@
 <body>
 <canvas id="game"></canvas>
 <div id="location" class="panel">
+  <div id="zone"><small></small><b></b></div>
   <div id="location-text"><div class="street">…</div><div class="place"></div><div class="meta"></div></div>
   <div id="online" class="offline"><i></i><span>Connectant…</span></div>
   <div id="hp"><span class="lbl">VIDA</span><div class="bar"><i></i></div><span class="val">100/100</span></div>
@@ -260,13 +267,14 @@
   <a href="https://opendata-ajuntament.barcelona.cat/data/ca/dataset/cens-locals-planta-baixa-act-economica" target="_blank" rel="noopener">Ajuntament de Barcelona</a> (CC-BY) ·
   <a href="https://overturemaps.org" target="_blank" rel="noopener">Overture Maps Foundation</a></div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=25"></script>
-<script src="npcs.js?v=25"></script>
-<script src="pois.js?v=25"></script>
-<script src="animals.js?v=25"></script>
-<script src="coins.js?v=25"></script>
-<script src="thieves.js?v=25"></script>
-<script src="drinks.js?v=25"></script>
-<script src="music.js?v=25"></script>
+<script src="game.js?v=28"></script>
+<script src="themes.js?v=28"></script>
+<script src="npcs.js?v=28"></script>
+<script src="pois.js?v=28"></script>
+<script src="animals.js?v=28"></script>
+<script src="coins.js?v=28"></script>
+<script src="thieves.js?v=28"></script>
+<script src="drinks.js?v=28"></script>
+<script src="music.js?v=28"></script>
 </body>
 </html>

@@ -352,17 +352,18 @@ function paintFacade(p, type, s, v, r) {
 }
 
 const tileCache = new Map();
-function getTile(kind, id, v) {
-  const key = kind + ":" + id + ":" + v;
+// th = tema del sector (themes.js); si el tema no defineix una tile, es fa servir l'estil base
+function getTile(kind, id, v, th = BASE_THEME) {
+  const key = kind + ":" + id + ":" + v + ":" + th;
   let cv = tileCache.get(key);
   if (cv) return cv;
-  const p = new Pix(TS, TS);
-  const r = rng(hash2(id * 31 + 7, v * 131 + (kind === "f" ? 999 : kind === "r" ? 555 : 1)));
-  if (kind === "g") paintGround(p, id, v, r);
+  const p = new Pix(TS, TS), theme = THEMES[th];
+  const r = rng(hash2(id * 31 + 7 + th * 7919, v * 131 + (kind === "f" ? 999 : kind === "r" ? 555 : 1)));
+  if (kind === "g") { if (!theme.ground?.(p, id, v, r)) paintGround(p, id, v, r); }
   else {
     const b = id - BUILDING_BASE, type = (b / 4) | 0, s = b % 4;
-    if (kind === "r") paintRoof(p, type, s, v, r);
-    else paintFacade(p, type, s, v, r);
+    if (kind === "r") (theme.roof || paintRoof)(p, type, s, v, r);
+    else (theme.facade || paintFacade)(p, type, s, v, r);
   }
   cv = p.toCanvas();
   tileCache.set(key, cv);
@@ -459,19 +460,26 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
 const DIRS = ["down", "up", "left", "right"];
 const makeHeroSet = (look) => Object.fromEntries(DIRS.map((d) => [d, [0, 1, 2, 3].map((f) => makeHero(d, f, look))]));
 
-function makeTree(round, seed) {
+function makeTree(round, seed, pal = {}) {
   const p = new Pix(26, 30), r = rng(seed);
-  const trunk = hex("#6b4426");
-  if (round) { // plàtan
+  const trunk = hex(pal.trunk || "#6b4426");
+  if (pal.cone) { // conífera fosca
+    p.rect(12, 22, 2, 7, trunk);
+    const base = hex(pal.base), light = hex(pal.light), dark = hex(pal.dark);
+    for (let y = 0; y < 24; y++) for (let x = 0; x < 26; x++) {
+      const half = (y + 2) * 0.45 - (y % 6) * 0.35, dx = x - 12.5;
+      if (Math.abs(dx) < half) p.set(x, y, dx < -half * 0.4 ? light : dx > half * 0.5 ? dark : base);
+    }
+  } else if (round) { // plàtan
     p.rect(12, 18, 3, 11, trunk); p.rect(12, 18, 1, 11, shade(trunk, 25));
-    const base = hex("#4e9a45"), light = hex("#78c160"), dark = hex("#2f6e35");
+    const base = hex(pal.base || "#4e9a45"), light = hex(pal.light || "#78c160"), dark = hex(pal.dark || "#2f6e35");
     for (let y = 0; y < 22; y++) for (let x = 0; x < 26; x++) {
       const dx = x - 13, dy = y - 10, d = Math.sqrt(dx * dx + dy * dy * 1.15) + r() * 1.6;
       if (d < 10.5) p.set(x, y, (dx + dy < -6 && r() < 0.8) ? light : (dx + dy > 5 && r() < 0.8) ? dark : (r() < 0.12 ? dark : base));
     }
   } else { // pi
     p.rect(12, 12, 2, 17, trunk); p.rect(12, 12, 1, 17, shade(trunk, 25));
-    const base = hex("#2f7040"), light = hex("#4e955a"), dark = hex("#1e4d2d");
+    const base = hex(pal.pineBase || "#2f7040"), light = hex(pal.pineLight || "#4e955a"), dark = hex(pal.pineDark || "#1e4d2d");
     for (let y = 0; y < 16; y++) for (let x = 0; x < 26; x++) {
       const dx = (x - 13) / 12, dy = (y - 7) / 6.5, d = dx * dx + dy * dy + r() * 0.15;
       if (d < 1) p.set(x, y, dy < -0.3 && r() < 0.7 ? light : dy > 0.4 ? dark : base);
@@ -552,21 +560,21 @@ function renderChunk(cx, cy) {
     if (tx >= state.W || ty >= state.H) continue;
     const raw = g(tx, ty), v = raw & 127, outside = raw & OUTSIDE;
     const px = (tx - x0) * TS, py = (ty - y0) * TS;
-    const hv = hash2(tx, ty);
+    const hv = hash2(tx, ty), th = sectorAt(tx, ty), theme = THEMES[th];
     if (v >= BUILDING_BASE) {
       const below = g(tx, ty + 1);
       if (!isBuilding(below)) {
-        c.drawImage(getTile("f", v, hv % 4), px, py);
-        c.fillStyle = "#2a1d2e";
+        c.drawImage(getTile("f", v, hv % 4, th), px, py);
+        c.fillStyle = theme.outline;
         if ((g(tx - 1, ty) & 127) !== v) c.fillRect(px, py, 1, TS);
         if ((g(tx + 1, ty) & 127) !== v) c.fillRect(px + TS - 1, py, 1, TS);
         c.fillRect(px, py + TS - 1, TS, 1);
       } else {
-        c.drawImage(getTile("r", v, (hv % 23) === 0 ? 1 : 0), px, py);
+        c.drawImage(getTile("r", v, (hv % 23) === 0 ? 1 : 0, th), px, py);
         const up = g(tx, ty - 1), lf = g(tx - 1, ty), rt = g(tx + 1, ty);
         // Contorn fosc de cada teulada (com els RPG de 16 bits) i carener il·luminat a dalt
-        c.fillStyle = "#2a1d2e";
-        if ((up & 127) !== v) { c.fillRect(px, py, TS, 1); c.fillStyle = "rgba(255,255,255,.35)"; c.fillRect(px, py + 1, TS, 1); c.fillStyle = "#2a1d2e"; }
+        c.fillStyle = theme.outline;
+        if ((up & 127) !== v) { c.fillRect(px, py, TS, 1); c.fillStyle = "rgba(255,255,255,.35)"; c.fillRect(px, py + 1, TS, 1); c.fillStyle = theme.outline; }
         if ((lf & 127) !== v) c.fillRect(px, py, 1, TS);
         if ((rt & 127) !== v) c.fillRect(px + TS - 1, py, 1, TS);
         // ràfec: ombra a la part de baix de la teulada, just damunt de la façana
@@ -576,10 +584,10 @@ function renderChunk(cx, cy) {
       let variant = hv % 4;
       if (v === T.PITCH) variant = (tx >> 1) & 1;
       if (v === T.ROAD_LINE) variant = 0;
-      c.drawImage(getTile("g", v, variant), px, py);
+      c.drawImage(getTile("g", v, variant, th), px, py);
       // vorada entre calçada i vorera
       if (ROADISH.has(v)) {
-        c.fillStyle = "#8a7f6a"; // vorada de pedra
+        c.fillStyle = theme.curb; // vorada
         if (!ROADISH.has(g(tx, ty - 1) & 127)) c.fillRect(px, py, TS, 2);
         if (!ROADISH.has(g(tx, ty + 1) & 127)) c.fillRect(px, py + TS - 2, TS, 2);
         if (!ROADISH.has(g(tx - 1, ty) & 127)) c.fillRect(px, py, 2, TS);
@@ -678,6 +686,16 @@ function buildMinimap() {
   for (let i = 0; i < W * H; i++) {
     const col = lut[state.ground[i]];
     img.data[i * 4] = col[0]; img.data[i * 4 + 1] = col[1]; img.data[i * 4 + 2] = col[2]; img.data[i * 4 + 3] = 255;
+  }
+  // fronteres entre zones temàtiques
+  if (state.sector) {
+    const sec = state.sector;
+    for (let y = 0; y < H - 1; y++) for (let x = 0; x < W - 1; x++) {
+      const i = y * W + x;
+      if (sec[i] !== sec[i + 1] || sec[i] !== sec[i + W]) {
+        img.data[i * 4] = 255; img.data[i * 4 + 1] = 240; img.data[i * 4 + 2] = 200;
+      }
+    }
   }
   c.putImageData(img, 0, 0);
   mmBase = cv;
@@ -827,8 +845,9 @@ function draw() {
     if (!d) continue;
     const bx = tx * TS + TS / 2, by = ty * TS + TS;
     let img;
-    if (d === D.TREE) img = S.trees[hash2(tx, ty) % S.trees.length];
-    else if (d === D.TREE2) img = S.pines[hash2(tx, ty) % S.pines.length];
+    const th = sectorAt(tx, ty);
+    if (d === D.TREE) img = S.trees[th][hash2(tx, ty) % S.trees[th].length];
+    else if (d === D.TREE2) img = S.pines[th][hash2(tx, ty) % S.pines[th].length];
     else if (d === D.LAMP) img = S.lamp;
     else if (d === D.BENCH) img = S.bench;
     else if (d === D.FOUNTAIN) img = S.fountain;
@@ -1394,11 +1413,12 @@ async function loadMap() {
 async function main() {
   resize();
   await Promise.all([loadMap(), loadConfig()]);
+  initThemes();
   try { await document.fonts.load('8px "Press Start 2P"'); } catch { /* font opcional */ }
   state.sprites = {
     hero: makeHeroSet(state.look),
-    trees: [1, 2, 3].map((s) => makeTree(true, s * 977)),
-    pines: [1, 2].map((s) => makeTree(false, s * 541)),
+    trees: THEMES.map((th) => [1, 2, 3].map((s) => makeTree(true, s * 977, th.tree))),
+    pines: THEMES.map((th) => [1, 2].map((s) => makeTree(false, s * 541, th.tree))),
     lamp: makeLamp(), bench: makeBench(), fountain: makeFountain(),
   };
   buildLabels();
@@ -1435,6 +1455,7 @@ async function main() {
     updateCoins(dt);
     updateThieves(dt);
     updateDrinks(dt);
+    updateZone();
     tickBubbles(dt);
     draw();
     drawMinimap();

@@ -31,9 +31,24 @@ Obre <http://localhost:8737>.
 
 Al mòbil apareixen controls tàctils: un joystick per caminar, el botó **Córrer**, **MAPA** per obrir el minimapa i **CENTRAR** per tornar la càmera al personatge. També pots arrossegar el mapa amb el dit.
 
+## Zones temàtiques
+
+El barri està dividit en 6 zones, cadascuna amb el seu estil de tiles, teulades, façanes, arbres, rètols de botigues i música (`public/themes.js`). Són estils inspirats en sagues conegudes, amb noms i música de creació pròpia:
+
+| Zona | Estil | Música |
+|---|---|---|
+| Vila dels Bruixots | Harry Potter: pedra fosca, pissarra, finestres ogivals, bolets | vals misteriós en mi menor |
+| La Comarca dels Turons | El Senyor dels Anells: turons, palla, cases-turó amb portes rodones | pastoral amb flauta en re major |
+| Poble de l'Heroi | Zelda: gespa, empedrat, teulades de colors | tema del poble en fa major |
+| Districte del Vapor | steampunk: metall reblat, coure, ulls de bou, fum | marxa mecànica en do menor |
+| Racó Kawaii | Hello Kitty: pastels, cors, llaços, quadres rosa | melodia saltironant en do major |
+| Ruta dels Monstres | Pokémon: herba alta, camins nets, teulades llises | tema d'aventura en sol major |
+
+Quan canvies de zona surt un avís, el panell mostra la zona actual i la música canvia amb un fos. Al minimapa es veuen les fronteres.
+
 ## Música
 
-La música de fons és una composició original en estil chiptune de 8 bits, sintetitzada en directe amb Web Audio (`public/music.js`): dues ones quadrades (melodia i arpegis), una triangular (baix) i soroll (bateria). Comença amb la primera tecla o toc i es pot aturar amb el botó **Música** o la tecla **B**.
+Cada zona té la seva música de fons, una composició original en estil chiptune de 8 bits, sintetitzada en directe amb Web Audio (`public/music.js`): dues ones quadrades (melodia i arpegis), una triangular (baix) i soroll (bateria). Comença amb la primera tecla o toc i es pot aturar amb el botó **Música** o la tecla **B**.
 
 ## Com està fet
 

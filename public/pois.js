@@ -198,20 +198,35 @@ const POI_ICONS = {
 const poiIcons = {};
 
 // Rètol 15x18: placa amb vora clara, glif al mig i una punta que assenyala el lloc
-function makePoiIcon(def) {
+// sign = estil del rètol de la zona (themes.js); null = rètol per defecte
+function makePoiIcon(def, sign) {
   const p = new Pix(15, 18);
-  const bg = hex(def.bg), edge = shade(bg, 55), dark = shade(bg, -35);
+  let bg = sign?.inner ? hex(sign.inner) : hex(def.bg);
+  if (sign?.round) bg = shade(bg, 30);                       // kawaii: colors més pastel
+  const edge = sign ? hex(sign.frame) : shade(bg, 55), dark = shade(bg, -35);
   p.rect(0, 0, 15, 15, edge);
-  p.rect(1, 1, 13, 13, bg);
-  p.rect(1, 13, 13, 1, dark);
+  const inset = sign?.thick ? 2 : 1;
+  p.rect(inset, inset, 15 - inset * 2, 15 - inset * 2, bg);
+  p.rect(inset, 14 - inset, 15 - inset * 2, 1, dark);
+  if (sign?.wood) for (const y of [4, 8, 11]) p.rect(1, y, 13, 1, shade(bg, -18));      // veta de la fusta
+  if (sign?.round) for (const [x, y] of [[0, 0], [14, 0], [0, 14], [14, 14]]) p.set(x, y, null);
+  if (sign?.corner && !sign.round) for (const [x, y] of [[1, 1], [13, 1], [1, 13], [13, 13]]) p.set(x, y, hex(sign.corner));
   p.rect(6, 15, 3, 1, edge); p.set(7, 16, edge);
   def.g.forEach((row, y) => [...row].forEach((ch, x) => { if (def.pal[ch]) p.set(3 + x, 3 + y, hex(def.pal[ch])); }));
+  if (sign?.bow) { // llaç a dalt
+    const b = hex(sign.corner);
+    p.rect(4, 0, 3, 2, b); p.rect(8, 0, 3, 2, b); p.rect(7, 0, 1, 2, shade(b, -30));
+  }
   p.outline(OUTLINE);
   return p.toCanvas();
 }
 
+// poiIcons[tema][categoria]
 function initPois() {
-  for (const [cat, def] of Object.entries(POI_ICONS)) poiIcons[cat] = makePoiIcon(def);
+  THEMES.forEach((th, i) => {
+    poiIcons[i] = {};
+    for (const [cat, def] of Object.entries(POI_ICONS)) poiIcons[i][cat] = makePoiIcon(def, th.sign);
+  });
 }
 
 // Afegeix les icones visibles a la llista de sprites (es dibuixen ordenades per profunditat)
@@ -221,7 +236,8 @@ function pushPoiSprites(list, camX, camY, vw, vh, k) {
   for (const p of state.meta.pois) {
     const x = p.x * TS, y = p.y * TS;
     if (x < camX - 40 || x > camX + vw + 40 || y < camY - 10 || y > camY + vh + 60) continue;
-    const img = poiIcons[p.c] || poiIcons.shop;
+    const icons = poiIcons[sectorAt(Math.floor(p.x), Math.floor(p.y))];
+    const img = icons[p.c] || icons.shop;
     list.push([y, img, Math.round(x - (img.width / 2) * s), Math.round(y - (img.height - 1) * s), false, s]);
   }
 }

@@ -580,6 +580,11 @@ function drawMinimap() {
   mmCtx.strokeStyle = "#ffd35a"; mmCtx.lineWidth = 1;
   mmCtx.strokeRect(state.cam.x / TS * mmScale + .5, state.cam.y / TS * mmScale + .5, vw * mmScale, vh * mmScale);
   const px = state.player.x / TS * mmScale, py = state.player.y / TS * mmScale;
+  for (const o of net.others.values()) {
+    const ox = o.x / TS * mmScale, oy = o.y / TS * mmScale;
+    mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(ox - 2.5, oy - 2.5, 5, 5);
+    mmCtx.fillStyle = "#5fb3ff"; mmCtx.fillRect(ox - 1.5, oy - 1.5, 3, 3);
+  }
   mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(px - 3, py - 3, 6, 6);
   mmCtx.fillStyle = "#ff4d4d"; mmCtx.fillRect(px - 2, py - 2, 4, 4);
 }
@@ -695,6 +700,10 @@ function draw() {
   // L'avatar manté sempre la mateixa mida en pantalla, independentment del zoom
   const k = HERO_SCREEN_SCALE / ZOOMS[state.zoomIdx];
   list.push([pl.y, S.hero[pl.dir][pl.frame], Math.round(pl.x) - 8 * k, Math.round(pl.y) - 23 * k, false, k]);
+  for (const o of net.others.values()) {
+    if (o.x < camX - 64 || o.x > camX + vw + 64 || o.y < camY - 64 || o.y > camY + vh + 96) continue;
+    list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * k, Math.round(o.y) - 23 * k, false, k]);
+  }
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -714,9 +723,14 @@ function draw() {
 }
 
 function drawPlayerName(camX, camY, z) {
-  const name = state.look.name.trim();
+  for (const o of net.others.values()) drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff");
+  drawNameTag(state.look.name, state.player.x, state.player.y, camX, camY, z, "#ffffff");
+}
+
+function drawNameTag(rawName, x, y, camX, camY, z, color) {
+  const name = rawName.trim();
   if (!name) return;
-  const pl = state.player;
+  const pl = { x, y };
   const fs = Math.round(8 * dpr);
   ctx.font = `${fs}px "Press Start 2P", monospace`;
   ctx.textBaseline = "middle";
@@ -724,7 +738,7 @@ function drawPlayerName(camX, camY, z) {
   const pad = 4 * dpr, w = ctx.measureText(name).width + pad * 2, h = fs + pad * 2;
   ctx.fillStyle = "rgba(11,13,31,.75)";
   ctx.fillRect(sx - w / 2, sy - h / 2, w, h);
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = color;
   ctx.fillText(name, sx - w / 2 + pad, sy + dpr);
 }
 
@@ -790,6 +804,7 @@ function applyLook() {
   state.sprites.hero = makeHeroSet(state.look);
   previewSprites = state.sprites.hero;
   saveLook();
+  net.sendLook();
   renderAvatarFields();
 }
 
@@ -856,7 +871,7 @@ function bindAvatarPanel() {
   document.getElementById("avatar-done").addEventListener("click", () => toggleAvatarPanel(false));
   avatarPanel.addEventListener("click", (e) => { if (e.target === avatarPanel) toggleAvatarPanel(false); });
   const nameInput = document.getElementById("avatar-name");
-  nameInput.addEventListener("input", () => { state.look.name = nameInput.value.slice(0, 16); saveLook(); });
+  nameInput.addEventListener("input", () => { state.look.name = nameInput.value.slice(0, 16); saveLook(); net.sendLook(); });
   nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === "Escape") toggleAvatarPanel(false); });
   document.getElementById("avatar-random").addEventListener("click", () => {
     const pick = (a) => a[(Math.random() * a.length) | 0];
@@ -869,8 +884,94 @@ function bindAvatarPanel() {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Multijugador: WebSocket cap al servidor de Cloudflare (sala única)
+const PROD_SERVER = "wss://sant-andreu-rpg.WORKERS_SUBDOMAIN.workers.dev/ws";
+function serverUrl() {
+  const q = new URLSearchParams(location.search).get("server");
+  if (q) return q;
+  if (["localhost", "127.0.0.1"].includes(location.hostname)) return `ws://${location.hostname}:8787/ws`;
+  return PROD_SERVER;
+}
+
+const net = {
+  ws: null, id: null, others: new Map(), connected: false, retry: 0,
+  sendT: 0, last: "", lookTimer: null,
+
+  connect() {
+    let ws;
+    try { ws = new WebSocket(serverUrl()); } catch { return this.reconnect(); }
+    this.ws = ws;
+    ws.onopen = () => { this.retry = 0; this.send({ t: "hello", look: state.look, ...this.pos() }); };
+    ws.onmessage = (e) => { try { this.onMessage(JSON.parse(e.data)); } catch { /* missatge invàlid */ } };
+    ws.onclose = () => {
+      this.connected = false; this.others.clear(); this.ws = null;
+      updateOnline();
+      this.reconnect();
+    };
+  },
+  reconnect() {
+    const wait = Math.min(30000, 1000 * 2 ** this.retry++);
+    setTimeout(() => this.connect(), wait);
+  },
+  send(m) { if (this.ws?.readyState === 1) this.ws.send(JSON.stringify(m)); },
+  pos() {
+    const pl = state.player;
+    return { x: Math.round(pl.x), y: Math.round(pl.y), dir: pl.dir, moving: pl.moving };
+  },
+  sendLook() {
+    clearTimeout(this.lookTimer);
+    this.lookTimer = setTimeout(() => this.send({ t: "look", look: state.look }), 300);
+  },
+  addOther(p) {
+    this.others.set(p.id, { ...p, tx: p.x, ty: p.y, anim: 0, frame: 0, sprites: makeHeroSet(p.look) });
+  },
+  onMessage(m) {
+    if (m.t === "welcome") {
+      this.id = m.id; this.connected = true; this.others.clear();
+      for (const p of m.players) this.addOther(p);
+    } else if (m.t === "join") {
+      this.addOther(m.p);
+    } else if (m.t === "leave") {
+      this.others.delete(m.id);
+    } else if (m.t === "move") {
+      const o = this.others.get(m.id);
+      if (o) Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving });
+    } else if (m.t === "look") {
+      const o = this.others.get(m.id);
+      if (o) { o.look = m.look; o.sprites = makeHeroSet(m.look); }
+    }
+    updateOnline();
+  },
+  update(dt) {
+    // Enviem la posició ~6 cops per segon mentre ens movem, i un cop quan parem
+    this.sendT -= dt;
+    if (this.sendT <= 0) {
+      this.sendT = 1 / 6;
+      const p = this.pos(), key = `${p.x},${p.y},${p.dir},${p.moving}`;
+      if (key !== this.last) { this.last = key; this.send({ t: "move", ...p }); }
+    }
+    // Interpolació suau dels altres avatars
+    const a = 1 - Math.pow(0.0001, dt);
+    for (const o of this.others.values()) {
+      const dist = Math.hypot(o.tx - o.x, o.ty - o.y);
+      if (dist > 400) { o.x = o.tx; o.y = o.ty; } // teletransport
+      else { o.x += (o.tx - o.x) * a; o.y += (o.ty - o.y) * a; }
+      if (o.moving || dist > 2) { o.anim += dt * 8; o.frame = Math.floor(o.anim) % 4; } else o.frame = 0;
+    }
+  },
+};
+
+function updateOnline() {
+  const el = document.getElementById("online");
+  el.classList.toggle("offline", !net.connected);
+  el.querySelector("span").textContent = net.connected
+    ? `${net.others.size + 1} connectat${net.others.size ? "s" : ""}`
+    : "Sense connexió";
+}
+
 // HUD
-const hud = document.getElementById("location");
+const hud = document.getElementById("location-text");
 let hudTimer = 0, lastHud = "";
 function updateHud(dt) {
   hudTimer -= dt;
@@ -1052,6 +1153,7 @@ async function main() {
   bindInput();
   bindAvatarPanel();
   bindTouchControls();
+  net.connect();
   document.getElementById("loading").classList.add("hidden");
   let last = performance.now();
   const loop = (now) => {
@@ -1061,6 +1163,7 @@ async function main() {
     draw();
     drawMinimap();
     updateHud(dt);
+    net.update(dt);
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);

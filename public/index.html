@@ -28,6 +28,10 @@
   #location .street { color: var(--accent); font-size: 12px; }
   #location .place { color: var(--text); }
   #location .meta { color: var(--muted); font-size: 8px; }
+  #online { display: flex; align-items: center; gap: 6px; font-size: 8px; color: #9fd3ff; margin-top: 2px; }
+  #online i { width: 7px; height: 7px; background: #4ade80; box-shadow: 0 0 0 1px #0b0d1f; }
+  #online.offline { color: var(--muted); }
+  #online.offline i { background: #6b7280; }
   #minimap-wrap { right: 16px; bottom: 34px; padding: 6px; }
   #minimap { display: block; image-rendering: pixelated; cursor: crosshair; }
   #minimap-wrap .title { font-size: 8px; color: var(--muted); margin-bottom: 4px; text-align: center; }
@@ -113,9 +117,8 @@
 <body>
 <canvas id="game"></canvas>
 <div id="location" class="panel">
-  <div class="street">…</div>
-  <div class="place"></div>
-  <div class="meta"></div>
+  <div id="location-text"><div class="street">…</div><div class="place"></div><div class="meta"></div></div>
+  <div id="online" class="offline"><i></i><span>Connectant…</span></div>
 </div>
 <div id="minimap-wrap" class="panel"><div class="title">SANT ANDREU DE PALOMAR</div><canvas id="minimap"></canvas></div>
 <div id="help" class="panel">

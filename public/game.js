@@ -286,7 +286,7 @@ function paintGround(p, id, v, r) {
   }
 }
 
-// Teulades de colors: cada tipus d'edifici té una paleta i cada edifici en tria un color
+// Colors de teulada i paret: cada tipus d'edifici té una paleta i cada edifici en tria un color
 const ROOF = [
   { colors: ["#c8483c", "#3f72c4", "#4f9e48", "#d1803a"], wall: ["#f3e6c4", "#eedcb2", "#f6edd6", "#e9d5a8"] }, // pisos
   { colors: ["#c8483c", "#b9542e", "#a8403a", "#d06a3a"], wall: ["#f3e6c4", "#efdcb4", "#f6edd6", "#ead6ac"] }, // cases
@@ -296,23 +296,6 @@ const ROOF = [
   { colors: ["#d1a23a", "#5aa05a", "#c0603a", "#4f8fc0"], wall: ["#f0e6cf", "#e8ddc2", "#f5eedc", "#e2d6b8"] }, // comerços
 ];
 const roofColor = (type, s) => hex(ROOF[type].colors[s]);
-
-// Teules grans en forma d'escata, en fileres decalades (8x8 px)
-function paintRoof(p, type, s, v, r) {
-  const c = roofColor(type, s);
-  const hi = shade(c, 30), lo = shade(c, -14), edge = shade(c, -40);
-  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
-    const row = y >> 3, yy = y % 8, sx = (x + (row % 2) * 4) % 8;
-    let col = yy >= 5 ? lo : c;
-    if (yy === 0 || (yy === 1 && sx > 1 && sx < 6)) col = hi;
-    if (yy === 7 || (yy >= 5 && (sx === 0 || sx === 7)) || (yy === 6 && (sx === 1 || sx === 6))) col = edge;
-    p.set(x, y, col);
-  }
-  if (v === 1 && type !== 3) { // xemeneia de pedra
-    p.rect(10, 2, 4, 6, hex("#b8ad98")); p.rect(10, 2, 4, 1, hex("#e2d8c2")); p.rect(11, 1, 2, 1, hex("#5a5048"));
-    p.rect(10, 7, 4, 1, hex("#7d7262"));
-  }
-}
 
 // Façana: guix amb biga de fusta, finestra amb travessers i test de flors, o porta de fusta
 function paintFacade(p, type, s, v, r) {
@@ -362,8 +345,7 @@ function getTile(kind, id, v, th = BASE_THEME) {
   if (kind === "g") { if (!theme.ground?.(p, id, v, r)) paintGround(p, id, v, r); }
   else {
     const b = id - BUILDING_BASE, type = (b / 4) | 0, s = b % 4;
-    if (kind === "r") (theme.roof || paintRoof)(p, type, s, v, r);
-    else (theme.facade || paintFacade)(p, type, s, v, r);
+    (theme.facade || paintFacade)(p, type, s, v, r); // les teulades es pinten a roofs.js
   }
   cv = p.toCanvas();
   tileCache.set(key, cv);
@@ -556,6 +538,15 @@ function renderChunk(cx, cy) {
   cv.width = cv.height = CHUNK * TS;
   const c = cv.getContext("2d");
   const x0 = cx * CHUNK, y0 = cy * CHUNK;
+  // 1a passada: teulades texturitzades píxel a píxel (roofs.js)
+  const img = c.createImageData(CHUNK * TS, CHUNK * TS);
+  for (let ty = y0; ty < y0 + CHUNK; ty++) for (let tx = x0; tx < x0 + CHUNK; tx++) {
+    if (tx >= state.W || ty >= state.H) continue;
+    const v = g(tx, ty) & 127;
+    if (v >= BUILDING_BASE && isBuilding(g(tx, ty + 1))) paintRoofTile(img.data, CHUNK * TS, (tx - x0) * TS, (ty - y0) * TS, tx, ty, v, sectorAt(tx, ty));
+  }
+  c.putImageData(img, 0, 0);
+  // 2a passada: terra, façanes, vores i ombres
   for (let ty = y0; ty < y0 + CHUNK; ty++) for (let tx = x0; tx < x0 + CHUNK; tx++) {
     if (tx >= state.W || ty >= state.H) continue;
     const raw = g(tx, ty), v = raw & 127, outside = raw & OUTSIDE;
@@ -570,7 +561,6 @@ function renderChunk(cx, cy) {
         if ((g(tx + 1, ty) & 127) !== v) c.fillRect(px + TS - 1, py, 1, TS);
         c.fillRect(px, py + TS - 1, TS, 1);
       } else {
-        c.drawImage(getTile("r", v, (hv % 23) === 0 ? 1 : 0, th), px, py);
         const up = g(tx, ty - 1), lf = g(tx - 1, ty), rt = g(tx + 1, ty);
         // Contorn fosc de cada teulada (com els RPG de 16 bits) i carener il·luminat a dalt
         c.fillStyle = theme.outline;

@@ -18,18 +18,6 @@ const heart = (p, x, y, col) => stamp(p, x, y, HEART_S, col);
 function rivets(p, col, hi) {
   for (const [x, y] of [[1, 1], [14, 1], [1, 14], [14, 14]]) { p.set(x, y, col); p.set(x - 1 < 0 ? x : x - 1, y - 1 < 0 ? y : y - 1, hi); }
 }
-// Teules en escata amb paleta pròpia
-function scaleRoof(p, c, rowH, w) {
-  const hi = shade(c, 30), lo = shade(c, -16), edge = shade(c, -44);
-  for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
-    const row = Math.floor(y / rowH), yy = y % rowH, sx = (x + (row % 2) * (w / 2)) % w;
-    let col = yy >= rowH - 3 ? lo : c;
-    if (yy === 0) col = hi;
-    if (yy === rowH - 1 || (yy >= rowH - 3 && (sx === 0 || sx === w - 1))) col = edge;
-    p.set(x, y, col);
-  }
-}
-
 // ---------------------------------------------------------------------------
 // 0 · Vila dels Bruixots (inspirat en Harry Potter): pedra fosca, pissarra lila, finestres ogivals
 const MAGIC = {
@@ -51,14 +39,6 @@ const MAGIC = {
     if (id === T.FOREST) { speckle(p, r, hex("#2a4a36"), [hex("#203a2a"), hex("#365c44")], 0.4); return true; }
     if (id === T.WATER) { speckle(p, r, hex("#2a3f6e"), [hex("#33508a")], 0.2); dots(p, r, 2, hex("#a8c8ff")); return true; }
     return false;
-  },
-  roof(p, type, s) {
-    const c = hex(["#4a3a6e", "#2e3a5e", "#2f4f5a", "#5e2a3a"][s]);
-    // pissarra en rombes
-    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
-      const d = (Math.abs((x % 8) - 3.5) + (y % 6)) % 6;
-      p.set(x, y, d < 1 ? shade(c, -35) : d < 2 ? shade(c, 20) : c);
-    }
   },
   facade(p, type, s, v, r) {
     const st = hex(["#6e6a74", "#77727c", "#66626c", "#7c7682"][s]);
@@ -107,17 +87,6 @@ const SHIRE = {
       return true;
     }
     return false;
-  },
-  roof(p, type, s, v, r) {
-    if (s % 2 === 0) { // teulada de gespa (casa-turó)
-      grassBase(p, r, hex("#6a9e3a"), 2);
-      return;
-    }
-    const c = hex(s === 1 ? "#c9a14a" : "#b88a3a"); // palla
-    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
-      const k = (x * 3 + y + (hash2(x, y >> 2) % 3)) % 4;
-      p.set(x, y, y % 5 === 4 ? shade(c, -30) : k === 0 ? shade(c, -14) : k === 2 ? shade(c, 14) : c);
-    }
   },
   facade(p, type, s, v, r) {
     if (s % 2 === 0) { // casa-turó amb porta rodona
@@ -194,20 +163,6 @@ const STEAM = {
     if (id === T.WATER) { speckle(p, r, hex("#4a5a3a"), [hex("#5a6a44"), hex("#3a4a30")], 0.3); return true; }
     return false;
   },
-  roof(p, type, s, v, r) {
-    if (s % 2 === 0) { // coure amb verdet
-      const c = hex(s === 0 ? "#4f9a8a" : "#3f8a7a");
-      speckle(p, r, c, [hex("#6abaa8"), hex("#b87333")], 0.2);
-      for (let x = 0; x < 16; x += 4) p.rect(x, 0, 1, 16, shade(c, -30));
-    } else { // xapa ondulada rovellada
-      const c = hex("#9a5a3a");
-      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, x % 3 === 0 ? shade(c, -25) : x % 3 === 1 ? shade(c, 15) : (r() < 0.15 ? hex("#7a3a22") : c));
-    }
-    if (v === 1) { // xemeneia amb fum
-      p.rect(9, 3, 4, 7, hex("#3a3430")); p.rect(9, 3, 4, 1, hex("#b87333"));
-      p.set(10, 1, hex("#c8c8c8")); p.set(11, 0, hex("#e0e0e0")); p.set(12, 1, hex("#a8a8a8"));
-    }
-  },
   facade(p, type, s, v, r) {
     const c = hex(["#5a4a3e", "#4e4038", "#62503f", "#544438"][s]);
     speckle(p, r, c, [shade(c, -8), shade(c, 8)], 0.2);
@@ -254,11 +209,6 @@ const KAWAII = {
     if (id === T.ROAD || id === T.ROAD_LINE || id === T.CROSSWALK || id === T.PARKING) { cobbles(p, r, hex("#c9b6e8")); return true; }
     if (id === T.WATER || id === T.POOL) { speckle(p, r, hex("#9ad8f0"), [hex("#b4e4f6")], 0.25); dots(p, r, 2, hex("#ffffff")); return true; }
     return false;
-  },
-  roof(p, type, s) {
-    const c = hex(["#f48fb1", "#8fd9c8", "#c39bd3", "#8ec5f0"][s]);
-    scaleRoof(p, c, 6, 6);
-    for (const [x, y] of [[3, 2], [10, 4], [6, 9], [13, 11]]) p.set(x, y, hex("#ffffff")); // pics blancs
   },
   facade(p, type, s, v, r) {
     const wall = hex(["#fff6fa", "#fffaf0", "#f6f9ff", "#fdf6ff"][s]);
@@ -315,10 +265,6 @@ const ROUTE = {
     }
     if (id === T.WATER) { p.fill(hex("#5898f8")); for (let x = 0; x < 16; x += 8) p.rect(x + (v * 3) % 8, 5 + v, 4, 1, hex("#a8d0ff")); return true; }
     return false;
-  },
-  roof(p, type, s) {
-    const c = hex(["#e04040", "#4070d0", "#40a060", "#f08030"][s]);
-    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) p.set(x, y, y % 4 === 3 ? shade(c, -40) : y % 4 === 0 ? shade(c, 25) : c);
   },
   facade(p, type, s, v) {
     p.fill(hex("#f8f0d8"));

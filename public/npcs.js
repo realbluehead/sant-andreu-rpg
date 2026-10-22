@@ -8,9 +8,17 @@ const NPC_CONFIG = {
   police: { count: 10, speed: 4.2, lane: 1.3, walkSteps: 40, seed: 1000 },  // tiles/s (~30 km/h)
   bike: { count: 24, speed: 2.6, lane: 0.6, walkSteps: 30, seed: 5000 },    // ~19 km/h
 };
-const MAX_HP = 100, HIT_DAMAGE = 5, HIT_COOLDOWN = 1.2;
+const MAX_HP = 100, HIT_COOLDOWN = 1.2;
+const DAMAGE = { bike: 5, police: 20, ultras: 25 };
+const HEAL_RADIUS = 2.5; // tiles al voltant d'una farmàcia
+const DEATH_TEXT = {
+  bike: "Un ciclista t'ha atropellat.<br>Compte amb els carrils bici!",
+  police: "Una moto de la policia t'ha atropellat.<br>Aparta't quan sentis les sirenes!",
+  ultras: "Els ultres de la UESA t'han passat per sobre.<br>Quan els vegis venir, fuig!",
+};
 
-const npcs = { list: [], sprites: null, hp: MAX_HP, invuln: 0, dead: false, floaters: [], flash: 0 };
+const npcs = { list: [], sprites: null, hp: MAX_HP, invuln: 0, dead: false, floaters: [], flash: 0, lastCause: "bike",
+  pharmacies: [], gangs: [] };
 
 // ---------------------------------------------------------------------------
 // Rutes sobre el graf de carrers
@@ -67,8 +75,10 @@ function makeRoute(G, r, walkSteps) {
 }
 
 function initNPCs(graph) {
+  npcs.pharmacies = (state.meta.pois || []).filter((p) => p.c === "pharmacy");
   if (!graph) return;
   npcs.sprites = makeNpcSprites();
+  initGangs(graph);
   for (const [kind, cfg] of Object.entries(NPC_CONFIG)) {
     const G = prepGraph(kind === "police" ? graph.car : graph.bike);
     if (!G.nodes.length) continue;
@@ -108,26 +118,57 @@ function updateNPCs(dt) {
   npcs.invuln = Math.max(0, npcs.invuln - dt);
   npcs.flash = Math.max(0, npcs.flash - dt);
   for (const f of npcs.floaters) f.t += dt;
-  npcs.floaters = npcs.floaters.filter((f) => f.t < 1);
-  if (!npcs.dead) checkHits();
+  npcs.floaters = npcs.floaters.filter((f) => f.t < 1.2);
+  updateGangs(t, dt);
+  if (!npcs.dead) { checkHits(); checkPharmacy(); }
 }
 
 function checkHits() {
   if (npcs.invuln > 0) return;
   const pl = state.player;
   for (const n of npcs.list) {
-    if (n.kind !== "bike") continue;
-    if (Math.abs(n.x - pl.x) < 10 && Math.abs(n.y - pl.y) < 9) {
-      hurtPlayer(HIT_DAMAGE, n);
+    const hw = n.kind === "police" ? 13 : 10; // la moto és més ampla
+    if (Math.abs(n.x - pl.x) < hw && Math.abs(n.y - pl.y) < 9) {
+      hurtPlayer(DAMAGE[n.kind], n, n.kind);
       return;
+    }
+  }
+  for (const g of npcs.gangs) {
+    if (!g.active) continue;
+    for (const m of g.members) {
+      if (Math.abs(m.x - pl.x) < 9 && Math.abs(m.y - pl.y) < 8) {
+        hurtPlayer(DAMAGE.ultras, m, "ultras");
+        return;
+      }
     }
   }
 }
 
-function hurtPlayer(dmg, by) {
+// A prop d'una farmàcia recuperes tota la vida
+function checkPharmacy() {
+  if (npcs.hp >= MAX_HP) return;
+  const tx = state.player.x / TS, ty = state.player.y / TS;
+  if (!npcs.pharmacies.some((p) => (p.x - tx) ** 2 + (p.y - ty) ** 2 < HEAL_RADIUS * HEAL_RADIUS)) return;
+  const gained = MAX_HP - npcs.hp;
+  npcs.hp = MAX_HP;
+  npcs.floaters.push({ text: `+${gained}`, t: 0, color: "#4ade80" });
+  updateHpUi();
+  showBanner("T'has recuperat!", "heal");
+}
+
+function showBanner(text, kind) {
+  const el = document.getElementById("banner");
+  el.textContent = text;
+  el.className = "show " + kind;
+  clearTimeout(showBanner.t);
+  showBanner.t = setTimeout(() => { el.className = ""; }, 2200);
+}
+
+function hurtPlayer(dmg, by, cause) {
   npcs.hp = Math.max(0, npcs.hp - dmg);
   npcs.invuln = HIT_COOLDOWN;
   npcs.flash = 0.35;
+  npcs.lastCause = cause;
   npcs.floaters.push({ text: `-${dmg}`, t: 0 });
   // empenta: ens aparta de la trajectòria del ciclista
   const pl = state.player;
@@ -147,6 +188,7 @@ function die() {
   npcs.dead = true;
   state.keys.clear();
   if (state.chatting) toggleChat(false);
+  document.getElementById("death-text").innerHTML = DEATH_TEXT[npcs.lastCause] || DEATH_TEXT.bike;
   document.getElementById("death").classList.remove("hidden");
   document.getElementById("revive-btn").focus();
 }
@@ -171,6 +213,7 @@ function updateHpUi() {
 // ---------------------------------------------------------------------------
 // Dibuix
 function pushNpcSprites(list, camX, camY, vw, vh, k) {
+  pushGangSprites(list, camX, camY, vw, vh, k);
   const flashOn = Math.floor(Date.now() / 250) % 2;
   for (const n of npcs.list) {
     if (n.x < camX - 64 || n.x > camX + vw + 64 || n.y < camY - 64 || n.y > camY + vh + 96) continue;
@@ -182,6 +225,7 @@ function pushNpcSprites(list, camX, camY, vw, vh, k) {
 }
 
 function drawNpcOverlay(camX, camY, z) {
+  drawGangOverlay(camX, camY, z);
   // "-5" que puja sobre l'avatar
   if (!npcs.floaters.length) return;
   const pl = state.player, fs = Math.round(10 * dpr);
@@ -190,15 +234,21 @@ function drawNpcOverlay(camX, camY, z) {
   ctx.textAlign = "center";
   for (const f of npcs.floaters) {
     const sx = (pl.x - camX) * z + 26 * dpr, sy = (pl.y - camY) * z - (HERO_SCREEN_SCALE * 16) * dpr - f.t * 30 * dpr;
-    ctx.globalAlpha = 1 - f.t;
+    ctx.globalAlpha = Math.max(0, 1 - f.t / 1.2);
     ctx.fillStyle = "#1a1420"; ctx.fillText(f.text, sx + 2 * dpr, sy + 2 * dpr);
-    ctx.fillStyle = "#ff4d4d"; ctx.fillText(f.text, sx, sy);
+    ctx.fillStyle = f.color || "#ff4d4d"; ctx.fillText(f.text, sx, sy);
   }
   ctx.globalAlpha = 1;
   ctx.textAlign = "left";
 }
 
 function drawNpcMinimap(c, scale) {
+  for (const g of npcs.gangs) {
+    if (!g.active) continue;
+    const blink = Math.floor(Date.now() / 200) % 2;
+    c.fillStyle = "#1a1420"; c.fillRect(g.cx / TS * scale - 3, g.cy / TS * scale - 3, 6, 6);
+    c.fillStyle = blink ? "#facc15" : "#dc2626"; c.fillRect(g.cx / TS * scale - 2, g.cy / TS * scale - 2, 4, 4);
+  }
   for (const n of npcs.list) {
     if (n.kind !== "police") continue;
     c.fillStyle = Math.floor(Date.now() / 300) % 2 ? "#3b82f6" : "#ef4444";
@@ -301,10 +351,108 @@ function makeNpcSprites() {
     for (const d of DIRS) set[d] = [makeCyclist(kit, d, 0), makeCyclist(kit, d, 1)];
     bike.push(set);
   }
-  return { police, bike };
+  return { police, bike, flag: [makeFlag(0), makeFlag(1)] };
 }
 
 function bindNpcUi() {
   document.getElementById("revive-btn").addEventListener("click", revive);
   updateHpUi();
+}
+
+// ---------------------------------------------------------------------------
+// Bandes d'ultres de la UESA (Unió Esportiva Sant Andreu): grups de 10 que apareixen
+// de tant en tant i recorren el barri cantant. Si et trepitgen perds 25 punts.
+// L'horari i la ruta depenen del rellotge, així tots els jugadors les veuen igual.
+const GANG = { slots: 2, cycle: 300, active: 150, size: 10, speed: 1.7, seed: 77000 };
+const GANG_CHANTS = ["UESA! UESA!", "Sant Andreu!!", "Groc i vermell!", "Oé, oé, oé!", "Som del Narcís Sala!", "Aquí manem nosaltres!"];
+
+function initGangs(graph) {
+  const G = prepGraph(graph.car);
+  if (!G.nodes.length) return;
+  for (let s = 0; s < GANG.slots; s++) {
+    const r = rng(GANG.seed + s * 131);
+    const members = [];
+    for (let i = 0; i < GANG.size; i++) {
+      const look = {
+        ...DEFAULT_LOOK, name: "",
+        skin: ["#ffe0bd", "#f1c27d", "#e0ac69", "#c68642", "#8d5524"][(r() * 5) | 0],
+        hair: ["#1c1414", "#4a2b1a", "#8b5a2b", "#d6a756"][(r() * 4) | 0],
+        hairStyle: ["short", "short", "bald", "long", "ponytail"][(r() * 5) | 0],
+        shirt: r() < 0.7 ? "#facc15" : "#dc2626", pants: ["#1f2a44", "#111111", "#5d6d7e"][(r() * 3) | 0],
+        shoes: "#111111", bottom: r() < 0.8 ? "pants" : "shorts",
+        extra: r() < 0.35 ? "cap" : "none", extraColor: "#dc2626",
+      };
+      if (look.shirt === "#facc15") look.stripe = "#dc2626"; // ratlles de la senyera
+      members.push({
+        sprites: makeHeroSet(look),
+        along: (r() - 0.5) * 5, across: (r() - 0.5) * 3, bob: r() * 10,
+        x: 0, y: 0, dir: "down", say: null,
+      });
+    }
+    npcs.gangs.push({ slot: s, G, members, active: false, window: -1, route: null, cx: 0, cy: 0, warned: -1 });
+  }
+}
+
+function updateGangs(t, dt) {
+  const pl = state.player;
+  for (const g of npcs.gangs) {
+    const off = g.slot * (GANG.cycle / GANG.slots);
+    const w = Math.floor((t + off) / GANG.cycle), lt = (t + off) - w * GANG.cycle;
+    g.active = lt < GANG.active;
+    if (!g.active) continue;
+    if (w !== g.window) { // nova aparició: nova ruta
+      g.window = w;
+      g.route = makeRoute(g.G, rng(GANG.seed + w * 7 + g.slot * 100003), 30);
+    }
+    const n = { route: g.route, speed: GANG.speed, phase: 0, lane: 0 };
+    const c = npcPos(n, lt);
+    g.cx = c.x * TS; g.cy = c.y * TS + TS / 2;
+    const dir = Math.abs(c.dx) > Math.abs(c.dy) ? (c.dx > 0 ? "right" : "left") : (c.dy > 0 ? "down" : "up");
+    for (const m of g.members) {
+      // posició dins del grup, orientada segons la direcció de la marxa
+      m.x = g.cx + (c.dx * m.along - c.dy * m.across) * TS;
+      m.y = g.cy + (c.dy * m.along + c.dx * m.across) * TS + Math.sin(t * 3 + m.bob) * 1.5;
+      m.dir = dir;
+      m.frame = Math.floor(t * 8 + m.bob) % 4;
+      if (m.say && (m.say.ttl -= dt) <= 0) m.say = null;
+      if (!m.say && Math.random() < dt * 0.05) m.say = { text: GANG_CHANTS[(Math.random() * GANG_CHANTS.length) | 0], ttl: 2.2 };
+    }
+    // avís quan una banda és a prop
+    if (g.warned !== w && Math.hypot(g.cx - pl.x, g.cy - pl.y) < 22 * TS) {
+      g.warned = w;
+      showBanner("Compte! Ultres de la UESA a prop!", "warn");
+    }
+  }
+}
+
+function pushGangSprites(list, camX, camY, vw, vh, k) {
+  for (const g of npcs.gangs) {
+    if (!g.active || g.cx < camX - 200 || g.cx > camX + vw + 200 || g.cy < camY - 200 || g.cy > camY + vh + 200) continue;
+    g.members.forEach((m, i) => {
+      list.push([m.y, m.sprites[m.dir][m.frame], Math.round(m.x) - 8 * k, Math.round(m.y) - 23 * k, false, k]);
+      if (i === 0) { // el primer porta la bandera
+        const fl = npcs.sprites.flag[Math.floor(Date.now() / 300) % 2];
+        list.push([m.y + 0.1, fl, Math.round(m.x) + 3 * k, Math.round(m.y) - 34 * k, false, k]);
+      }
+    });
+  }
+}
+
+function drawGangOverlay(camX, camY, z) {
+  for (const g of npcs.gangs) {
+    if (!g.active) continue;
+    for (const m of g.members) if (m.say) drawBubble(m.say, m.x, m.y, camX, camY, z);
+  }
+}
+
+// Bandera groga i vermella (senyera) que oneja
+function makeFlag(f) {
+  const p = new Pix(14, 26), Y = hex("#facc15"), R = hex("#dc2626"), pole = hex("#6b4426");
+  p.rect(0, 0, 1, 26, pole);
+  for (let y = 0; y < 9; y++) for (let x = 1; x < 14; x++) {
+    const wave = f ? (x % 4 < 2 ? 0 : 1) : (x % 4 < 2 ? 1 : 0);
+    p.set(x, y + wave, y % 2 ? R : Y);
+  }
+  p.outline(OUTLINE);
+  return p.toCanvas();
 }

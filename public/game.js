@@ -290,6 +290,12 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
   const pants = hex(look.pants), shoe = hex(look.shoes), eye = hex("#1b1b2a"), extra = hex(look.extraColor);
   const style = look.hairStyle;
   const lift = [0, 1, 0, 2][f];
+  // samarreta a ratlles verticals (p. ex. la de la UESA)
+  const stripes = () => {
+    if (!look.stripe) return;
+    const st = hex(look.stripe);
+    for (let i = 0; i < p.data.length; i++) if (p.data[i] === shirt && (i % p.w) % 2 === 1) p.data[i] = st;
+  };
   if (dir === "down" || dir === "up") {
     const ll = lift === 1 ? 1 : 0, rl = lift === 2 ? 1 : 0;
     // cames: amb pantalons, pantaló curt o faldilla es veu més o menys pell
@@ -339,6 +345,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
     p.set(10, 7, eye);
     if (look.extra === "glasses") { p.rect(9, 6, 3, 2, eye); p.set(10, 6, hex("#9fd3ff")); p.rect(6, 6, 3, 1, eye); }
     if (look.extra === "cap") { p.rect(4, 1, 8, 3, extra); p.rect(11, 4, 3, 1, shade(extra, -45)); }
+    stripes();
     if (dir === "left") { // mirall
       const q = new Pix(16, 24);
       for (let y = 0; y < 24; y++) for (let x = 0; x < 16; x++) q.set(15 - x, y, p.get(x, y));
@@ -346,6 +353,7 @@ function makeHero(dir, f, look = DEFAULT_LOOK) {
       return q.toCanvas();
     }
   }
+  stripes();
   p.outline(OUTLINE);
   return p.toCanvas();
 }

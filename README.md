@@ -52,7 +52,9 @@ Els bars, cafeteries, forns, farmàcies, restaurants, supermercats i altres come
 - **24 ciclistes** circulen pels carrils bici i els carrers tranquils.
 - **Gats i gossos** passegen per places, parcs, voreres i patis interiors; si t'hi acostes potser et diuen "Miau!" o "Guau!".
 - **Estols de coloms** picotegen a les places i alcen el vol quan t'hi acostes.
-- Comences amb **100 punts de vida**. Si un ciclista t'atropella, en perds 5 (amb un segon i mig de gràcia entre cops). A 0, has mort i pots ressuscitar a la Plaça d'Orfila.
+- De tant en tant apareixen **bandes de 10 ultres de la UESA** (Unió Esportiva Sant Andreu) amb samarretes grogues i vermelles i una senyera, que recorren el barri cantant. Quan n'hi ha una a prop surt un avís i al minimapa parpelleja en groc i vermell.
+- Comences amb **100 punts de vida**. Perds vida si t'atropella un ciclista (**-5**) o una moto de policia (**-20**), o si et trepitgen els ultres (**-25**), amb un segon i mig de gràcia entre cops. A 0, has mort i pots ressuscitar a la Plaça d'Orfila.
+- Si t'acostes a una **farmàcia**, recuperes tota la vida.
 
 Les rutes dels NPCs es generen a partir del graf de carrers d'OpenStreetMap (`graph` a `map.json`) amb una llavor fixa, i la posició depèn del rellotge: tots els jugadors veuen els mateixos NPCs al mateix lloc sense carregar el servidor.
 

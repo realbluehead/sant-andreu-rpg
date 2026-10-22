@@ -42,6 +42,14 @@
   body.hurt::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 6;
     box-shadow: inset 0 0 120px 30px rgba(239,68,68,.65); animation: hurt .45s ease-out forwards; }
   @keyframes hurt { from { opacity: 1; } to { opacity: 0; } }
+  #banner { position: fixed; left: 50%; top: 22%; transform: translate(-50%, -10px); z-index: 7; pointer-events: none;
+    font-size: 16px; padding: 12px 18px; border: 3px solid var(--panel-border); border-radius: 4px; background: var(--panel-bg);
+    box-shadow: 0 0 0 3px var(--panel-shadow), 4px 4px 0 3px rgba(0,0,0,.35); opacity: 0; transition: opacity .25s, transform .25s;
+    text-align: center; max-width: calc(100vw - 32px); }
+  #banner.show { opacity: 1; transform: translate(-50%, 0); }
+  #banner.heal { color: #4ade80; }
+  #banner.warn { color: #facc15; border-color: #dc2626; font-size: 12px; }
+  @media (max-width: 700px) { #banner { font-size: 12px; } #banner.warn { font-size: 9px; } }
   #death { position: fixed; inset: 0; z-index: 8; display: grid; place-items: center; background: rgba(40,4,12,.72); padding: 16px; }
   #death .panel { position: relative; text-align: center; padding: 22px 26px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
   #death h2 { margin: 0; font-size: 22px; font-weight: normal; color: #ff4d4d; text-shadow: 3px 3px 0 #0b0d1f; }
@@ -200,16 +208,17 @@
 <div id="death" class="hidden" role="alertdialog" aria-modal="true" aria-labelledby="death-title">
   <div class="panel">
     <h2 id="death-title">HAS MORT</h2>
-    <p>Un ciclista t'ha atropellat massa vegades.<br>Compte amb els carrils bici!</p>
+    <p id="death-text">Un ciclista t'ha atropellat.<br>Compte amb els carrils bici!</p>
     <button id="revive-btn" type="button">RESSUSCITAR</button>
   </div>
 </div>
+<div id="banner" role="status" aria-live="polite"></div>
 <div id="toast" class="panel hidden"></div>
 <div id="attribution">Dades © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL)</div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=12"></script>
-<script src="npcs.js?v=12"></script>
-<script src="pois.js?v=12"></script>
-<script src="animals.js?v=12"></script>
+<script src="game.js?v=13"></script>
+<script src="npcs.js?v=13"></script>
+<script src="pois.js?v=13"></script>
+<script src="animals.js?v=13"></script>
 </body>
 </html>

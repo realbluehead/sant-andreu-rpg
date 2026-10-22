@@ -42,6 +42,14 @@ Per regenerar el mapa després d'actualitzar `data/osm.json`:
 python3 build_map.py
 ```
 
+## NPCs i vida
+
+- **20 policies en moto** fan la ronda pels carrers del barri, amb les llums blaves i vermelles enceses.
+- **24 ciclistes** circulen pels carrils bici i els carrers tranquils.
+- Comences amb **100 punts de vida**. Si un ciclista t'atropella, en perds 5 (amb un segon i mig de gràcia entre cops). A 0, has mort i pots ressuscitar a la Plaça d'Orfila.
+
+Les rutes dels NPCs es generen a partir del graf de carrers d'OpenStreetMap (`graph` a `map.json`) amb una llavor fixa, i la posició depèn del rellotge: tots els jugadors veuen els mateixos NPCs al mateix lloc sense carregar el servidor.
+
 ## Multijugador
 
 Quan entres, el joc es connecta per WebSocket a un servidor de Cloudflare (Workers + Durable Objects, pla gratuït) i veus els altres avatars connectats, amb el seu nom i aspecte.

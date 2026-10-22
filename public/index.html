@@ -32,6 +32,23 @@
   #online i { width: 7px; height: 7px; background: #4ade80; box-shadow: 0 0 0 1px #0b0d1f; }
   #online.offline { color: var(--muted); }
   #online.offline i { background: #6b7280; }
+  #hp { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 8px; }
+  #hp .lbl { color: #ff8a8a; }
+  #hp .bar { flex: 1; min-width: 90px; max-width: 160px; height: 10px; background: #3a1420; border: 2px solid #0b0d1f; box-shadow: 0 0 0 1px #f4f1e8; }
+  #hp .bar i { display: block; height: 100%; width: 100%; background: #4ade80; box-shadow: inset 0 -3px 0 rgba(0,0,0,.25); transition: width .25s; }
+  #hp.low .bar i { background: #ef4444; animation: pulse .8s steps(2) infinite; }
+  #hp .val { color: var(--text); min-width: 56px; }
+  @keyframes pulse { 50% { opacity: .5; } }
+  body.hurt::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 6;
+    box-shadow: inset 0 0 120px 30px rgba(239,68,68,.65); animation: hurt .45s ease-out forwards; }
+  @keyframes hurt { from { opacity: 1; } to { opacity: 0; } }
+  #death { position: fixed; inset: 0; z-index: 8; display: grid; place-items: center; background: rgba(40,4,12,.72); padding: 16px; }
+  #death .panel { position: relative; text-align: center; padding: 22px 26px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+  #death h2 { margin: 0; font-size: 22px; font-weight: normal; color: #ff4d4d; text-shadow: 3px 3px 0 #0b0d1f; }
+  #death p { margin: 0; font-size: 9px; color: var(--muted); line-height: 1.8; }
+  #revive-btn { font: inherit; font-size: 11px; padding: 12px 16px; color: #1d2142; background: var(--accent);
+    border: 3px solid var(--panel-border); border-radius: 3px; cursor: pointer; box-shadow: inset -3px -3px 0 #c99a2a; }
+  #revive-btn:hover, #revive-btn:focus-visible { background: #ffe08a; outline: none; }
   #minimap-wrap { right: 16px; bottom: 34px; padding: 6px; }
   #minimap { display: block; image-rendering: pixelated; cursor: crosshair; }
   #minimap-wrap .title { font-size: 8px; color: var(--muted); margin-bottom: 4px; text-align: center; }
@@ -139,6 +156,7 @@
 <div id="location" class="panel">
   <div id="location-text"><div class="street">…</div><div class="place"></div><div class="meta"></div></div>
   <div id="online" class="offline"><i></i><span>Connectant…</span></div>
+  <div id="hp"><span class="lbl">VIDA</span><div class="bar"><i></i></div><span class="val">100/100</span></div>
 </div>
 <div id="minimap-wrap" class="panel"><div class="title">SANT ANDREU DE PALOMAR</div><canvas id="minimap"></canvas></div>
 <div id="help" class="panel">
@@ -179,9 +197,17 @@
   <input id="chat-input" maxlength="30" enterkeyhint="send" spellcheck="false" placeholder="Escriu un missatge…">
   <span id="chat-count">0/30</span>
 </form>
+<div id="death" class="hidden" role="alertdialog" aria-modal="true" aria-labelledby="death-title">
+  <div class="panel">
+    <h2 id="death-title">HAS MORT</h2>
+    <p>Un ciclista t'ha atropellat massa vegades.<br>Compte amb els carrils bici!</p>
+    <button id="revive-btn" type="button">RESSUSCITAR</button>
+  </div>
+</div>
 <div id="toast" class="panel hidden"></div>
 <div id="attribution">Dades © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL)</div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=8"></script>
+<script src="game.js?v=9"></script>
+<script src="npcs.js?v=9"></script>
 </body>
 </html>

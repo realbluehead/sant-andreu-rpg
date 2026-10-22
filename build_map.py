@@ -414,6 +414,83 @@ for el in els:
     places.append({"name": name, "kind": kind, "x": round(x, 1), "y": round(y, 1)})
 print(f"  {len(places)} llocs amb nom")
 
+# --- 8. Xarxa viària per als NPCs ----------------------------------------
+# Graf de cruïlles (dins del barri) on cada aresta porta la seva polilínia.
+CAR_NET = {"residential", "unclassified", "tertiary", "secondary", "primary", "trunk", "living_street",
+           "tertiary_link", "secondary_link", "primary_link", "trunk_link"}
+BIKE_NET = {"cycleway", "residential", "living_street", "pedestrian", "unclassified", "tertiary"}
+
+
+def build_graph(kinds):
+    coords, adj = {}, {}
+    for el in els:
+        t = el.get("tags", {})
+        if el["type"] != "way" or t.get("highway") not in kinds or is_underground(t) or t.get("area") == "yes":
+            continue
+        ids, geo = el.get("nodes", []), el.get("geometry", [])
+        if len(ids) != len(geo) or len(ids) < 2:
+            continue
+        for nid, g in zip(ids, geo):
+            coords[nid] = proj(g["lat"], g["lon"])
+        for a_, b_ in zip(ids, ids[1:]):
+            if a_ != b_:
+                adj.setdefault(a_, set()).add(b_)
+                adj.setdefault(b_, set()).add(a_)
+
+    def ok(n):
+        x, y = coords[n]
+        return 0 <= x < WIDTH and 0 <= y < HEIGHT and inside[int(y) * WIDTH + int(x)]
+    adj = {n: {m for m in nb if ok(m)} for n, nb in adj.items() if ok(n)}
+    adj = {n: nb for n, nb in adj.items() if nb}
+    # component connex més gran
+    seen, best = set(), set()
+    for n in sorted(adj):
+        if n in seen:
+            continue
+        comp, stack = set(), [n]
+        while stack:
+            c = stack.pop()
+            if c in comp:
+                continue
+            comp.add(c)
+            stack.extend(adj[c] - comp)
+        seen |= comp
+        if len(comp) > len(best):
+            best = comp
+    adj = {n: adj[n] & best for n in best}
+    # comprimeix les cadenes de grau 2 en arestes entre cruïlles
+    junctions = sorted(n for n, nb in adj.items() if len(nb) != 2)
+    if not junctions:
+        return {"nodes": [], "edges": []}
+    index = {n: i for i, n in enumerate(junctions)}
+    edges, used = [], set()
+    for j in junctions:
+        for nb in sorted(adj[j]):
+            if (j, nb) in used:
+                continue
+            path, prev, cur = [j], j, nb
+            while cur not in index:
+                path.append(cur)
+                nxt = [m for m in adj[cur] if m != prev]
+                if not nxt:
+                    break
+                prev, cur = cur, nxt[0]
+            path.append(cur)
+            if cur not in index:
+                continue
+            for u, v in zip(path, path[1:]):
+                used.add((u, v)); used.add((v, u))
+            line = [[round(coords[n][0], 1), round(coords[n][1], 1)] for n in path]
+            if index[j] != index[cur] or len(line) > 2:
+                edges.append([index[j], index[cur], line])
+    nodes = [[round(coords[n][0], 1), round(coords[n][1], 1)] for n in junctions]
+    return {"nodes": nodes, "edges": edges}
+
+
+graph = {"car": build_graph(CAR_NET), "bike": build_graph(BIKE_NET)}
+for k, gph in graph.items():
+    print(f"  xarxa {k}: {len(gph['nodes'])} cruïlles, {len(gph['edges'])} trams")
+
 # --- Sortida -------------------------------------------------------------
 os.makedirs(OUT, exist_ok=True)
 header = struct.pack("<4sHH", b"SAPM", WIDTH, HEIGHT)
@@ -427,7 +504,7 @@ json.dump({
     "width": WIDTH, "height": HEIGHT, "metersPerTile": M_PER_TILE,
     "bbox": [S, W, N, E], "start": [round(start[0], 1), round(start[1], 1)],
     "boundary": [[[round(x, 1), round(y, 1)] for x, y in r] for r in boundary],
-    "streets": list(streets.values()), "places": places,
+    "streets": list(streets.values()), "places": places, "graph": graph,
     "attribution": "© OpenStreetMap contributors (ODbL)",
 }, open(os.path.join(OUT, "map.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 print("Fet:", os.path.getsize(os.path.join(OUT, "map.bin")), "bytes map.bin,",

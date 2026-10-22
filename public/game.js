@@ -1,6 +1,7 @@
 // Sant Andreu RPG — mapa pixel art de Sant Andreu de Palomar fet amb dades d'OpenStreetMap.
 "use strict";
 
+const DATA_VERSION = 2;  // augmenta-ho quan es regenerin map.bin / map.json
 const TS = 16;          // píxels per tile
 const CHUNK = 32;       // tiles per chunk
 const CHUNK_CACHE = 70;
@@ -585,6 +586,7 @@ function drawMinimap() {
     mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(ox - 2.5, oy - 2.5, 5, 5);
     mmCtx.fillStyle = "#5fb3ff"; mmCtx.fillRect(ox - 1.5, oy - 1.5, 3, 3);
   }
+  drawNpcMinimap(mmCtx, mmScale);
   mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(px - 3, py - 3, 6, 6);
   mmCtx.fillStyle = "#ff4d4d"; mmCtx.fillRect(px - 2, py - 2, 4, 4);
 }
@@ -615,7 +617,8 @@ function collides(x, y) {
 }
 
 function update(dt) {
-  const k = state.editing || state.chatting ? new Set() : state.keys, pl = state.player;
+  const frozen = state.editing || state.chatting || npcs.dead;
+  const k = frozen ? new Set() : state.keys, pl = state.player;
   let dx = 0, dy = 0;
   if (k.has("ArrowLeft") || k.has("KeyA")) dx -= 1;
   if (k.has("ArrowRight") || k.has("KeyD")) dx += 1;
@@ -624,7 +627,7 @@ function update(dt) {
   if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
   // joystick tàctil (analògic)
   const joy = state.joy;
-  if (!state.editing && !state.chatting && joy.active && Math.hypot(joy.x, joy.y) > 0.2) { dx = joy.x; dy = joy.y; }
+  if (!frozen && joy.active && Math.hypot(joy.x, joy.y) > 0.2) { dx = joy.x; dy = joy.y; }
   pl.moving = dx !== 0 || dy !== 0;
   if (pl.moving) {
     state.follow = true;
@@ -704,6 +707,7 @@ function draw() {
     if (o.x < camX - 64 || o.x > camX + vw + 64 || o.y < camY - 64 || o.y > camY + vh + 96) continue;
     list.push([o.y, o.sprites[o.dir][o.frame], Math.round(o.x) - 8 * k, Math.round(o.y) - 23 * k, false, k]);
   }
+  pushNpcSprites(list, camX, camY, vw, vh, k);
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero] of list) {
     const s = hero || 1;
@@ -720,6 +724,7 @@ function draw() {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (state.showLabels) drawLabels(camX, camY, z);
   drawPlayerName(camX, camY, z);
+  drawNpcOverlay(camX, camY, z);
 }
 
 function drawPlayerName(camX, camY, z) {
@@ -1159,6 +1164,7 @@ function bindInput() {
   addEventListener("keydown", (e) => {
     // Als camps de text (xat, nom) les tecles han de funcionar normalment, espai inclòs
     if (e.target instanceof HTMLInputElement) return;
+    if (npcs.dead) return; // a la pantalla de mort només compta el botó de ressuscitar
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
     if (e.code === "Escape" && state.editing) { toggleAvatarPanel(false); return; }
     if (e.code === "KeyP" && !e.repeat) { toggleAvatarPanel(); return; }
@@ -1210,8 +1216,8 @@ function bindInput() {
 
 async function loadMap() {
   const [bin, meta] = await Promise.all([
-    fetch("map.bin").then((r) => r.body.pipeThrough(new DecompressionStream("deflate"))).then((s) => new Response(s).arrayBuffer()),
-    fetch("map.json").then((r) => r.json()),
+    fetch("map.bin?v=" + DATA_VERSION).then((r) => r.body.pipeThrough(new DecompressionStream("deflate"))).then((s) => new Response(s).arrayBuffer()),
+    fetch("map.json?v=" + DATA_VERSION).then((r) => r.json()),
   ]);
   const dv = new DataView(bin);
   const W = dv.getUint16(4, true), H = dv.getUint16(6, true);
@@ -1241,6 +1247,8 @@ async function main() {
   bindAvatarPanel();
   bindTouchControls();
   bindChat();
+  initNPCs(state.meta.graph);
+  bindNpcUi();
   net.connect();
   document.getElementById("loading").classList.add("hidden");
   let last = performance.now();
@@ -1249,6 +1257,7 @@ async function main() {
     last = now;
     if (canvas.width !== Math.floor(innerWidth * (window.devicePixelRatio || 1))) resize();
     update(dt);
+    updateNPCs(dt);
     tickBubbles(dt);
     draw();
     drawMinimap();

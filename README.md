@@ -67,7 +67,28 @@ Cada zona té la seva música de fons, una composició original en estil chiptun
 
 - `data/osm.json` — dades d'OpenStreetMap descarregades amb l'API d'Overpass (edificis, vies, usos del sòl, arbres, llocs).
 - `build_map.py` — rasteritza les dades en una graella de tiles de 2 m (`public/map.bin`) i exporta carrers, llocs i el límit del barri (`public/map.json`). Només fa servir la biblioteca estàndard de Python.
-- `public/game.js` — motor del joc en canvas: tiles i sprites pixel art generats per codi en estil de poble RPG (gespa, camins de terra, empedrat, teulades de colors, cases amb bigues de fusta…), càmera, col·lisions, rètols, minimapa i editor d'avatar.
+- `public/` — el joc, en JavaScript sense dependències ni compilació (scripts clàssics que comparteixen l'àmbit global, en l'ordre d'`index.html`):
+  - `core.js` — configuració, constants, utilitats (`Pix`, `rng`, `store`, `inView`), estat del joc, col·lisions i el **registre de sistemes**.
+  - `tiles.js`, `roofs.js`, `sprites.js`, `themes.js` — tiles, teulades, personatges i estils de cada zona, tot generat per codi.
+  - `game.js` — mapa en chunks, rètols, minimapa, moviment, dibuix de cada fotograma i arrencada (`main`).
+  - `net.js`, `chat.js`, `avatar.js`, `hud.js`, `input.js` — multijugador, xat, panell OPCIONS, HUD i controls (teclat, ratolí i tàctils).
+  - Un fitxer per sistema: `world.js` (rellotge, clima, camions), `npcs.js`, `pois.js`, `animals.js`, `coins.js`, `thieves.js`, `spooky.js`, `bicing.js`, `interior.js`, `drinks.js`, `music.js`, `fog.js`, a més de `title.js` i `intro.js`.
+
+### Afegir un sistema nou
+
+Crea `public/elmeu.js`, afegeix-lo a `index.html` abans de `title.js` i registra'l amb els ganxos que necessiti (tots són opcionals; la llista completa és a `core.js`):
+
+```js
+addSystem({
+  init: initElMeu,          // en arrencar
+  update: updateElMeu,      // cada fotograma al carrer (dt)
+  sprites: pushElMeuSprites, // sprites ordenats per profunditat
+  overlay: drawElMeuTexts,  // textos per sobre dels rètols
+  minimap: drawElMeuMinimap,
+});
+```
+
+Si té paràmetres configurables, afegeix-los a `admin/schema.json` (amb el valor per defecte) i a `public/config.json`: el joc els llegeix a `CFG`.
 
 Per regenerar el mapa després d'actualitzar `data/osm.json`:
 

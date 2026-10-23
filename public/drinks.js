@@ -6,16 +6,13 @@
 const DRUNK_KEY = "santandreu-rpg-drunk";
 // Màxim, pujada per cervesa, baixada per cafè i preu: CFG.drinks (config.json)
 
-const drink = { level: loadDrunk(), bars: [], cafes: [] };
+const drink = { level: 0, bars: [], cafes: [] };
 
-function loadDrunk() {
-  try { return Math.max(0, Math.min(CFG.drinks.maxLevel, parseInt(localStorage.getItem(DRUNK_KEY) || "0", 10) || 0)); } catch { return 0; }
-}
-function saveDrunk() {
-  try { localStorage.setItem(DRUNK_KEY, String(drink.level)); } catch { /* sense emmagatzematge */ }
-}
+function loadDrunk() { return Math.max(0, Math.min(CFG.drinks.maxLevel, parseInt(store.get(DRUNK_KEY) || "0", 10) || 0)); }
+function saveDrunk() { store.set(DRUNK_KEY, String(drink.level)); }
 
 function initDrinks() {
+  drink.level = loadDrunk();
   const pois = state.meta.pois || [];
   drink.bars = pois.filter((p) => p.c === "beer");
   drink.cafes = pois.filter((p) => p.c === "coffee");
@@ -70,3 +67,5 @@ function updateDrunkUi(bump) {
   el.classList.toggle("high", drink.level >= CFG.drinks.maxLevel * 0.6);
   if (bump) { el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
 }
+
+addSystem({ init: initDrinks });

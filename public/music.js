@@ -100,12 +100,8 @@ const octave = (n, d) => n.replace(/\d/, (o) => String(Number(o) + d));
 const music = { ctx: null, master: null, on: loadMusicPref(), started: false, step: 0, next: 0, timer: null,
   waves: {}, noise: null, song: SONGS[2], theme: 2 };
 
-function loadMusicPref() {
-  try { return localStorage.getItem(MUSIC_KEY) !== "off"; } catch { return true; }
-}
-function saveMusicPref() {
-  try { localStorage.setItem(MUSIC_KEY, music.on ? "on" : "off"); } catch { /* sense emmagatzematge */ }
-}
+function loadMusicPref() { return store.get(MUSIC_KEY) !== "off"; }
+function saveMusicPref() { store.set(MUSIC_KEY, music.on ? "on" : "off"); }
 
 // Ona quadrada amb cicle de treball variable (12,5 %, 25 %, 50 %), com els canals de pols de la NES
 function pulseWave(ctx, duty) {
@@ -269,3 +265,5 @@ function initMusic() {
     else if (music.on && music.started) music.ctx.resume();
   });
 }
+
+addSystem({ init: initMusic });

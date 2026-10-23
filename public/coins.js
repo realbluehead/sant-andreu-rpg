@@ -15,14 +15,10 @@ const DROP_FLY = 0.45;    // s que triguen a caure
 const coins = { list: new Map(), pending: new Map(), wallet: loadNum(COIN_KEY), bank: loadNum(BANK_KEY),
   sprites: null, nearest: null, banks: [], dropped: [] };
 
-function loadNum(key) {
-  try { return Math.max(0, parseInt(localStorage.getItem(key) || "0", 10) || 0); } catch { return 0; }
-}
+function loadNum(key) { return Math.max(0, parseInt(store.get(key) || "0", 10) || 0); }
 function saveMoney() {
-  try {
-    localStorage.setItem(COIN_KEY, String(coins.wallet));
-    localStorage.setItem(BANK_KEY, String(coins.bank));
-  } catch { /* sense emmagatzematge */ }
+  store.set(COIN_KEY, String(coins.wallet));
+  store.set(BANK_KEY, String(coins.bank));
 }
 
 function initCoins() {
@@ -142,7 +138,7 @@ function pushCoinSprites(list, camX, camY, vw, vh, k) {
   const now = Date.now(), s = k * 0.8;
   for (const c of coins.list.values()) {
     const x = c.x * TS, y = c.y * TS;
-    if (x < camX - 40 || x > camX + vw + 40 || y < camY - 40 || y > camY + vh + 40) continue;
+    if (!inView(x, y, camX, camY, vw, vh, 40, 40)) continue;
     const img = coins.sprites[Math.floor(now / 140 + c.id) % 4];
     const bob = Math.sin(now / 300 + c.id) * 2;
     list.push([y, img, Math.round(x - (img.width / 2) * s), Math.round(y - (img.height + 2) * s + bob), false, s]);
@@ -152,7 +148,7 @@ function pushCoinSprites(list, camX, camY, vw, vh, k) {
     const f = Math.min(1, d.t / DROP_FLY);
     const x = (d.x0 + (d.x - d.x0) * f) * TS, y = (d.y0 + (d.y - d.y0) * f) * TS;
     const hop = Math.sin(f * Math.PI) * 26;                 // arc en sortir volant
-    if (x < camX - 40 || x > camX + vw + 40 || y < camY - 60 || y > camY + vh + 40) continue;
+    if (!inView(x, y, camX, camY, vw, vh, 60, 40)) continue;
     const img = coins.sprites[Math.floor(now / 90 + d.id) % 4];
     list.push([y, img, Math.round(x - (img.width / 2) * s), Math.round(y - (img.height + 2) * s - hop), false, s]);
   }
@@ -223,3 +219,5 @@ function makeCoinFrame(f) {
   p.outline(OUTLINE);
   return p.toCanvas();
 }
+
+addSystem({ init: initCoins, update: updateCoins, sprites: pushCoinSprites, heroScale: true, top: drawTreasurePointer });

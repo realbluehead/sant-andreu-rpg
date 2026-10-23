@@ -22,7 +22,7 @@ const INTRO_ITEMS = (touch) => [
 const intro = { open: false, t0: 0 };
 
 function showIntroOnce() {
-  if (lsGet(INTRO_KEY)) return;
+  if (store.get(INTRO_KEY)) return;
   const touch = document.body.classList.contains("touch");
   document.getElementById("intro-list").innerHTML =
     INTRO_ITEMS(touch).map(([icon, text]) => `<li><span>${icon}</span><span>${text}</span></li>`).join("");
@@ -36,7 +36,7 @@ function closeIntro() {
   intro.open = false;
   state.onTitle = false;
   document.getElementById("intro").classList.add("hidden");
-  lsSet(INTRO_KEY, "1");
+  store.set(INTRO_KEY, "1");
 }
 
 document.getElementById("intro-ok").addEventListener("click", closeIntro);

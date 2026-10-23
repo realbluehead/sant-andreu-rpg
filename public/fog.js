@@ -15,12 +15,12 @@ function initFog() {
   fog.w = Math.ceil(state.W / FOG_CELL); fog.h = Math.ceil(state.H / FOG_CELL);
   fog.bits = new Uint8Array(Math.ceil((fog.w * fog.h) / 8));
   try { // explorat anteriorment
-    const saved = localStorage.getItem(FOG_KEY);
+    const saved = store.get(FOG_KEY);
     if (saved) {
       const raw = atob(saved);
       if (raw.length === fog.bits.length) for (let i = 0; i < raw.length; i++) fog.bits[i] = raw.charCodeAt(i);
     }
-  } catch { /* sense emmagatzematge o dades antigues */ }
+  } catch { /* dades antigues o malmeses */ }
   fog.cv = document.createElement("canvas");
   fog.cv.width = fog.w; fog.cv.height = fog.h;
   fog.ctx = fog.cv.getContext("2d");
@@ -70,7 +70,7 @@ function saveFog() {
   fog.dirty = false;
   let s = "";
   for (let i = 0; i < fog.bits.length; i++) s += String.fromCharCode(fog.bits[i]);
-  try { localStorage.setItem(FOG_KEY, btoa(s)); } catch { /* sense emmagatzematge */ }
+  store.set(FOG_KEY, btoa(s));
 }
 
 // Boira sobre el mapa (es crida amb la transformació del món activa); la vora queda suau
@@ -101,3 +101,5 @@ function resetFog() {
   updateFog(0);
   saveFog();
 }
+
+addSystem({ init: initFog, update: updateFog, veil: drawFog, minimap: drawFogMinimap });

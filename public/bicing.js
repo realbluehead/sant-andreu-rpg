@@ -56,7 +56,7 @@ function pushBicingSprites(list, camX, camY, vw, vh, k) {
   const img = bicing.dock;
   for (const s of bicing.stations) {
     const x = s.x * TS, y = s.y * TS + 12;
-    if (x < camX - 60 || x > camX + vw + 60 || y < camY - 40 || y > camY + vh + 60) continue;
+    if (!inView(x, y, camX, camY, vw, vh, 60, 60)) continue;
     list.push([y, img, Math.round(x - (img.width / 2) * k), Math.round(y - (img.height - 1) * k), false, 0]);
   }
 }
@@ -110,3 +110,5 @@ function makeRider(look, dir, f) {
   else { c.drawImage(body, 3, 0); drawParts(); }
   return cv;
 }
+
+addSystem({ init: initBicing, update: updateBicing, sprites: pushBicingSprites });

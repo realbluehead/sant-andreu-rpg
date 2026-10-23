@@ -135,7 +135,7 @@ function updateAnimals(dt) {
 function pushAnimalSprites(list, camX, camY, vw, vh, k) {
   const S = animals.sprites, now = Date.now();
   for (const a of animals.list) {
-    if (a.x < camX - 80 || a.x > camX + vw + 80 || a.y < camY - 80 || a.y > camY + vh + 80) continue;
+    if (!inView(a.x, a.y, camX, camY, vw, vh, 80, 80)) continue;
     let img, dx = 0, dy = 0;
     if (a.kind === "pigeon") {
       if (a.fly > 0) {
@@ -255,3 +255,5 @@ function makeAnimalSprites() {
     })),
   };
 }
+
+addSystem({ init: initAnimals, update: updateAnimals, sprites: pushAnimalSprites, overlay: drawAnimalBubbles });

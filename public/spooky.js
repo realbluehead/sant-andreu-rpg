@@ -120,11 +120,11 @@ function updateSpooky(dt) {
 function pushSpookySprites(list, camX, camY, vw, vh, k) {
   const now = Date.now();
   for (const z of spooky.zombies) {
-    if (!z.active || z.x < camX - 60 || z.x > camX + vw + 60 || z.y < camY - 60 || z.y > camY + vh + 100) continue;
+    if (!z.active || !inView(z.x, z.y, camX, camY, vw, vh, 60, 100)) continue;
     list.push([z.y, z.sprites[z.dir][z.frame], Math.round(z.x) - 8 * k, Math.round(z.y) - 23 * k, false, k]);
   }
   for (const g of spooky.ghosts) {
-    if (!g.active || g.x < camX - 60 || g.x > camX + vw + 60 || g.y < camY - 60 || g.y > camY + vh + 100) continue;
+    if (!g.active || !inView(g.x, g.y, camX, camY, vw, vh, 60, 100)) continue;
     const img = spooky.sprites.ghost[Math.floor(now / 300 + g.ph) % 2];
     const bob = Math.sin(now / 400 + g.ph) * 3;
     // els fantasmes suren: es dibuixen per sobre de tot el que tenen a prop
@@ -151,3 +151,5 @@ function makeGhost(f) {
   p.outline([60, 70, 120, 160]);
   return p.toCanvas();
 }
+
+addSystem({ init: initSpooky, update: updateSpooky, sprites: pushSpookySprites, overlay: drawSpookyOverlay });

@@ -354,3 +354,5 @@ function updateZone() {
   document.getElementById("banner").style.setProperty("--zone", t.color);
   applyMusic();
 }
+
+addSystem({ update: updateZone });

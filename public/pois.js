@@ -245,7 +245,7 @@ function pushPoiSprites(list, camX, camY, vw, vh, k) {
   const s = k * 0.85;
   for (const p of state.meta.pois) {
     const x = p.x * TS, y = p.y * TS;
-    if (x < camX - 40 || x > camX + vw + 40 || y < camY - 10 || y > camY + vh + 60) continue;
+    if (!inView(x, y, camX, camY, vw, vh, 40, 60)) continue;
     const icons = poiIcons[sectorAt(Math.floor(p.x), Math.floor(p.y))];
     const img = icons[p.c] || icons.shop;
     list.push([y, img, Math.round(x - (img.width / 2) * s), Math.round(y - (img.height - 1) * s), false, s]);
@@ -297,3 +297,5 @@ function shadeCss(h) {
   const c = shade(hex(h), 60);
   return `rgb(${c[0]},${c[1]},${c[2]})`;
 }
+
+addSystem({ init: initPois, sprites: pushPoiSprites, heroScale: true, overlay: drawPoiNames });

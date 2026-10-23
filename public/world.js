@@ -202,17 +202,17 @@ function updateClockHud() {
 function pushWorldSprites(list, camX, camY, vw, vh, k) {
   const S = world.sprites, now = Date.now(), flash = Math.floor(now / 250) % 2;
   for (const tr of world.trucks) {
-    if (!tr.active || tr.x < camX - 80 || tr.x > camX + vw + 80 || tr.y < camY - 80 || tr.y > camY + vh + 80) continue;
+    if (!tr.active || !inView(tr.x, tr.y, camX, camY, vw, vh, 80, 80)) continue;
     const img = S.truck[tr.dir][flash], ks = k * TRUCK_SCALE;
     list.push([tr.y, img, Math.round(tr.x - (img.width / 2) * ks), Math.round(tr.y - (img.height - 1) * ks), true, ks]);
   }
   for (const b of world.bags) {
-    if (b.x < camX - 20 || b.x > camX + vw + 20 || b.y < camY - 20 || b.y > camY + vh + 30) continue;
+    if (!inView(b.x, b.y, camX, camY, vw, vh, 20, 30)) continue;
     const img = S.bags[b.v];
     list.push([b.y, img, Math.round(b.x - (img.width / 2) * k), Math.round(b.y - (img.height - 1) * k), false, k]);
   }
   for (const j of world.fountainJets) {
-    if (j.x < camX - 30 || j.x > camX + vw + 30 || j.y < camY - 40 || j.y > camY + vh + 30) continue;
+    if (!inView(j.x, j.y, camX, camY, vw, vh, 40, 30)) continue;
     const img = S.jet[(Math.floor(now / 140) + j.ph) % 4], kj = k * 1.6; // brolladors ben visibles
     list.push([j.y, img, Math.round(j.x - (img.width / 2) * kj), Math.round(j.y - (img.height - 1) * kj), false, kj]);
   }
@@ -271,7 +271,7 @@ function drawLighting(camX, camY, z, vw, vh) {
     }
     for (const p of state.meta.pois || []) { // rètols il·luminats
       const x = p.x * TS, y = p.y * TS;
-      if (x > camX - 20 && x < camX + vw + 20 && y > camY - 20 && y < camY + vh + 40) lights.push([x, y - 8, 22 * on]);
+      if (inView(x, y, camX, camY, vw, vh, 20, 40)) lights.push([x, y - 8, 22 * on]);
     }
   }
   // el jugador porta un fanalet
@@ -406,3 +406,6 @@ function makeJet(f) {
   p.rect(2, 23, 8, 2, w2); p.set(1, 22 + (f % 2), w); p.set(10, 23 - (f % 2), w); // esquitx a baix
   return p.toCanvas();
 }
+
+addSystem({ init: initWorld, update: updateWorld, updateIndoors: updateWorld, ground: drawWaterShimmer, sprites: pushWorldSprites,
+  light: (camX, camY, z, vw, vh) => { drawLighting(camX, camY, z, vw, vh); drawWeather(); } });

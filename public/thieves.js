@@ -184,7 +184,7 @@ function rob(t) {
 
 function pushThiefSprites(list, camX, camY, vw, vh, k) {
   for (const t of thieves.list) {
-    if (!t.active || t.x < camX - 60 || t.x > camX + vw + 60 || t.y < camY - 60 || t.y > camY + vh + 100) continue;
+    if (!t.active || !inView(t.x, t.y, camX, camY, vw, vh, 60, 100)) continue;
     list.push([t.y, t.sprites[t.dir][t.frame], Math.round(t.x) - 8 * k, Math.round(t.y) - 23 * k, false, k]);
   }
 }
@@ -192,3 +192,5 @@ function pushThiefSprites(list, camX, camY, vw, vh, k) {
 function drawThiefOverlay(camX, camY, z) {
   for (const t of thieves.list) if (t.active && t.say) drawBubble(t.say, t.x, t.y, camX, camY, z, 14 * z);
 }
+
+addSystem({ init: initThieves, update: updateThieves, sprites: pushThiefSprites, overlay: drawThiefOverlay });

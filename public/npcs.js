@@ -221,7 +221,7 @@ function pushNpcSprites(list, camX, camY, vw, vh, k) {
   pushGangSprites(list, camX, camY, vw, vh, k);
   const flashOn = Math.floor(Date.now() / 250) % 2;
   for (const n of npcs.list) {
-    if (n.x < camX - 64 || n.x > camX + vw + 64 || n.y < camY - 64 || n.y > camY + vh + 96) continue;
+    if (!inView(n.x, n.y, camX, camY, vw, vh, 64, 96)) continue;
     const img = n.kind === "police" ? npcs.sprites.police[n.dir][flashOn]
       : n.kind === "scooter" ? npcs.sprites.scooter[n.variant][n.dir]
       : npcs.sprites.bike[n.variant][n.dir][Math.floor(Date.now() / 160 + n.phase) % 2];
@@ -433,7 +433,7 @@ function updateGangs(t, dt) {
 
 function pushGangSprites(list, camX, camY, vw, vh, k) {
   for (const g of npcs.gangs) {
-    if (!g.active || g.cx < camX - 200 || g.cx > camX + vw + 200 || g.cy < camY - 200 || g.cy > camY + vh + 200) continue;
+    if (!g.active || !inView(g.cx, g.cy, camX, camY, vw, vh, 200, 200)) continue;
     g.members.forEach((m, i) => {
       list.push([m.y, m.sprites[m.dir][m.frame], Math.round(m.x) - 8 * k, Math.round(m.y) - 23 * k, false, k]);
       if (i === 0) { // el primer porta la bandera
@@ -500,3 +500,5 @@ function makeScooterSet(look) {
   }
   return out;
 }
+
+addSystem({ init() { initNPCs(state.meta.graph); bindNpcUi(); }, update: updateNPCs, sprites: pushNpcSprites, top: drawNpcOverlay, minimap: drawNpcMinimap });

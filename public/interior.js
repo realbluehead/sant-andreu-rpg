@@ -365,3 +365,5 @@ function updateEnterHint() {
     : venue ? `O: entrar a ${venue.p.n || VENUES[venue.kind].label}` : "";
   document.getElementById("enter-btn").classList.toggle("dim", !venue);
 }
+
+addSystem({ init: initInteriors, update: updateEnterHint, updateIndoors: updateInterior });

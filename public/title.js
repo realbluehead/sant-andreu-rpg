@@ -38,11 +38,11 @@ function setupGoogle() {
   s.async = true;
   s.onload = () => {
     google.accounts.id.initialize({
-      client_id: clientId, callback: onGoogleCredential, auto_select: lsGet(AUTH_KEY) === "google",
+      client_id: clientId, callback: onGoogleCredential, auto_select: store.get(AUTH_KEY) === "google",
       cancel_on_tap_outside: true, use_fedcm_for_prompt: true,
     });
     google.accounts.id.renderButton(box, { theme: "filled_black", size: "large", shape: "pill", text: "signin_with", locale: "ca" });
-    if (lsGet(AUTH_KEY) === "google") google.accounts.id.prompt(); // usuari que ja havia entrat
+    if (store.get(AUTH_KEY) === "google") google.accounts.id.prompt(); // usuari que ja havia entrat
   };
   document.head.appendChild(s);
 }
@@ -53,7 +53,7 @@ function onGoogleCredential(resp) {
   try { info = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))); } catch { /* token invàlid */ }
   title.token = token;
   title.user = { name: info.given_name || info.name || "", email: info.email || "" };
-  lsSet(AUTH_KEY, "google");
+  store.set(AUTH_KEY, "google");
   // si encara es diu "Jugador", agafa el nom de Google
   if (!state.look.name || state.look.name === DEFAULT_LOOK.name) {
     state.look.name = (title.user.name || "Jugador").slice(0, 16);
@@ -73,7 +73,7 @@ function onAuthReply(m) {
 }
 
 function signOut() {
-  lsSet(AUTH_KEY, "");
+  store.set(AUTH_KEY, "");
   title.user = null; title.token = null;
   if (window.google?.accounts?.id) google.accounts.id.disableAutoSelect();
   net.send({ t: "auth", token: "" });
@@ -87,8 +87,6 @@ function updateAuthUi() {
   document.getElementById("auth-out").classList.toggle("hidden", !title.user);
 }
 
-const lsGet = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
-const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch { /* sense emmagatzematge */ } };
 
 // ---------------------------------------------------------------------------
 // Il·lustració de la portada: el barri al capvespre, amb l'església, la xemeneia de la

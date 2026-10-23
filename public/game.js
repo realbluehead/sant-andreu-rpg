@@ -773,6 +773,7 @@ function drawMinimap() {
   mmCtx.strokeRect(state.cam.x / TS * mmScale + .5, state.cam.y / TS * mmScale + .5, vw * mmScale, vh * mmScale);
   const px = state.player.x / TS * mmScale, py = state.player.y / TS * mmScale;
   for (const o of net.others.values()) {
+    if (o.room) continue; // és dins d'un bar
     const ox = o.x / TS * mmScale, oy = o.y / TS * mmScale;
     mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(ox - 2.5, oy - 2.5, 5, 5);
     mmCtx.fillStyle = "#5fb3ff"; mmCtx.fillRect(ox - 1.5, oy - 1.5, 3, 3);
@@ -808,8 +809,9 @@ function loadPosition() {
   return null;
 }
 function savePosition() {
+  const p = state.interior ? state.outPos : state.player; // dins d'un bar, es desa la porta del bar
   try {
-    localStorage.setItem(POS_KEY, JSON.stringify({ x: +((state.player.x - TS / 2) / TS).toFixed(2), y: +((state.player.y - TS + 2) / TS).toFixed(2) }));
+    localStorage.setItem(POS_KEY, JSON.stringify({ x: +((p.x - TS / 2) / TS).toFixed(2), y: +((p.y - TS + 2) / TS).toFixed(2) }));
   } catch { /* sense emmagatzematge */ }
 }
 
@@ -822,6 +824,7 @@ function placePlayer(tx, ty) {
 
 const HB = { w: 10, h: 6 }; // caixa de col·lisió als peus
 function collides(x, y) {
+  if (state.interior) return interiorCollides(x, y);
   const x0 = Math.floor((x - HB.w / 2) / TS), x1 = Math.floor((x + HB.w / 2 - 1) / TS);
   const y0 = Math.floor((y - HB.h) / TS), y1 = Math.floor((y - 1) / TS);
   for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) if (blocked(tx, ty)) return true;
@@ -865,7 +868,7 @@ function update(dt) {
     state.cam.x += (tx - state.cam.x) * a;
     state.cam.y += (ty - state.cam.y) * a;
   }
-  const mw = state.W * TS, mh = state.H * TS;
+  const mw = (state.interior ? state.interior.W : state.W) * TS, mh = (state.interior ? state.interior.H : state.H) * TS;
   state.cam.x = vw > mw ? (mw - vw) / 2 : Math.max(0, Math.min(mw - vw, state.cam.x));
   state.cam.y = vh > mh ? (mh - vh) / 2 : Math.max(0, Math.min(mh - vh, state.cam.y));
 }
@@ -925,7 +928,7 @@ function draw() {
   // Els altres jugadors i els NPCs s'escalen amb el mapa; rètols i monedes no
   const kw = 1;
   for (const o of net.others.values()) {
-    if (o.x < camX - 64 || o.x > camX + vw + 64 || o.y < camY - 64 || o.y > camY + vh + 96) continue;
+    if (o.room || o.x < camX - 64 || o.x > camX + vw + 64 || o.y < camY - 64 || o.y > camY + vh + 96) continue;
     if (o.bike) {
       o.riderSprites ||= makeRiderSet(o.look);
       list.push([o.y, o.riderSprites[o.dir][o.frame % 2], Math.round(o.x) - 11 * kw, Math.round(o.y) - 27 * kw, false, kw]);
@@ -942,9 +945,33 @@ function draw() {
   pushSpookySprites(list, camX, camY, vw, vh, kw);
   pushBicingSprites(list, camX, camY, vw, vh, kw);
   pushWorldSprites(list, camX, camY, vw, vh, kw);
+  drawSprites(list);
+
+  // rètols (en espai de pantalla, nítids)
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  drawLighting(camX, camY, z, vw, vh); // nit i llums (world.js)
+  drawWeather();
+  if (state.showLabels) drawLabels(camX, camY, z);
+  drawPoiNames(camX, camY, z); // abans dels noms dels avatars, que han de quedar per sobre
+  drawAnimalBubbles(camX, camY, z);
+  drawThiefOverlay(camX, camY, z);
+  drawSpookyOverlay(camX, camY, z);
+  drawPlayerName(camX, camY, z);
+  drawNpcOverlay(camX, camY, z);
+  drawTreasurePointer(camX, camY, z);
+}
+
+// Dibuixa una llista de sprites ordenada per profunditat:
+// [y, imatge, x, y, ombra, escala, fx] amb fx = { lift (salt), swim (nedant), seat (assegut) }
+function drawSprites(list) {
   list.sort((a, b) => a[0] - b[0]);
   for (const [, img, x, y, shadow, hero, fx] of list) {
     const s = hero || 1;
+    if (fx?.seat) { // assegut: es veu de cintura en amunt (les cames queden sota la taula)
+      const sh = img.height * 0.66;
+      ctx.drawImage(img, 0, 0, img.width, sh, x, y + (img.height - sh) * s * 0.55, img.width * s, sh * s);
+      continue;
+    }
     if (fx?.swim) { // nedant: mig cos fora de l'aigua i ones al voltant
       const keep = 0.58, sh = img.height * keep, t = Date.now() / 300;
       ctx.drawImage(img, 0, 0, img.width, sh, x, y + (img.height - sh) * s, img.width * s, sh * s);
@@ -962,23 +989,11 @@ function draw() {
     }
     ctx.drawImage(img, x, y - (fx?.lift || 0), img.width * s, img.height * s);
   }
-
-  // rètols (en espai de pantalla, nítids)
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  drawLighting(camX, camY, z, vw, vh); // nit i llums (world.js)
-  drawWeather();
-  if (state.showLabels) drawLabels(camX, camY, z);
-  drawPoiNames(camX, camY, z); // abans dels noms dels avatars, que han de quedar per sobre
-  drawAnimalBubbles(camX, camY, z);
-  drawThiefOverlay(camX, camY, z);
-  drawSpookyOverlay(camX, camY, z);
-  drawPlayerName(camX, camY, z);
-  drawNpcOverlay(camX, camY, z);
-  drawTreasurePointer(camX, camY, z);
 }
 
 function drawPlayerName(camX, camY, z) {
   for (const o of net.others.values()) {
+    if (o.room) continue;
     drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff", 24 * z); // els altres jugadors s'escalen amb el mapa
     drawBubble(o.bubble, o.x, o.y, camX, camY, z, 24 * z);
   }
@@ -1255,7 +1270,7 @@ const net = {
   send(m) { if (this.ws?.readyState === 1) this.ws.send(JSON.stringify(m)); },
   pos() {
     const pl = state.player;
-    return { x: Math.round(pl.x), y: Math.round(pl.y), dir: pl.dir, moving: pl.moving, bike: !!state.riding };
+    return { x: Math.round(pl.x), y: Math.round(pl.y), dir: pl.dir, moving: pl.moving, bike: !!state.riding, room: state.interior?.id || "" };
   },
   sendLook() {
     clearTimeout(this.lookTimer);
@@ -1275,7 +1290,10 @@ const net = {
       this.others.delete(m.id);
     } else if (m.t === "move") {
       const o = this.others.get(m.id);
-      if (o) Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving, bike: !!m.bike });
+      if (o) {
+        if ((m.room || "") !== (o.room || "")) { o.x = m.x; o.y = m.y; } // ha entrat o sortit d'un bar: sense interpolar
+        Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving, bike: !!m.bike, room: m.room || "" });
+      }
     } else if (m.t === "say") {
       const o = this.others.get(m.id);
       const text = String(m.text).slice(0, CFG.chat.maxLength);
@@ -1322,6 +1340,12 @@ function updateHud(dt) {
   hudTimer -= dt;
   if (hudTimer > 0) return;
   hudTimer = 0.15;
+  if (state.interior) {
+    const html = `<div class="street">${escapeHtml(state.interior.name)}</div><div class="place">> Dins del bar</div>`;
+    if (html !== lastHud) { hud.innerHTML = html; lastHud = html; }
+    updateTreasureHud();
+    return;
+  }
   const tx = state.player.x / TS, ty = state.player.y / TS;
   const street = nearestStreet(tx, ty);
   const place = nearestPlace(tx, ty);
@@ -1427,7 +1451,8 @@ function bindInput() {
     if (e.code === "Space" && !e.repeat && !state.editing) jump();
     if (e.code === "Escape" && state.editing) { toggleAvatarPanel(false); return; }
     if (e.code === "KeyP" && !e.repeat) { toggleAvatarPanel(); return; }
-    if (e.code === "KeyR" && !e.repeat && !state.editing && !state.chatting) { toggleBike(); return; }
+    if (e.code === "KeyR" && !e.repeat && !state.editing && !state.chatting) { if (!state.interior) toggleBike(); return; }
+    if (e.code === "KeyO" && !e.repeat && !state.editing && !state.chatting) { enterBar(); return; }
     if ((e.key === "Enter" || e.code === "KeyT") && !state.editing && !e.repeat) { e.preventDefault(); toggleChat(true); return; }
     if (state.editing) return;
     state.keys.add(e.code);
@@ -1530,6 +1555,7 @@ async function main() {
   initPois();
   initBicing();
   initWorld();
+  initInteriors();
   initAnimals();
   initCoins();
   initThieves();
@@ -1544,6 +1570,17 @@ async function main() {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     if (canvas.width !== Math.floor(innerWidth * (window.devicePixelRatio || 1))) resize();
+    if (state.interior) { // dins d'un bar: el barri queda en pausa per a tu
+      updateWorld(dt);
+      update(dt);
+      updateInterior(dt);
+      tickBubbles(dt);
+      if (state.interior) drawInterior(); else draw();
+      updateHud(dt);
+      net.update(dt);
+      requestAnimationFrame(loop);
+      return;
+    }
     updateWorld(dt);
     update(dt);
     updateNPCs(dt);
@@ -1554,6 +1591,7 @@ async function main() {
     updateBicing();
     updateDrinks(dt);
     updateZone();
+    updateEnterHint();
     tickBubbles(dt);
     draw();
     drawMinimap();

@@ -23,6 +23,7 @@ Obre <http://localhost:8737>.
 | C | centrar la càmera |
 | M | minimapa (clic sobre un punt blau per saber quin jugador és i a quina distància) |
 | L | rètols de carrers i places |
+| O | entrar al bar que tens davant |
 | ESPAI | saltar (per passar per sobre de les bosses d'escombraries) |
 | R | agafar o deixar una bici a una estació de Bicing |
 | N | mode fantasma (travessa edificis) |
@@ -96,6 +97,10 @@ El temps passa: **cada minut real és una hora** del joc (un dia dura 24 minuts)
 - **Aigua**: si entres a l'aigua, nedes (més a poc a poc i sense bici).
 - **Font de Can Fabra**: té brolladors animats.
 - **Temps**: cada dos dies del joc canvia entre sol, núvols, pluja, boira o neu.
+
+## Dins dels bars
+
+Davant d'un bar, prem **O** (o el botó **ENTRA** al mòbil) per entrar-hi. Cada un dels bars del mapa té el seu local inventat, generat a partir del seu nom (sempre igual per a tothom) i amb els colors de la zona: barra amb tiradors, prestatgeria d'ampolles, taules i cadires, un cambrer que va amunt i avall i clients prenent alguna cosa. Si hi ha altres jugadors al mateix bar, us veieu. Per tornar al barri, surt per la porta.
 
 ## Bicing
 

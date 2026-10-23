@@ -34,7 +34,9 @@ function cleanLook(l) {
 }
 const num = (v) => (Number.isFinite(v) ? Math.round(v * 10) / 10 : 0);
 function cleanPos(m) {
-  return { x: num(m.x), y: num(m.y), dir: DIRS.includes(m.dir) ? m.dir : "down", moving: !!m.moving, bike: !!m.bike };
+  // room = sala on és el jugador ("" = carrer, "bar-12" = dins d'un bar)
+  const room = typeof m.room === "string" ? m.room.slice(0, 24).replace(/[^a-z0-9-]/g, "") : "";
+  return { x: num(m.x), y: num(m.y), dir: DIRS.includes(m.dir) ? m.dir : "down", moving: !!m.moving, bike: !!m.bike, room };
 }
 
 export class Room extends DurableObject {
@@ -140,7 +142,7 @@ export class Room extends DurableObject {
     } else if (m.t === "move") {
       Object.assign(a.p, cleanPos(m));
       ws.serializeAttachment(a);
-      this.broadcast({ t: "move", id: a.id, x: a.p.x, y: a.p.y, dir: a.p.dir, moving: a.p.moving, bike: a.p.bike }, ws);
+      this.broadcast({ t: "move", id: a.id, x: a.p.x, y: a.p.y, dir: a.p.dir, moving: a.p.moving, bike: a.p.bike, room: a.p.room }, ws);
     } else if (m.t === "take") {
       await this.loadCoins();
       const i = this.coins.findIndex((c) => c.id === m.id);

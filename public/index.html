@@ -164,6 +164,11 @@
   #chat-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(160px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
   #bike-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(212px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
   #bike-btn.dim { opacity: .45; }
+  #enter-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(316px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
+  #enter-btn.dim { opacity: .45; }
+  #enter-hint { left: 50%; bottom: 132px; transform: translateX(-50%); font-size: 9px; color: #ffd35a; padding: 6px 10px; z-index: 3; }
+  body.touch #enter-hint { bottom: auto; top: 52%; }
+  body.indoors #minimap-wrap, body.indoors #bike-hint, body.indoors #map-btn { display: none !important; }
   #jump-btn { right: calc(132px + env(safe-area-inset-right)); bottom: calc(264px + env(safe-area-inset-bottom)); font-size: 8px; width: 74px; height: 38px; }
   #bike-hint { left: 50%; bottom: 96px; transform: translateX(-50%); font-size: 9px; color: #ff8a80; padding: 6px 10px; z-index: 3; }
   body.touch #bike-hint { bottom: auto; top: 45%; }
@@ -226,7 +231,7 @@
   <b>FLETXES / WASD</b> caminar · <b>SHIFT</b> córrer<br>
   <b>+ / −</b> o roda: zoom · arrossega: moure càmera<br>
   <b>C</b> centrar · <b>M</b> minimapa · <b>L</b> rètols<br>
-  <b>ESPAI</b> saltar · <b>ENTER</b> parlar · <b>R</b> bici · <b>N</b> fantasma · <b>P</b> avatar · <b>B</b> música · <b>H</b> ajuda
+  <b>O</b> entrar al bar · <b>ESPAI</b> saltar · <b>ENTER</b> parlar · <b>R</b> bici · <b>N</b> fantasma · <b>P</b> avatar · <b>B</b> música · <b>H</b> ajuda
 </div>
 <div id="zoom" class="panel">
   <button id="zoom-out" type="button" aria-label="Allunyar">−</button>
@@ -257,6 +262,8 @@
 <button id="chat-btn" class="touch-btn touch-only" type="button">XAT</button>
 <button id="bike-btn" class="touch-btn touch-only dim" type="button">BICI</button>
 <button id="jump-btn" class="touch-btn touch-only" type="button">SALTA</button>
+<button id="enter-btn" class="touch-btn touch-only dim" type="button">ENTRA</button>
+<div id="enter-hint" class="panel hidden"></div>
 <div id="bike-hint" class="panel hidden">R: agafar una bici</div>
 <div id="chat-log" aria-live="polite"></div>
 <form id="chat" class="panel hidden" autocomplete="off">
@@ -277,18 +284,19 @@
   <a href="https://opendata-ajuntament.barcelona.cat/data/ca/dataset/cens-locals-planta-baixa-act-economica" target="_blank" rel="noopener">Ajuntament de Barcelona</a> (CC-BY) ·
   <a href="https://overturemaps.org" target="_blank" rel="noopener">Overture Maps Foundation</a></div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=44"></script>
-<script src="themes.js?v=44"></script>
-<script src="roofs.js?v=44"></script>
-<script src="npcs.js?v=44"></script>
-<script src="pois.js?v=44"></script>
-<script src="animals.js?v=44"></script>
-<script src="coins.js?v=44"></script>
-<script src="thieves.js?v=44"></script>
-<script src="spooky.js?v=44"></script>
-<script src="bicing.js?v=44"></script>
-<script src="world.js?v=44"></script>
-<script src="drinks.js?v=44"></script>
-<script src="music.js?v=44"></script>
+<script src="game.js?v=47"></script>
+<script src="themes.js?v=47"></script>
+<script src="roofs.js?v=47"></script>
+<script src="npcs.js?v=47"></script>
+<script src="pois.js?v=47"></script>
+<script src="animals.js?v=47"></script>
+<script src="coins.js?v=47"></script>
+<script src="thieves.js?v=47"></script>
+<script src="spooky.js?v=47"></script>
+<script src="bicing.js?v=47"></script>
+<script src="world.js?v=47"></script>
+<script src="interior.js?v=47"></script>
+<script src="drinks.js?v=47"></script>
+<script src="music.js?v=47"></script>
 </body>
 </html>

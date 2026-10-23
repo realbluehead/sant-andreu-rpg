@@ -5,7 +5,7 @@
 
 const DRUNK_KEY = "santandreu-rpg-drunk";
 // Màxim, pujada per cervesa, baixada per cafè i preu: CFG.drinks (config.json)
-const DRINK_RADIUS = 2; // tiles al voltant del bar o la cafeteria
+const DRINK_RADIUS = 3.5; // tiles al voltant del bar o la cafeteria (el punt sol ser dins de l'edifici)
 
 const drink = { level: loadDrunk(), bars: [], cafes: [], inside: null, cooldown: 0 };
 

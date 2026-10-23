@@ -138,8 +138,9 @@ function updateWorld(dt) {
   if (state.jumpT > 0) state.jumpT = Math.max(0, state.jumpT - dt);
   const pl = state.player, under = g(Math.floor(pl.x / TS), Math.floor((pl.y - 2) / TS)) & 127;
   world.swimming = (under === T.WATER || under === T.POOL) && !state.noclip;
+  if (state.interior) world.swimming = false;
   // si un camió et passa per sobre, t'aparta
-  for (const tr of world.trucks) if (tr.active && hitsTruck(tr, pl.x, pl.y)) pushOutOfTruck(tr);
+  else for (const tr of world.trucks) if (tr.active && hitsTruck(tr, pl.x, pl.y)) pushOutOfTruck(tr);
   updateClockHud();
 }
 
@@ -162,6 +163,7 @@ function pushOutOfTruck(tr) {
 
 // Obstacles del món per a les col·lisions del jugador (camions i bosses)
 function worldBlocks(x, y) {
+  if (state.interior) return false;
   for (const tr of world.trucks) if (tr.active && hitsTruck(tr, x, y)) return true;
   if (state.jumpT > 0) return false; // les bosses es poden saltar
   const x0 = Math.floor((x - HB.w / 2) / TS), x1 = Math.floor((x + HB.w / 2 - 1) / TS);

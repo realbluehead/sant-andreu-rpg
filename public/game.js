@@ -80,6 +80,9 @@ const CFG = {
   "bags": {
     "perDay": 150
   },
+  "auth": {
+    "googleClientId": ""
+  },
   "magic": {
     "ghosts": 12,
     "zombies": 14,
@@ -826,7 +829,7 @@ function collides(x, y) {
 }
 
 function update(dt) {
-  const frozen = state.editing || state.chatting || npcs.dead;
+  const frozen = state.editing || state.chatting || npcs.dead || state.onTitle;
   const k = frozen ? new Set() : state.keys, pl = state.player;
   let dx = 0, dy = 0;
   if (k.has("ArrowLeft") || k.has("KeyA")) dx -= 1;
@@ -1277,6 +1280,7 @@ const net = {
     coinsOnMessage(m);
     if (m.t === "welcome") {
       this.id = m.id; this.connected = true; this.others.clear();
+      sendAuth(); // si s'ha entrat amb Google, el servidor ho torna a verificar
       for (const p of m.players) this.addOther(p);
     } else if (m.t === "join") {
       this.addOther(m.p);
@@ -1288,6 +1292,8 @@ const net = {
         if ((m.room || "") !== (o.room || "")) { o.x = m.x; o.y = m.y; } // ha entrat o sortit d'un bar: sense interpolar
         Object.assign(o, { tx: m.x, ty: m.y, dir: m.dir, moving: m.moving, bike: !!m.bike, room: m.room || "" });
       }
+    } else if (m.t === "auth") {
+      onAuthReply(m);
     } else if (m.t === "say") {
       const o = this.others.get(m.id);
       const text = String(m.text).slice(0, CFG.chat.maxLength);
@@ -1440,6 +1446,7 @@ function bindInput() {
   addEventListener("keydown", (e) => {
     // Als camps de text (xat, nom) les tecles han de funcionar normalment, espai inclòs
     if (e.target instanceof HTMLInputElement) return;
+    if (state.onTitle || e.titleStart) return; // a la portada només compta ENTER (title.js), que no ha d'obrir el xat
     if (npcs.dead) return; // a la pantalla de mort només compta el botó de ressuscitar
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(e.code)) e.preventDefault();
     if (e.code === "Space" && !e.repeat && !state.editing) jump();
@@ -1524,6 +1531,7 @@ async function loadMap() {
 async function main() {
   resize();
   await Promise.all([loadMap(), loadConfig()]);
+  initTitle();
   initThemes();
   try { await document.fonts.load('8px "Press Start 2P"'); } catch { /* font opcional */ }
   state.sprites = {

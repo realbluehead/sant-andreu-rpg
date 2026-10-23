@@ -95,6 +95,20 @@
   #attribution { position: fixed; right: 8px; bottom: 6px; font: 11px system-ui, sans-serif; color: #c9cbe0;
     background: rgba(16,18,31,.7); padding: 2px 6px; border-radius: 3px; }
   #attribution a { color: #c9cbe0; }
+  #title { position: fixed; inset: 0; z-index: 11; display: grid; place-items: center; background: #1b1d4a; overflow: hidden; }
+  #title-art { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; object-fit: cover; }
+  .title-box { position: relative; text-align: center; padding: 16px; margin-top: -18vh; }
+  #title h1 { margin: 0; font-size: clamp(28px, 8vw, 72px); font-weight: normal; letter-spacing: 2px; color: #ffd35a;
+    text-shadow: 0 4px 0 #c0392b, 0 8px 0 #1a1420, 4px 4px 0 #1a1420, -4px 4px 0 #1a1420; }
+  #title .subtitle { margin: 18px 0 26px; font-size: clamp(8px, 2vw, 12px); color: #fff3e0; text-shadow: 2px 2px 0 #1a1420; }
+  .title-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  #title-guest { font: inherit; font-size: 11px; color: #1d2142; background: #ffd35a; border: 3px solid #f4f1e8; border-radius: 4px;
+    padding: 12px 18px; cursor: pointer; box-shadow: 0 0 0 3px #1a1420, inset -3px -3px 0 #c99a2a; }
+  #title-guest:hover { background: #ffe08a; }
+  .title-hint { margin-top: 20px; font-size: 8px; color: #fff3e0; text-shadow: 2px 2px 0 #1a1420; animation: blink 1.2s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  #auth-status { font-size: 7px; color: var(--muted); line-height: 1.6; }
+  #auth-out { font: inherit; font-size: 8px; color: var(--text); background: #2c3266; border: 2px solid #4a5196; border-radius: 3px; padding: 6px 8px; cursor: pointer; }
   #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #10121f; z-index: 10; font-size: 12px; }
   .hidden { display: none !important; }
   #toast { top: 16px; left: 50%; transform: translateX(-50%); font-size: 10px; transition: opacity .3s; }
@@ -250,6 +264,8 @@
         <button id="avatar-reset" type="button">Restablir</button>
         <button id="avatar-done" type="button">Fet</button>
       </div>
+      <div id="auth-status">Jugant com a convidat</div>
+      <button id="auth-out" class="hidden" type="button">Tanca la sessió</button>
     </div>
     <div id="avatar-fields"></div>
   </div>
@@ -284,19 +300,32 @@
   <a href="https://opendata-ajuntament.barcelona.cat/data/ca/dataset/cens-locals-planta-baixa-act-economica" target="_blank" rel="noopener">Ajuntament de Barcelona</a> (CC-BY) ·
   <a href="https://overturemaps.org" target="_blank" rel="noopener">Overture Maps Foundation</a></div>
 <div id="loading">Carregant Sant Andreu…</div>
-<script src="game.js?v=48"></script>
-<script src="themes.js?v=48"></script>
-<script src="roofs.js?v=48"></script>
-<script src="npcs.js?v=48"></script>
-<script src="pois.js?v=48"></script>
-<script src="animals.js?v=48"></script>
-<script src="coins.js?v=48"></script>
-<script src="thieves.js?v=48"></script>
-<script src="spooky.js?v=48"></script>
-<script src="bicing.js?v=48"></script>
-<script src="world.js?v=48"></script>
-<script src="interior.js?v=48"></script>
-<script src="drinks.js?v=48"></script>
-<script src="music.js?v=48"></script>
+<div id="title">
+  <canvas id="title-art"></canvas>
+  <div class="title-box">
+    <h1>SANT ANDREU</h1>
+    <p class="subtitle">Un RPG pel barri de Sant Andreu de Palomar</p>
+    <div class="title-actions">
+      <div id="title-google"></div>
+      <button id="title-guest" type="button">Jugar com a convidat</button>
+    </div>
+    <p class="title-hint">Prem ENTER per començar</p>
+  </div>
+</div>
+<script src="game.js?v=51"></script>
+<script src="themes.js?v=51"></script>
+<script src="roofs.js?v=51"></script>
+<script src="npcs.js?v=51"></script>
+<script src="pois.js?v=51"></script>
+<script src="animals.js?v=51"></script>
+<script src="coins.js?v=51"></script>
+<script src="thieves.js?v=51"></script>
+<script src="spooky.js?v=51"></script>
+<script src="bicing.js?v=51"></script>
+<script src="world.js?v=51"></script>
+<script src="interior.js?v=51"></script>
+<script src="title.js?v=51"></script>
+<script src="drinks.js?v=51"></script>
+<script src="music.js?v=51"></script>
 </body>
 </html>

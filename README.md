@@ -130,6 +130,17 @@ Hi ha **90 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m 
 
 Les rutes dels NPCs es generen a partir del graf de carrers d'OpenStreetMap (`graph` a `map.json`) amb una llavor fixa, i la posició depèn del rellotge: tots els jugadors veuen els mateixos NPCs al mateix lloc sense carregar el servidor.
 
+## Portada i comptes
+
+En obrir el joc surt una portada en pixel art amb el títol **Sant Andreu**. Es pot jugar com a convidat o **iniciar sessió amb Google**. El servidor verifica el compte i, la primera vegada que algú hi entra, envia un correu d'avís (via [Resend](https://resend.com)) a l'adreça configurada.
+
+Per activar-ho:
+
+1. A [Google Cloud Console](https://console.cloud.google.com/apis/credentials) crea un *ID de client OAuth* de tipus **Aplicació web** amb orígens JavaScript autoritzats `https://realbluehead.github.io` i `http://localhost:8737`.
+2. Posa aquest Client ID a `public/config.json` (`auth.googleClientId`) i a `server/wrangler.toml` (`GOOGLE_CLIENT_ID`).
+3. Crea una clau d'API a Resend amb el compte del correu que ha de rebre els avisos i guarda-la com a secret: `cd server && npx wrangler secret put RESEND_API_KEY`.
+4. `cd server && npx wrangler deploy`.
+
 ## Multijugador
 
 Quan entres, el joc es connecta per WebSocket a un servidor de Cloudflare (Workers + Durable Objects, pla gratuït) i veus els altres avatars connectats, amb el seu nom i aspecte.

@@ -39,6 +39,37 @@ function cleanPos(m) {
   return { x: num(m.x), y: num(m.y), dir: DIRS.includes(m.dir) ? m.dir : "down", moving: !!m.moving, bike: !!m.bike, room };
 }
 
+// Verifica un ID token de Google (inici de sessió) amb l'endpoint oficial de Google
+async function verifyGoogle(token, clientId) {
+  if (!clientId || typeof token !== "string" || token.length > 4096) return null;
+  try {
+    const r = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(token)}`);
+    if (!r.ok) return null;
+    const t = await r.json();
+    const issOk = t.iss === "accounts.google.com" || t.iss === "https://accounts.google.com";
+    if (t.aud !== clientId || !issOk || Number(t.exp) * 1000 < Date.now() || !t.sub) return null;
+    return { sub: t.sub, email: t.email_verified === "true" || t.email_verified === true ? t.email : "", name: t.given_name || t.name || "Jugador" };
+  } catch { return null; }
+}
+
+// Avisa per correu (Resend) quan algú es registra per primer cop
+async function notifyNewUser(env, user, total) {
+  if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) return;
+  const when = new Date(user.created).toLocaleString("ca-ES", { timeZone: "Europe/Madrid" });
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: "Sant Andreu RPG <onboarding@resend.dev>",
+        to: [env.NOTIFY_EMAIL],
+        subject: `Nou registre a Sant Andreu RPG: ${user.name}`,
+        text: `S'ha registrat un nou jugador a Sant Andreu RPG.\n\nNom: ${user.name}\nCorreu: ${user.email || "(no verificat)"}\nData: ${when}\n\nJugadors registrats en total: ${total}\n`,
+      }),
+    });
+  } catch { /* si falla el correu, el registre continua sent vàlid */ }
+}
+
 export class Room extends DurableObject {
   // Llegeix config.json de GitHub Pages (com a molt un cop per minut). Així, publicar un canvi
   // de configuració al repositori també s'aplica al servidor sense tornar-lo a desplegar.
@@ -157,6 +188,22 @@ export class Room extends DurableObject {
       const msg = { t: "taken", id: c.id, by: a.id };
       ws.send(JSON.stringify(msg));
       this.broadcast(msg, ws);
+    } else if (m.t === "auth") {
+      if (!m.token) { delete a.user; ws.serializeAttachment(a); return; } // ha tancat la sessió
+      const info = await verifyGoogle(m.token, this.env.GOOGLE_CLIENT_ID);
+      if (!info) { ws.send(JSON.stringify({ t: "auth", ok: false })); return; }
+      const key = `user:${info.sub}`;
+      let user = await this.ctx.storage.get(key);
+      const newUser = !user;
+      if (newUser) {
+        user = { name: info.name, email: info.email, created: Date.now() };
+        const total = ((await this.ctx.storage.get("userCount")) || 0) + 1;
+        await this.ctx.storage.put({ [key]: user, userCount: total });
+        await notifyNewUser(this.env, user, total);
+      }
+      a.user = { sub: info.sub, name: info.name };
+      ws.serializeAttachment(a);
+      ws.send(JSON.stringify({ t: "auth", ok: true, name: info.name, newUser }));
     } else if (m.t === "say") {
       const text = String(m.text ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, (await this.getConfig()).maxSay);
       const now = Date.now();

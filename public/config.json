@@ -79,5 +79,8 @@
     "zombieSpeed": 45,
     "zombieSight": 7,
     "zombieDamage": 10
+  },
+  "auth": {
+    "googleClientId": ""
   }
 }

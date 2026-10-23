@@ -52,23 +52,25 @@ async function verifyGoogle(token, clientId) {
   } catch { return null; }
 }
 
-// Avisa per correu (Resend) quan algú es registra per primer cop
-async function notifyNewUser(env, user, total) {
-  if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) return;
-  const when = new Date(user.created).toLocaleString("ca-ES", { timeZone: "Europe/Madrid" });
-  try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: "Sant Andreu RPG <onboarding@resend.dev>",
-        to: [env.NOTIFY_EMAIL],
-        subject: `Nou registre a Sant Andreu RPG: ${user.name}`,
-        text: `S'ha registrat un nou jugador a Sant Andreu RPG.\n\nNom: ${user.name}\nCorreu: ${user.email || "(no verificat)"}\nData: ${when}\n\nJugadors registrats en total: ${total}\n`,
-      }),
-    });
-  } catch { /* si falla el correu, el registre continua sent vàlid */ }
-}
+// DESACTIVAT de moment: avís per correu de nous registres. Per activar-lo, descomenta aquesta funció
+// i la crida a notifyNewUser més avall, i guarda la clau amb `npx wrangler secret put RESEND_API_KEY`.
+// // Avisa per correu (Resend) quan algú es registra per primer cop
+// async function notifyNewUser(env, user, total) {
+//   if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) return;
+//   const when = new Date(user.created).toLocaleString("ca-ES", { timeZone: "Europe/Madrid" });
+//   try {
+//     await fetch("https://api.resend.com/emails", {
+//       method: "POST",
+//       headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         from: "Sant Andreu RPG <onboarding@resend.dev>",
+//         to: [env.NOTIFY_EMAIL],
+//         subject: `Nou registre a Sant Andreu RPG: ${user.name}`,
+//         text: `S'ha registrat un nou jugador a Sant Andreu RPG.\n\nNom: ${user.name}\nCorreu: ${user.email || "(no verificat)"}\nData: ${when}\n\nJugadors registrats en total: ${total}\n`,
+//       }),
+//     });
+//   } catch { /* si falla el correu, el registre continua sent vàlid */ }
+// }
 
 export class Room extends DurableObject {
   // Llegeix config.json de GitHub Pages (com a molt un cop per minut). Així, publicar un canvi
@@ -199,7 +201,7 @@ export class Room extends DurableObject {
         user = { name: info.name, email: info.email, created: Date.now() };
         const total = ((await this.ctx.storage.get("userCount")) || 0) + 1;
         await this.ctx.storage.put({ [key]: user, userCount: total });
-        await notifyNewUser(this.env, user, total);
+        // await notifyNewUser(this.env, user, total); // avís per correu desactivat de moment
       }
       a.user = { sub: info.sub, name: info.name };
       ws.serializeAttachment(a);

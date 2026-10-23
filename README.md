@@ -132,13 +132,13 @@ Les rutes dels NPCs es generen a partir del graf de carrers d'OpenStreetMap (`gr
 
 ## Portada i comptes
 
-En obrir el joc surt una portada en pixel art amb el títol **Sant Andreu**. Es pot jugar com a convidat o **iniciar sessió amb Google**. El servidor verifica el compte i, la primera vegada que algú hi entra, envia un correu d'avís (via [Resend](https://resend.com)) a l'adreça configurada.
+En obrir el joc surt una portada en pixel art amb el títol **Sant Andreu**. Es pot jugar com a convidat o **iniciar sessió amb Google**. El servidor verifica el compte i guarda els jugadors registrats. L'avís per correu de nous registres (via [Resend](https://resend.com)) està programat però **desactivat de moment** (comentat a `server/src/index.js`).
 
 Per activar-ho:
 
 1. A [Google Cloud Console](https://console.cloud.google.com/apis/credentials) crea un *ID de client OAuth* de tipus **Aplicació web** amb orígens JavaScript autoritzats `https://realbluehead.github.io` i `http://localhost:8737`.
 2. Posa aquest Client ID a `public/config.json` (`auth.googleClientId`) i a `server/wrangler.toml` (`GOOGLE_CLIENT_ID`).
-3. Crea una clau d'API a Resend amb el compte del correu que ha de rebre els avisos i guarda-la com a secret: `cd server && npx wrangler secret put RESEND_API_KEY`.
+3. (Opcional, per als avisos per correu) Descomenta `notifyNewUser` a `server/src/index.js` i `NOTIFY_EMAIL` a `server/wrangler.toml`, crea una clau d'API a Resend amb el compte del correu que ha de rebre els avisos i guarda-la com a secret: `cd server && npx wrangler secret put RESEND_API_KEY`.
 4. `cd server && npx wrangler deploy`.
 
 ## Multijugador

@@ -32,7 +32,7 @@
     "damage": 25
   },
   "thieves": {
-    "count": 90,
+    "count": 9,
     "sight": 6,
     "giveUp": 16,
     "chaseSpeed": 76,
@@ -79,6 +79,13 @@
     "zombieSpeed": 45,
     "zombieSight": 7,
     "zombieDamage": 10
+  },
+  "night": {
+    "startHour": 20,
+    "endHour": 6,
+    "thieves": 40,
+    "zombies": 30,
+    "ghosts": 20
   },
   "auth": {
     "googleClientId": "191935334253-espbqq5ue0aqtct0up6op8u3q8gikph3.apps.googleusercontent.com"

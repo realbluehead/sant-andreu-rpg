@@ -253,7 +253,8 @@
           "min": 0,
           "max": 300,
           "step": 1,
-          "default": 90
+          "default": 9,
+          "help": "De dia; de nit en surten més (secció Nit)"
         },
         {
           "key": "sight",
@@ -352,6 +353,62 @@
           "step": 1,
           "default": 10,
           "unit": "punts"
+        }
+      ]
+    },
+    {
+      "key": "night",
+      "title": "Nit de monstres",
+      "icon": "🌙",
+      "fields": [
+        {
+          "key": "startHour",
+          "label": "Hora en què surten",
+          "type": "int",
+          "min": 0,
+          "max": 23,
+          "step": 1,
+          "default": 20,
+          "unit": "h"
+        },
+        {
+          "key": "endHour",
+          "label": "Hora en què s'amaguen",
+          "type": "int",
+          "min": 0,
+          "max": 23,
+          "step": 1,
+          "default": 6,
+          "unit": "h"
+        },
+        {
+          "key": "thieves",
+          "label": "Lladres extra de nit",
+          "type": "int",
+          "min": 0,
+          "max": 300,
+          "step": 1,
+          "default": 40,
+          "help": "Per tot el barri"
+        },
+        {
+          "key": "zombies",
+          "label": "Zombies de nit",
+          "type": "int",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "default": 30,
+          "help": "Per tot el barri, no només a la Vila dels Bruixots"
+        },
+        {
+          "key": "ghosts",
+          "label": "Fantasmes de nit",
+          "type": "int",
+          "min": 0,
+          "max": 200,
+          "step": 1,
+          "default": 20
         }
       ]
     },

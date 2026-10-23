@@ -21,39 +21,52 @@ function pickMagicHome(r, allowed) {
 function initSpooky() {
   spooky.sprites = { ghost: [makeGhost(0), makeGhost(1)] };
   const allowed = new Set(SPOOKY_TILES);
-  for (let i = 0; i < CFG.magic.ghosts; i++) {
-    const r = rng(13000 + i * 7333), home = pickMagicHome(r, allowed);
-    if (!home) continue;
-    spooky.ghosts.push({ hx: home[0] * TS, hy: home[1] * TS, ph: r() * 10, sp: 0.25 + r() * 0.25,
-      rad: (3 + r() * 5) * TS, x: 0, y: 0, say: null, cd: 0 });
-  }
-  for (let i = 0; i < CFG.magic.zombies; i++) {
-    const r = rng(14000 + i * 5113), home = pickMagicHome(r, allowed);
-    if (!home) continue;
-    const look = {
-      ...DEFAULT_LOOK, name: "", zombie: true, eyes: "#e03030",
-      skin: ["#8fbf6a", "#7aa85a", "#9cc47a"][(r() * 3) | 0],
-      hair: ["#2a2a1e", "#4a3a2a", "#5a5a4a"][(r() * 3) | 0], hairStyle: ["short", "long", "bald"][(r() * 3) | 0],
-      shirt: ["#5a5048", "#4a5a4a", "#6a5040"][(r() * 3) | 0], pants: "#3a3430", shoes: "#2a2420",
-      bottom: r() < 0.7 ? "pants" : "shorts", extra: "none",
-    };
-    spooky.zombies.push({ home, allowed, sprites: makeHeroSet(look), r, x: home[0] * TS, y: home[1] * TS,
-      dir: "down", frame: 0, anim: 0, mode: "wander", target: null, wait: r() * 3, say: null, cd: 0, detour: null, stuck: 0 });
+  // els de la Vila dels Bruixots hi són sempre; els de nit (CFG.night) surten per tot el barri
+  const groups = [[CFG.magic.ghosts, CFG.magic.zombies, false], [CFG.night.ghosts, CFG.night.zombies, true]];
+  for (const [nGhosts, nZombies, night] of groups) {
+    const seed = night ? 50000 : 0;
+    for (let i = 0; i < nGhosts; i++) {
+      const r = rng(13000 + seed + i * 7333), home = night ? pickHome(r, allowed) : pickMagicHome(r, allowed);
+      if (!home) continue;
+      spooky.ghosts.push({ hx: home[0] * TS, hy: home[1] * TS, ph: r() * 10, sp: 0.25 + r() * 0.25,
+        rad: (3 + r() * 5) * TS, x: 0, y: 0, say: null, cd: 0, night });
+    }
+    for (let i = 0; i < nZombies; i++) {
+      const r = rng(14000 + seed + i * 5113), home = night ? pickHome(r, allowed) : pickMagicHome(r, allowed);
+      if (!home) continue;
+      const look = {
+        ...DEFAULT_LOOK, name: "", zombie: true, eyes: "#e03030",
+        skin: ["#8fbf6a", "#7aa85a", "#9cc47a"][(r() * 3) | 0],
+        hair: ["#2a2a1e", "#4a3a2a", "#5a5a4a"][(r() * 3) | 0], hairStyle: ["short", "long", "bald"][(r() * 3) | 0],
+        shirt: ["#5a5048", "#4a5a4a", "#6a5040"][(r() * 3) | 0], pants: "#3a3430", shoes: "#2a2420",
+        bottom: r() < 0.7 ? "pants" : "shorts", extra: "none",
+      };
+      spooky.zombies.push({ home, allowed, sprites: makeHeroSet(look), r, x: home[0] * TS, y: home[1] * TS, night, anywhere: night,
+        active: !night, dir: "down", frame: 0, anim: 0, mode: "wander", target: null, wait: r() * 3, say: null, cd: 0, detour: null, stuck: 0 });
+    }
   }
 }
 
-// Els zombies no surten de la Vila dels Bruixots
+// Els zombies de la Vila no en surten; els de nit van per tot el barri
 function zombieStep(z, dx, dy, dist) {
   const x0 = z.x, y0 = z.y;
   const moved = thiefStep(z, dx, dy, dist);
-  if (sectorAt(Math.floor(z.x / TS), Math.floor(z.y / TS)) !== SPOOKY_THEME) { z.x = x0; z.y = y0; return 0; }
+  if (!z.anywhere && sectorAt(Math.floor(z.x / TS), Math.floor(z.y / TS)) !== SPOOKY_THEME) { z.x = x0; z.y = y0; return 0; }
   return moved;
 }
 
 function updateSpooky(dt) {
   const pl = state.player, t = performance.now() / 1000;
   const canHunt = !npcs.dead && !state.editing;
+  const monsters = world.monsters;
+  for (const g of spooky.ghosts) g.active = !g.night || monsters;
+  for (const z of spooky.zombies) {
+    if (!z.night) continue;
+    if (monsters && !z.active) { z.x = z.home[0] * TS; z.y = z.home[1] * TS; z.mode = "wander"; }
+    z.active = monsters;
+  }
   for (const g of spooky.ghosts) {
+    if (!g.active) continue;
     // vol en forma de vuit, travessant parets
     g.x = g.hx + Math.cos(t * g.sp + g.ph) * g.rad;
     g.y = g.hy + Math.sin(t * g.sp * 2 + g.ph) * g.rad * 0.5;
@@ -65,6 +78,7 @@ function updateSpooky(dt) {
     }
   }
   for (const z of spooky.zombies) {
+    if (!z.active) continue;
     if (z.say && (z.say.ttl -= dt) <= 0) z.say = null;
     z.cd = Math.max(0, z.cd - dt);
     const dx = pl.x - z.x, dy = pl.y - z.y, dist = Math.hypot(dx, dy);
@@ -106,11 +120,11 @@ function updateSpooky(dt) {
 function pushSpookySprites(list, camX, camY, vw, vh, k) {
   const now = Date.now();
   for (const z of spooky.zombies) {
-    if (z.x < camX - 60 || z.x > camX + vw + 60 || z.y < camY - 60 || z.y > camY + vh + 100) continue;
+    if (!z.active || z.x < camX - 60 || z.x > camX + vw + 60 || z.y < camY - 60 || z.y > camY + vh + 100) continue;
     list.push([z.y, z.sprites[z.dir][z.frame], Math.round(z.x) - 8 * k, Math.round(z.y) - 23 * k, false, k]);
   }
   for (const g of spooky.ghosts) {
-    if (g.x < camX - 60 || g.x > camX + vw + 60 || g.y < camY - 60 || g.y > camY + vh + 100) continue;
+    if (!g.active || g.x < camX - 60 || g.x > camX + vw + 60 || g.y < camY - 60 || g.y > camY + vh + 100) continue;
     const img = spooky.sprites.ghost[Math.floor(now / 300 + g.ph) % 2];
     const bob = Math.sin(now / 400 + g.ph) * 3;
     // els fantasmes suren: es dibuixen per sobre de tot el que tenen a prop
@@ -119,8 +133,8 @@ function pushSpookySprites(list, camX, camY, vw, vh, k) {
 }
 
 function drawSpookyOverlay(camX, camY, z) {
-  for (const s of spooky.zombies) if (s.say) drawBubble(s.say, s.x, s.y, camX, camY, z, 14 * z);
-  for (const g of spooky.ghosts) if (g.say) drawBubble(g.say, g.x, g.y, camX, camY, z, 14 * z);
+  for (const s of spooky.zombies) if (s.active && s.say) drawBubble(s.say, s.x, s.y, camX, camY, z, 14 * z);
+  for (const g of spooky.ghosts) if (g.active && g.say) drawBubble(g.say, g.x, g.y, camX, camY, z, 14 * z);
 }
 
 // Fantasma semitransparent amb la vora inferior ondulada (2 fotogrames)

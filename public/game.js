@@ -39,7 +39,7 @@ const CFG = {
     "damage": 25
   },
   "thieves": {
-    "count": 90,
+    "count": 9,
     "sight": 9,
     "giveUp": 16,
     "chaseSpeed": 76,
@@ -79,6 +79,13 @@ const CFG = {
   },
   "bags": {
     "perDay": 150
+  },
+  "night": {
+    "startHour": 20,
+    "endHour": 6,
+    "thieves": 40,
+    "zombies": 30,
+    "ghosts": 20
   },
   "auth": {
     "googleClientId": ""

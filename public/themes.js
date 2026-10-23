@@ -352,5 +352,5 @@ function updateZone() {
   const t = THEMES[th];
   if (!first) showBanner(`Has entrat a: ${t.name}`, "zone");
   document.getElementById("banner").style.setProperty("--zone", t.color);
-  setMusicTheme(th);
+  applyMusic();
 }

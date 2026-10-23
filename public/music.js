@@ -62,11 +62,21 @@ const SONGS = [
     ],
     chords: ["G", "D", "C", "D", "G", "Am", "D", "G"],
   },
+  { // 6 · Nit de monstres: tema de terror en re menor, lent, amb tritons i un batec de cor
+    bpm: 80, steps: 8, lead: "arp", leadVol: 0.4, arpWave: "triangle", arp: 2, arpUp: 0, drums: "heart",
+    bars: [
+      "D5 . . . F5 . E5 .", "D5 . . . A4 . . .", "G4 . Bb4 . D5 . C#5 .", "D5 . . . - . - -",
+      "A5 . . . G#5 . . .", "G5 . F5 . E5 . Bb4 .", "A4 . G4 . F4 . E4 .", "D4 . . . - . - -",
+    ],
+    chords: ["Dm", "Bb", "Gm", "A", "Dm", "Edim", "Gm", "A"],
+  },
 ];
+const NIGHT_SONG = 6;
 const CHORDS = {
   F: ["F3", "A3", "C4"], C: ["C3", "E3", "G3"], Dm: ["D3", "F3", "A3"], Bb: ["Bb2", "D3", "F3"],
   Em: ["E3", "G3", "B3"], Am: ["A2", "C3", "E3"], B: ["B2", "D#3", "F#3"], G: ["G2", "B2", "D3"],
   D: ["D3", "F#3", "A3"], A: ["A2", "C#3", "E3"], Cm: ["C3", "Eb3", "G3"], Ab: ["Ab2", "C3", "Eb3"], Fm: ["F2", "Ab2", "C3"],
+  Gm: ["G2", "Bb2", "D3"], Edim: ["E3", "G3", "Bb3"],
 };
 // Patrons de bateria per corxera: k = bombo, s = caixa, h = xarles (a la meitat de la corxera)
 const DRUMS = {
@@ -76,6 +86,7 @@ const DRUMS = {
   march: { k: [0, 2, 4, 6], s: [2, 6], h: "all" },
   pop: { k: [0, 4], s: [2, 6], h: "off" },
   adventure: { k: [0, 3, 4], s: [2, 6], h: "all" },
+  heart: { k: [0, 1], s: [], h: [] },                  // batec de cor
 };
 
 const NOTE = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -185,6 +196,11 @@ function tick() {
     music.step++;
     music.next += stepDur(music.song);
   }
+}
+
+// Música segons el moment: de nit (monstres) la de terror, si no la de la zona
+function applyMusic() {
+  setMusicTheme(world.monsters ? NIGHT_SONG : currentZone < 0 ? 2 : currentZone);
 }
 
 // Canvia la cançó segons la zona, amb un fos curt

@@ -51,6 +51,10 @@ Quan canvies de zona surt un avís, el panell mostra la zona actual i la música
 
 A la **Vila dels Bruixots**, els lladres van vestits de bruixot (túnica i barret en punta) i hi viuen **fantasmes** que suren travessant parets i espanten (però no fan mal) i **zombies** lents que, si et veuen, t'empaiten i et mosseguen (-10). Els zombies no surten de la Vila. Les quantitats i el dany es configuren a l'admin. A la **Ruta dels Monstres**, els lladres van amb una disfressa de drac de foc (caputxa amb banyes, ales i cua amb flama).
 
+## Nit de monstres
+
+De **20 a 6 h** (hora del joc) surten 40 lladres més i 30 zombies i 20 fantasmes per tot el barri, i la música canvia a un tema de terror. En fer-se de dia s'amaguen. Es configura a l'admin (secció *Nit de monstres*).
+
 ## Música
 
 Cada zona té la seva música de fons, una composició original en estil chiptune de 8 bits, sintetitzada en directe amb Web Audio (`public/music.js`): dues ones quadrades (melodia i arpegis), una triangular (baix) i soroll (bateria). Comença amb la primera tecla o toc i es pot aturar amb el botó **Música** o la tecla **B**.
@@ -114,7 +118,7 @@ La posició, l'embriaguesa i les monedes es guarden al navegador: en recarregar 
 
 ## Lladres
 
-Hi ha **90 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m i sense cap edifici pel mig) et persegueixen, una mica més lents que tu. Si t'atrapen et roben totes les monedes que portes a sobre; les del banc no. Si t'allunyes prou o els perds de vista, es rendeixen. Els lladres són locals: cada jugador té els seus i només el persegueixen a ell.
+De dia hi ha **9 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m i sense cap edifici pel mig) et persegueixen, una mica més lents que tu. Si t'atrapen et roben totes les monedes que portes a sobre; les del banc no. Si t'allunyes prou o els perds de vista, es rendeixen. Els lladres són locals: cada jugador té els seus i només el persegueixen a ell.
 
 ## NPCs i vida
 

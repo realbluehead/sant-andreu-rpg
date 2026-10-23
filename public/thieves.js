@@ -22,8 +22,11 @@ const thieves = { list: [] };
 function initThieves() {
   const allowed = new Set(THIEF.tiles);
   const hoodies = ["#2b2b33", "#3f3f46", "#1f2a44", "#4a3728", "#3d4a3d"];
-  for (let i = 0; i < CFG.thieves.count; i++) {
-    const r = rng(THIEF.seed + i * 6151);
+  // els primers ronden sempre; la resta només surten de nit (CFG.night.thieves), per tot el barri
+  const total = CFG.thieves.count + CFG.night.thieves;
+  for (let i = 0; i < total; i++) {
+    const night = i >= CFG.thieves.count;
+    const r = rng(THIEF.seed + i * 6151 + (night ? 777 : 0));
     const home = pickHome(r, allowed);
     if (!home) continue;
     const look = {
@@ -45,7 +48,7 @@ function initThieves() {
     // a la Ruta dels Monstres, disfressats de drac de foc
     if (dragon) Object.assign(look, { mask: false, costume: "dragon", extra: "none", shirt: "#f08030", pants: "#f08030", shoes: "#c05a20", bottom: "pants" });
     thieves.list.push({
-      home, allowed, sprites: makeHeroSet(look), r, lines: wizard ? WIZARD_LINES : dragon ? DRAGON_LINES : THIEF_LINES,
+      home, allowed, sprites: makeHeroSet(look), r, night, active: !night, lines: wizard ? WIZARD_LINES : dragon ? DRAGON_LINES : THIEF_LINES,
       x: home[0] * TS, y: home[1] * TS, dir: "down", frame: 0, anim: 0, moving: false,
       mode: "wander", target: null, wait: r() * 3, unseen: 0, cooldown: 0, fleeT: 0,
       stuck: 0, detour: null, say: null,
@@ -96,8 +99,12 @@ function thiefSay(t, text, ttl = 1.8) { t.say = { text, ttl }; }
 
 function updateThieves(dt) {
   const pl = state.player;
-  const canChase = !npcs.dead && !state.editing;
+  const canChase = !npcs.dead && !state.editing, monsters = world.monsters;
   for (const t of thieves.list) {
+    if (t.night) { // lladres de nit: apareixen al seu racó en fer-se fosc i desapareixen de dia
+      if (!monsters) { t.active = false; continue; }
+      if (!t.active) { t.active = true; t.x = t.home[0] * TS; t.y = t.home[1] * TS; t.mode = "wander"; t.say = null; }
+    }
     if (t.say && (t.say.ttl -= dt) <= 0) t.say = null;
     t.cooldown = Math.max(0, t.cooldown - dt);
     const dx = pl.x - t.x, dy = pl.y - t.y, dist = Math.hypot(dx, dy);
@@ -177,11 +184,11 @@ function rob(t) {
 
 function pushThiefSprites(list, camX, camY, vw, vh, k) {
   for (const t of thieves.list) {
-    if (t.x < camX - 60 || t.x > camX + vw + 60 || t.y < camY - 60 || t.y > camY + vh + 100) continue;
+    if (!t.active || t.x < camX - 60 || t.x > camX + vw + 60 || t.y < camY - 60 || t.y > camY + vh + 100) continue;
     list.push([t.y, t.sprites[t.dir][t.frame], Math.round(t.x) - 8 * k, Math.round(t.y) - 23 * k, false, k]);
   }
 }
 
 function drawThiefOverlay(camX, camY, z) {
-  for (const t of thieves.list) if (t.say) drawBubble(t.say, t.x, t.y, camX, camY, z, 14 * z);
+  for (const t of thieves.list) if (t.active && t.say) drawBubble(t.say, t.x, t.y, camX, camY, z, 14 * z);
 }

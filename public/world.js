@@ -40,6 +40,11 @@ function weatherForDay(day) {
   return WEATHERS[0];
 }
 const isNight = (h) => h >= NIGHT_START || h < NIGHT_END;
+// Nit de monstres (per defecte de 20 a 6 h): més lladres, zombies i fantasmes arreu i música de terror
+function monstersOut(h = world.hour) {
+  const s = CFG.night.startHour, e = CFG.night.endHour;
+  return s > e ? h >= s || h < e : h >= s && h < e;
+}
 
 // ---------------------------------------------------------------------------
 // Inicialització
@@ -117,6 +122,12 @@ function updateWorld(dt) {
   world.day = day; world.hour = hour;
   world.weather = weatherForDay(day);
   world.dark = darknessAt(hour);
+  const monsters = monstersOut(hour);
+  if (monsters !== world.monsters) {
+    if (world.monsters !== undefined) showBanner(monsters ? "Ha caigut la nit... surten els monstres!" : "Es fa de dia: els monstres s'amaguen", monsters ? "rob" : "bank");
+    world.monsters = monsters;
+    applyMusic();
+  }
   // camions (només de nit)
   const night = isNight(hour);
   for (const tr of world.trucks) {

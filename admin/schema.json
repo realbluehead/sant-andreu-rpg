@@ -538,42 +538,8 @@
       ]
     },
     {
-      "key": "bank",
-      "title": "Bancs",
-      "icon": "🏦",
-      "fields": [
-        {
-          "key": "radius",
-          "label": "Distància per assegurar les monedes",
-          "type": "number",
-          "min": 0.5,
-          "max": 10,
-          "step": 0.5,
-          "default": 2.5,
-          "unit": "caselles"
-        }
-      ]
-    },
-    {
-      "key": "pharmacy",
-      "title": "Farmàcies",
-      "icon": "➕",
-      "fields": [
-        {
-          "key": "radius",
-          "label": "Distància per curar-te",
-          "type": "number",
-          "min": 0.5,
-          "max": 10,
-          "step": 0.5,
-          "default": 2.5,
-          "unit": "caselles"
-        }
-      ]
-    },
-    {
       "key": "drinks",
-      "title": "Bars i cafeteries",
+      "title": "Bars i cafeteries (a la barra)",
       "icon": "🍺",
       "fields": [
         {

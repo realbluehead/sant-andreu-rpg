@@ -56,12 +56,6 @@ const CFG = {
     "max": 50,
     "dropLifeSeconds": 60
   },
-  "bank": {
-    "radius": 2.5
-  },
-  "pharmacy": {
-    "radius": 2.5
-  },
   "drinks": {
     "maxLevel": 20,
     "beerUp": 1,
@@ -1589,7 +1583,6 @@ async function main() {
     updateThieves(dt);
     updateSpooky(dt);
     updateBicing();
-    updateDrinks(dt);
     updateZone();
     updateEnterHint();
     tickBubbles(dt);

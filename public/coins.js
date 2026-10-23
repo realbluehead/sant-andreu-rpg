@@ -31,17 +31,16 @@ function initCoins() {
   updateCoinUi();
 }
 
-// Passar per un banc o caixer hi diposita tot el que portes a sobre
-function checkBank() {
-  if (!coins.wallet || npcs.dead) return;
-  const tx = state.player.x / TS, ty = state.player.y / TS;
-  if (!coins.banks.some((b) => (b.x - tx) ** 2 + (b.y - ty) ** 2 < CFG.bank.radius ** 2)) return;
+// Al taulell d'un banc (interior.js) s'hi diposita tot el que portes a sobre. Retorna què diu el caixer.
+function depositAtBank() {
+  if (!coins.wallet) { showBanner("No portes monedes per ingressar", "warn"); return "No porta res per ingressar"; }
   const n = coins.wallet;
   coins.bank += n;
   coins.wallet = 0;
   saveMoney();
   updateCoinUi("bank");
   showBanner(`${n} moned${n === 1 ? "a assegurada" : "es assegurades"} al banc!`, "bank");
+  return `Ingressades ${n} monedes!`;
 }
 
 // T'han atropellat: les monedes que portes surten volant i queden escampades al voltant.
@@ -98,7 +97,6 @@ function coinsOnDisconnect() {
 }
 
 function updateCoins(dt = 0) {
-  checkBank();
   const pl = state.player, tx = pl.x / TS, ty = pl.y / TS, now = Date.now();
   // monedes caigudes: es recullen localment, sense servidor
   for (const d of coins.dropped) {

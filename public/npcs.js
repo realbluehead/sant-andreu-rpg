@@ -123,7 +123,7 @@ function updateNPCs(dt) {
   for (const f of npcs.floaters) f.t += dt;
   npcs.floaters = npcs.floaters.filter((f) => f.t < 1.2);
   updateGangs(t, dt);
-  if (!npcs.dead) { checkHits(); checkPharmacy(); }
+  if (!npcs.dead) checkHits();
 }
 
 function checkHits() {
@@ -147,16 +147,15 @@ function checkHits() {
   }
 }
 
-// A prop d'una farmàcia recuperes tota la vida
-function checkPharmacy() {
-  if (npcs.hp >= CFG.player.maxHp) return;
-  const tx = state.player.x / TS, ty = state.player.y / TS;
-  if (!npcs.pharmacies.some((p) => (p.x - tx) ** 2 + (p.y - ty) ** 2 < CFG.pharmacy.radius ** 2)) return;
+// Al taulell d'una farmàcia (interior.js) recuperes tota la vida. Retorna què diu el farmacèutic.
+function healAtPharmacy() {
+  if (npcs.hp >= CFG.player.maxHp) { showBanner("Estàs perfectament", "heal"); return "Fa molt bona cara!"; }
   const gained = CFG.player.maxHp - npcs.hp;
   npcs.hp = CFG.player.maxHp;
   npcs.floaters.push({ text: `+${gained}`, t: 0, color: "#4ade80" });
   updateHpUi();
   showBanner("T'has recuperat!", "heal");
+  return "Prengui això i com nou!";
 }
 
 function showBanner(text, kind) {

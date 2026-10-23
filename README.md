@@ -85,7 +85,7 @@ Cada 5 segons el servidor fa aparèixer una moneda en un lloc accessible del bar
 
 Els punts on poden aparèixer els genera `build_map.py` a `server/src/spawns.json`.
 
-Les monedes que recull van a la **cartera** ("A sobre"). Si passes per un **banc o caixer** queden **assegurades** ("Banc") i ja no te les poden robar.
+Les monedes que recull van a la **cartera** ("A sobre"). Si les ingresses al taulell d'un **banc** queden **assegurades** ("Banc") i ja no te les poden robar.
 
 ## Dia, nit i temps
 
@@ -100,7 +100,7 @@ El temps passa: **cada minut real és una hora** del joc (un dia dura 24 minuts)
 
 ## Dins dels bars
 
-Davant d'un bar, prem **O** (o el botó **ENTRA** al mòbil) per entrar-hi. Cada un dels bars del mapa té el seu local inventat, generat a partir del seu nom (sempre igual per a tothom) i amb els colors de la zona: barra amb tiradors, prestatgeria d'ampolles, taules i cadires, un cambrer que va amunt i avall i clients prenent alguna cosa. Si hi ha altres jugadors al mateix bar, us veieu. Per tornar al barri, surt per la porta.
+Davant d'un bar, cafeteria, farmàcia o banc, prem **O** (o el botó **ENTRA** al mòbil) per entrar-hi. Cada local és inventat, generat a partir del seu nom (sempre igual per a tothom). Els bars i les cafeteries tenen barra, taules, cadires, cambrer i clients prenent alguna cosa, amb els colors de la zona; les farmàcies tenen prestatges, creu verda i cua; els bancs, finestretes, caixers automàtics i cordons. **L'acció es fa al taulell**: a la barra del bar et serveixen una cervesa, a la de la cafeteria un cafè, a la farmàcia et cures i al banc ingresses les monedes. Si hi ha altres jugadors al mateix bar, us veieu. Per tornar al barri, surt per la porta.
 
 ## Bicing
 
@@ -108,7 +108,7 @@ Hi ha **52 estacions de Bicing**: les 31 reals d'OpenStreetMap més 21 del joc, 
 
 ## Bars, cafeteries i embriaguesa
 
-Tens un nivell d'**embriaguesa** de 0 a 20. Cada vegada que entres a un **bar** i portes monedes, pagues 1 moneda i et prens una cervesa (+1). Com més embriagat vas, més **ziga-zaga** fas en caminar. Només baixa prenent **cafès** a les cafeteries (1 moneda, -3).
+Tens un nivell d'**embriaguesa** de 0 a 20. A la **barra d'un bar**, si portes monedes, pagues 1 moneda i et prens una cervesa (+1). Com més embriagat vas, més **ziga-zaga** fas en caminar. Només baixa prenent **cafès** a la barra d'una cafeteria (1 moneda, -3).
 
 La posició, l'embriaguesa i les monedes es guarden al navegador: en recarregar tornes on eres.
 
@@ -126,7 +126,7 @@ Hi ha **90 lladres** amb antifaç que ronden pel barri. Si et veuen (a uns 18 m 
 - De tant en tant apareixen **bandes de 10 ultres de la UESA** (Unió Esportiva Sant Andreu) amb samarretes grogues i vermelles i una senyera, que recorren el barri cantant. Quan n'hi ha una a prop surt un avís i al minimapa parpelleja en groc i vermell.
 - Comences amb **100 punts de vida**. Perds vida si t'atropella un ciclista (**-5**), una moto de policia (**-20**) o un patinet (**-30**), o si et trepitgen els ultres (**-25**), amb un segon i mig de gràcia entre cops. A 0, has mort i pots ressuscitar a la Plaça d'Orfila.
 - Quan t'atropella una bici, una moto o un patinet, **les monedes que portes a sobre cauen escampades al voltant**: les pots tornar a recollir durant un minut.
-- Si t'acostes a una **farmàcia**, recuperes tota la vida.
+- Al taulell d'una **farmàcia**, recuperes tota la vida.
 
 Les rutes dels NPCs es generen a partir del graf de carrers d'OpenStreetMap (`graph` a `map.json`) amb una llavor fixa, i la posició depèn del rellotge: tots els jugadors veuen els mateixos NPCs al mateix lloc sense carregar el servidor.
 

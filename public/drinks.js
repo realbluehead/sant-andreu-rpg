@@ -1,13 +1,12 @@
-// Embriaguesa (0-20): quan passes per un bar i portes monedes, pagues 1 moneda i et prens una
-// cervesa (+1). L'única manera de baixar-la és prendre cafès a les cafeteries (1 moneda, -3).
+// Embriaguesa (0-20): a la barra d'un bar pagues 1 moneda i et prens una cervesa (+1).
+// L'única manera de baixar-la és prendre cafès a la barra d'una cafeteria (1 moneda, -3).
 // Com més embriagat vas, més ziga-zaga fas en caminar.
 "use strict";
 
 const DRUNK_KEY = "santandreu-rpg-drunk";
 // Màxim, pujada per cervesa, baixada per cafè i preu: CFG.drinks (config.json)
-const DRINK_RADIUS = 3.5; // tiles al voltant del bar o la cafeteria (el punt sol ser dins de l'edifici)
 
-const drink = { level: loadDrunk(), bars: [], cafes: [], inside: null, cooldown: 0 };
+const drink = { level: loadDrunk(), bars: [], cafes: [] };
 
 function loadDrunk() {
   try { return Math.max(0, Math.min(CFG.drinks.maxLevel, parseInt(localStorage.getItem(DRUNK_KEY) || "0", 10) || 0)); } catch { return 0; }
@@ -24,35 +23,25 @@ function initDrinks() {
   updateDrunkUi();
 }
 
-function placeAt(list, tx, ty) {
-  return list.find((p) => (p.x - tx) ** 2 + (p.y - ty) ** 2 < DRINK_RADIUS * DRINK_RADIUS);
-}
-
-// Es beu un cop per cada vegada que entres a la zona d'un establiment
-function updateDrinks(dt) {
-  drink.cooldown = Math.max(0, drink.cooldown - dt);
-  if (npcs.dead) return;
-  const tx = state.player.x / TS, ty = state.player.y / TS;
-  const bar = placeAt(drink.bars, tx, ty), cafe = !bar && placeAt(drink.cafes, tx, ty);
-  const here = bar || cafe || null;
-  if (here === drink.inside) return;
-  drink.inside = here;
-  if (!here || drink.cooldown > 0) return;
-  drink.cooldown = 2;
-  const name = here.n || (bar ? "el bar" : "la cafeteria");
-  if (bar) {
-    if (drink.level >= CFG.drinks.maxLevel) return showBanner("Ja n'has begut prou!", "warn");
-    if (!pay()) return showBanner(`No portes monedes per a una cervesa`, "warn");
+// Es demana a la barra (interior.js): cervesa al bar, cafè a la cafeteria.
+// Retorna el que diu el cambrer.
+function serveDrink(kind, name) {
+  if (kind === "bar") {
+    if (drink.level >= CFG.drinks.maxLevel) { showBanner("Ja n'has begut prou!", "warn"); return "Per avui ja n'hi ha prou!"; }
+    if (!pay()) { showBanner("No portes monedes per a una cervesa", "warn"); return "Sense monedes no hi ha cervesa!"; }
     drink.level = Math.min(CFG.drinks.maxLevel, drink.level + CFG.drinks.beerUp);
     showBanner(`Glup! Una cervesa a ${name}`, "beer");
-  } else {
-    if (drink.level <= 0) return; // sobri: no cal cafè
-    if (!pay()) return showBanner(`No portes monedes per a un cafè`, "warn");
-    drink.level = Math.max(0, drink.level - CFG.drinks.coffeeDown);
-    showBanner(`Un cafè a ${name}. Et despertes una mica!`, "coffee");
+    saveDrunk();
+    updateDrunkUi(true);
+    return "Aquí té la seva canya!";
   }
+  if (drink.level <= 0) { showBanner("Ja estàs ben despert", "coffee"); return "Avui ja vas ben despert!"; }
+  if (!pay()) { showBanner("No portes monedes per a un cafè", "warn"); return "Sense monedes no hi ha cafè!"; }
+  drink.level = Math.max(0, drink.level - CFG.drinks.coffeeDown);
+  showBanner(`Un cafè a ${name}. Et despertes una mica!`, "coffee");
   saveDrunk();
   updateDrunkUi(true);
+  return "Un cafè ben carregat!";
 }
 
 function pay() {

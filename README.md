@@ -74,6 +74,14 @@ Cada zona té la seva música de fons, una composició original en estil chiptun
   - `net.js`, `chat.js`, `avatar.js`, `hud.js`, `input.js` — multijugador, xat, panell OPCIONS, HUD i controls (teclat, ratolí i tàctils).
   - Un fitxer per sistema: `world.js` (rellotge, clima, camions), `npcs.js`, `pois.js`, `animals.js`, `coins.js`, `thieves.js`, `spooky.js`, `bicing.js`, `interior.js`, `drinks.js`, `music.js`, `fog.js`, a més de `title.js` i `intro.js`.
 
+### Test de fum
+
+`tests/smoke.mjs` obre el joc en un Chromium sense finestra (escriptori i mòbil) i hi juga uns segons: caminar, fer-se de nit, entrar i sortir d'un bar, OPCIONS, xat i zoom. Falla si hi ha cap error a la consola o si un `.js` de `public/` no es carrega a `index.html`. GitHub Actions el passa abans de publicar: si falla, la web no s'actualitza.
+
+```bash
+cd tests && npm install && npm run smoke
+```
+
 ### Afegir un sistema nou
 
 Crea `public/elmeu.js`, afegeix-lo a `index.html` abans de `title.js` i registra'l amb els ganxos que necessiti (tots són opcionals; la llista completa és a `core.js`):

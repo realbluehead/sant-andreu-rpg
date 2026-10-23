@@ -145,6 +145,10 @@ function blocked(tx, ty) {
 //   veil()                                cobreix el mapa (coordenades del món): la boira
 //   top(camX, camY, z)                    per sobre de tot, fins i tot dels noms
 //   minimap(c, scale)                     dibuixa al minimapa (abans dels jugadors)
+//   indoorOverlay(room, camX, camY, z)    per sobre de tot dins d'un local
+//   on: { nom(dades) }                    escolta esdeveniments del joc llançats amb emit():
+//                                         "coin" (n'has recollit una), "deposit" (n), "drink" ({ kind, room })
 const systems = [];
 function addSystem(sys) { systems.push(sys); }
 const runSystems = (hook, ...args) => { for (const s of systems) s[hook]?.(...args); };
+const emit = (event, data) => { for (const s of systems) s.on?.[event]?.(data); };

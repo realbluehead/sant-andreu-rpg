@@ -31,6 +31,8 @@ function cleanLook(l) {
   const out = { name: String(l.name ?? "").replace(/[\u0000-\u001f]/g, "").trim().slice(0, 16) || "Jugador" };
   for (const k of LOOK_COLORS) out[k] = COLOR.test(l[k]) ? l[k] : "#888888";
   for (const [k, vals] of Object.entries(LOOK_ENUMS)) out[k] = vals.includes(l[k]) ? l[k] : vals[0];
+  const level = Math.floor(Number(l.level)); // nivell de les missions (es mostra al costat del nom)
+  if (level >= 1 && level <= 100) out.level = level;
   return out;
 }
 const num = (v) => (Number.isFinite(v) ? Math.round(v * 10) / 10 : 0);

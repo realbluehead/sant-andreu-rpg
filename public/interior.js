@@ -53,14 +53,14 @@ const venues = []; // { p (POI), kind }
 
 function initInteriors() {
   for (const [kind, v] of Object.entries(VENUES)) {
-    for (const p of state.meta.pois || []) if (p.c === v.poi) venues.push({ p, kind });
+    for (const p of state.meta.pois || []) if (p.c === v.poi) venues.push({ p, kind, id: `${kind}-${venues.length}` });
   }
-  document.getElementById("enter-btn").addEventListener("click", (e) => { e.stopPropagation(); enterBar(); });
+  document.getElementById("enter-btn").addEventListener("click", (e) => { e.stopPropagation(); interact(); });
 }
 
 // Genera (i guarda) el local d'un establiment
 function interiorFor(venue) {
-  const idx = venues.indexOf(venue), key = `${venue.kind}-${idx}`;
+  const idx = venues.indexOf(venue), key = venue.id;
   if (interiors.has(key)) return interiors.get(key);
   const V = VENUES[venue.kind], poi = venue.p;
   const r = rng(hash2(idx * 7 + 3, (poi.n || "").length * 131 + venue.kind.length));
@@ -113,7 +113,11 @@ function interiorFor(venue) {
   const staff = { x: 2 * TS, y: 2 * TS + 14, minX: 1.5 * TS, maxX: (cw - 0.5) * TS, dir: "down", frame: 0, anim: 0,
     target: null, wait: 1, sprites: makeHeroSet(staffLook), say: null, cd: 3 };
   const style = KIND_STYLE[venue.kind] || INTERIOR_STYLE[th];
-  const room = { id: key, kind: venue.kind, name: poi.n || V.label, W, H, grid, doorX, cw, style, patrons, standers, staff, cups, atCounter: false };
+  // un client fa de donant de missions (quests.js): si no n'hi ha cap, n'apareix un dempeus
+  const giver = patrons[0] || standers[0] || (standers.push({ x: (doorX + 3) * TS, y: (H - 3) * TS + 14, dir: "up",
+    sprites: makeHeroSet(randomLook(r)), say: null, cd: r() * 8 }), standers[0]);
+  giver.name = giverName(venue);
+  const room = { id: key, kind: venue.kind, name: poi.n || V.label, W, H, grid, doorX, cw, style, patrons, standers, staff, giver, cups, atCounter: false };
   room.canvas = renderInterior(room);
   interiors.set(key, room);
   if (interiors.size > 12) interiors.delete(interiors.keys().next().value);
@@ -309,6 +313,7 @@ function updateInterior(dt) {
       if (Math.random() < 0.5) p.say = { text: lines[(Math.random() * lines.length) | 0], ttl: 2 };
     }
   }
+  updateEnterHint();
 }
 
 function drawInterior() {
@@ -342,28 +347,38 @@ function drawInterior() {
   ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
   for (const o of net.others.values()) {
     if (o.room !== room.id) continue;
-    drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff", 24 * z);
+    drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff", 24 * z, o.look.level);
     drawBubble(o.bubble, o.x, o.y, camX, camY, z, 24 * z);
   }
   for (const p of room.patrons) if (p.say) drawBubble(p.say, p.x, p.y, camX, camY, z, 12 * z);
   for (const p of [...room.standers, w]) if (p.say) drawBubble(p.say, p.x, p.y, camX, camY, z, 14 * z);
-  drawNameTag(state.look.name, pl.x, pl.y, camX, camY, z, "#ffffff");
+  drawNameTag(state.look.name, pl.x, pl.y, camX, camY, z, "#ffffff", undefined, quests.level);
   drawBubble(state.bubble, pl.x, pl.y, camX, camY, z);
   drawNpcOverlay(camX, camY, z);
+  runSystems("indoorOverlay", room, camX, camY, z);
+}
+
+// Tecla O / E i botó ENTRA: a dins, parla amb el donant de missions si el tens al costat; a fora, entra
+function interact() {
+  if (state.interior) tryTalk();
+  else enterBar();
 }
 
 // Indicació "O: entrar" a fora, o què fer a dins
 let enterNear = null;
 function updateEnterHint() {
-  const el = document.getElementById("enter-hint");
+  const el = document.getElementById("enter-hint"), btn = document.getElementById("enter-btn");
   const venue = state.interior ? null : nearestVenue();
-  const key = state.interior ? state.interior.id : venue;
+  const giver = state.interior ? nearGiver() : null;
+  const key = state.interior ? state.interior.id + (giver ? ":talk" : "") : venue;
   if (key === enterNear) return;
   enterNear = key;
   el.classList.toggle("hidden", !venue && !state.interior);
-  el.textContent = state.interior ? `${VENUES[state.interior.kind].hint} · surt per la porta`
+  el.textContent = giver ? `O: parlar amb ${giver.name}`
+    : state.interior ? `${VENUES[state.interior.kind].hint} · surt per la porta`
     : venue ? `O: entrar a ${venue.p.n || VENUES[venue.kind].label}` : "";
-  document.getElementById("enter-btn").classList.toggle("dim", !venue);
+  btn.textContent = state.interior ? "PARLA" : "ENTRA";
+  btn.classList.toggle("dim", !venue && !giver);
 }
 
 addSystem({ init: initInteriors, update: updateEnterHint, updateIndoors: updateInterior });

@@ -85,7 +85,8 @@ function bindInput() {
     if (e.code === "Escape" && state.editing) { toggleAvatarPanel(false); return; }
     if (e.code === "KeyP" && !e.repeat) { toggleAvatarPanel(); return; }
     if (e.code === "KeyR" && !e.repeat && !state.editing && !state.chatting) { if (!state.interior) toggleBike(); return; }
-    if (e.code === "KeyO" && !e.repeat && !state.editing && !state.chatting) { enterBar(); return; }
+    if ((e.code === "KeyO" || e.code === "KeyE") && !e.repeat && !state.editing && !state.chatting) { interact(); return; }
+    if (e.code === "KeyJ" && !e.repeat && !state.editing && !state.chatting) { toggleQuestLog(true); return; }
     if ((e.key === "Enter" || e.code === "KeyT") && !state.editing && !e.repeat) { e.preventDefault(); toggleChat(true); return; }
     if (state.editing) return;
     state.keys.add(e.code);

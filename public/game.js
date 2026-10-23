@@ -229,7 +229,7 @@ function collides(x, y) {
 }
 
 function update(dt) {
-  const frozen = state.editing || state.chatting || npcs.dead || state.onTitle;
+  const frozen = state.editing || state.chatting || npcs.dead || state.onTitle || state.dialog;
   const k = frozen ? new Set() : state.keys, pl = state.player;
   let dx = 0, dy = 0;
   if (k.has("ArrowLeft") || k.has("KeyA")) dx -= 1;
@@ -382,10 +382,10 @@ function drawSprites(list) {
 function drawPlayerName(camX, camY, z) {
   for (const o of net.others.values()) {
     if (o.room || !fogExplored(o.x / TS, o.y / TS)) continue;
-    drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff", 24 * z); // els altres jugadors s'escalen amb el mapa
+    drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff", 24 * z, o.look.level); // els altres s'escalen amb el mapa
     drawBubble(o.bubble, o.x, o.y, camX, camY, z, 24 * z);
   }
-  drawNameTag(state.look.name, state.player.x, state.player.y, camX, camY, z, "#ffffff");
+  drawNameTag(state.look.name, state.player.x, state.player.y, camX, camY, z, "#ffffff", undefined, quests.level);
   drawBubble(state.bubble, state.player.x, state.player.y, camX, camY, z);
 }
 
@@ -423,8 +423,8 @@ function drawBubble(b, x, y, camX, camY, z, spriteH = HERO_SCREEN_SCALE * 24 * d
   ctx.restore();
 }
 
-function drawNameTag(rawName, x, y, camX, camY, z, color, spriteH = HERO_SCREEN_SCALE * 24 * dpr) {
-  const name = rawName.trim();
+function drawNameTag(rawName, x, y, camX, camY, z, color, spriteH = HERO_SCREEN_SCALE * 24 * dpr, level = 0) {
+  const name = rawName.trim() + (level ? ` [${level}]` : "");
   if (!name) return;
   const pl = { x, y };
   const fs = Math.round(8 * dpr);

@@ -36,6 +36,7 @@ function depositAtBank() {
   saveMoney();
   updateCoinUi("bank");
   showBanner(`${n} moned${n === 1 ? "a assegurada" : "es assegurades"} al banc!`, "bank");
+  emit("deposit", n);
   return `Ingressades ${n} monedes!`;
 }
 
@@ -81,6 +82,7 @@ function coinsOnMessage(m) {
     coins.pending.delete(m.id);
     if (m.by === net.id) {
       coins.wallet++;
+      emit("coin");
       saveMoney();
       updateCoinUi("wallet");
       npcs.floaters.push({ text: "+1", t: 0, color: "#facc15" });
@@ -154,51 +156,11 @@ function pushCoinSprites(list, camX, camY, vw, vh, k) {
   }
 }
 
-// Fletxa a la vora de la pantalla que apunta al tresor més proper quan no es veu
+// Fletxa a la vora de la pantalla que apunta al tresor més proper (hud.js)
 function drawTreasurePointer(camX, camY, z) {
   if (!coins.nearest || npcs.dead) return;
-  const { c, meters } = coins.nearest, pl = state.player;
-  const W = canvas.width, H = canvas.height;
-  const px = (pl.x - camX) * z, py = (pl.y - camY) * z;
-  const cx = (c.x * TS - camX) * z, cy = (c.y * TS - camY) * z;
-  const margin = 46 * dpr;
-  const onScreen = cx > margin && cx < W - margin && cy > margin && cy < H - margin;
-  ctx.font = `${Math.round(8 * dpr)}px "Press Start 2P", monospace`;
-  ctx.textBaseline = "middle";
-  ctx.textAlign = "center";
-  let ax, ay, ang;
-  if (onScreen) {
-    // a la vista: només una etiqueta petita sobre la moneda
-    ax = cx; ay = cy - 26 * dpr; ang = null;
-  } else {
-    const dx = cx - px, dy = cy - py;
-    let t = Infinity;
-    if (dx > 0) t = Math.min(t, (W - margin - px) / dx);
-    if (dx < 0) t = Math.min(t, (margin - px) / dx);
-    if (dy > 0) t = Math.min(t, (H - margin - py) / dy);
-    if (dy < 0) t = Math.min(t, (margin - py) / dy);
-    ax = px + dx * t; ay = py + dy * t; ang = Math.atan2(dy, dx);
-  }
-  ctx.save();
-  if (ang !== null) {
-    ctx.translate(ax, ay);
-    ctx.rotate(ang);
-    const r = 12 * dpr;
-    ctx.beginPath();
-    ctx.moveTo(r, 0); ctx.lineTo(-r * 0.7, -r * 0.75); ctx.lineTo(-r * 0.35, 0); ctx.lineTo(-r * 0.7, r * 0.75); ctx.closePath();
-    ctx.fillStyle = "#facc15"; ctx.strokeStyle = "#1a1420"; ctx.lineWidth = 3 * dpr;
-    ctx.stroke(); ctx.fill();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    // etiqueta cap a l'interior de la pantalla
-    ax -= Math.cos(ang) * 30 * dpr; ay -= Math.sin(ang) * 22 * dpr;
-  }
-  const label = `${meters} m`, w = ctx.measureText(label).width + 10 * dpr, h = 16 * dpr;
-  ctx.fillStyle = "rgba(11,13,31,.8)";
-  ctx.fillRect(ax - w / 2, ay - h / 2, w, h);
-  ctx.fillStyle = "#facc15";
-  ctx.fillText(label, ax, ay + dpr);
-  ctx.restore();
-  ctx.textAlign = "left";
+  const { c, meters } = coins.nearest;
+  drawEdgePointer(c.x * TS, c.y * TS, `${meters} m`, "#facc15", camX, camY, z);
 }
 
 // Moneda de 10x10 que gira (4 fotogrames)

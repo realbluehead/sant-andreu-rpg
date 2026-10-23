@@ -17,7 +17,7 @@ const net = {
     let ws;
     try { ws = new WebSocket(serverUrl()); } catch { return this.reconnect(); }
     this.ws = ws;
-    ws.onopen = () => { this.retry = 0; this.send({ t: "hello", look: state.look, ...this.pos() }); };
+    ws.onopen = () => { this.retry = 0; this.send({ t: "hello", look: this.look(), ...this.pos() }); };
     ws.onmessage = (e) => { try { this.onMessage(JSON.parse(e.data)); } catch { /* missatge invàlid */ } };
     ws.onclose = () => {
       this.connected = false; this.others.clear(); this.ws = null;
@@ -35,9 +35,10 @@ const net = {
     const pl = state.player;
     return { x: Math.round(pl.x), y: Math.round(pl.y), dir: pl.dir, moving: pl.moving, bike: !!state.riding, room: state.interior?.id || "" };
   },
+  look() { return { ...state.look, level: quests.level }; }, // el nivell es mostra al costat del nom
   sendLook() {
     clearTimeout(this.lookTimer);
-    this.lookTimer = setTimeout(() => this.send({ t: "look", look: state.look }), 300);
+    this.lookTimer = setTimeout(() => this.send({ t: "look", look: this.look() }), 300);
   },
   addOther(p) {
     this.others.set(p.id, { ...p, tx: p.x, ty: p.y, anim: 0, frame: 0, sprites: makeHeroSet(p.look) });

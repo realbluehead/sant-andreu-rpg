@@ -84,6 +84,54 @@
   #intro li b { font-weight: normal; color: var(--accent); }
   #intro-ok { align-self: center; font: inherit; font-size: 10px; color: #1d2142; background: #ffd35a; border: 3px solid #f4f1e8;
     border-radius: 4px; padding: 10px 18px; cursor: pointer; }
+  /* Nivell i missions (quests.js), a l'estil del WoW */
+  #level { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 8px; }
+  #level .lbl { color: #c084fc; white-space: nowrap; }
+  #level .lbl b { font-weight: normal; color: #ffd23f; }
+  #level .bar { flex: 1; min-width: 60px; max-width: 110px; height: 8px; background: #241634; border: 2px solid #0b0d1f; box-shadow: 0 0 0 1px #f4f1e8; }
+  #level .bar i { display: block; height: 100%; width: 0; background: linear-gradient(#d8b4fe, #a855f7); transition: width .4s; }
+  #level .val { color: var(--muted); font-size: 7px; }
+  #banner.quest { color: #ffd23f; border-color: #a16207; }
+  #banner.level { color: #ffd23f; border-color: #ffd23f; font-size: 20px; text-shadow: 0 0 12px rgba(255,210,63,.8), 3px 3px 0 #0b0d1f; }
+  #quest-tracker { right: 16px; top: 120px; width: 230px; padding: 8px 10px; cursor: pointer; z-index: 2; background: rgba(29,33,66,.82); }
+  #quest-tracker .head { font-size: 8px; color: #ffd23f; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  #quest-tracker .head small { color: var(--muted); font-size: 6px; }
+  #quest-tracker .list > div { display: flex; flex-direction: column; gap: 3px; margin-bottom: 7px; font-size: 7px; line-height: 1.5; }
+  #quest-tracker .list b { font-weight: normal; color: #ffd23f; font-size: 8px; }
+  #quest-tracker .list .tracked b::before { content: "▸ "; color: #c084fc; }
+  #quest-tracker .list span { color: var(--text); }
+  #quest-tracker .list span.ok { color: #86efac; }
+  #quest-dialog, #quest-log { position: fixed; inset: 0; z-index: 8; display: grid; place-items: center; background: rgba(11,13,31,.45); padding: 16px; }
+  #quest-dialog.hidden, #quest-log.hidden { display: none; }
+  .parchment { width: min(440px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; background: #efe0bd; color: #3a2614;
+    border: 4px solid #6b4426; box-shadow: 0 0 0 3px #1a1420, inset 0 0 30px rgba(120,80,30,.35); border-radius: 4px; padding: 16px 18px;
+    font-family: Georgia, "Times New Roman", serif; font-size: 15px; line-height: 1.5; }
+  .parchment .who { font: 8px "Press Start 2P", monospace; color: #8a5a32; margin-bottom: 6px; }
+  .parchment h3 { margin: 0 0 10px; font: 12px "Press Start 2P", monospace; color: #5a2a0a; }
+  .parchment h4 { margin: 12px 0 4px; font: 9px "Press Start 2P", monospace; color: #5a2a0a; }
+  .parchment p { margin: 0 0 6px; }
+  .parchment ul { margin: 0; padding-left: 20px; }
+  .parchment li.ok { color: #2f7a3a; text-decoration: line-through; }
+  .parchment .rewards { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; }
+  .parchment .rewards b { font: 9px "Press Start 2P", monospace; color: #5a2a0a; width: 100%; }
+  .parchment .rewards .xp { color: #7e22ce; font-weight: bold; }
+  .parchment .rewards .cn { color: #a16207; font-weight: bold; }
+  .parchment .buttons { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; flex-wrap: wrap; }
+  .parchment button { font: 9px "Press Start 2P", monospace; color: #f4f1e8; background: #6b4426; border: 3px solid #3a2614; border-radius: 3px; padding: 9px 12px; cursor: pointer; }
+  .parchment button.primary { background: #a16207; color: #fff7db; }
+  .parchment button:hover { filter: brightness(1.15); }
+  #quest-log .q { border-top: 2px dashed rgba(107,68,38,.4); padding-top: 10px; margin-top: 10px; }
+  #quest-log .q.tracked h4::before { content: "▸ "; color: #7e22ce; }
+  #quest-log .q h4 small { font: italic 12px Georgia, serif; color: #8a5a32; }
+  #quest-log .q p { font-size: 13px; color: #5a4030; }
+  #quest-log .row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; }
+  #quest-log .row span { margin-right: auto; color: #7e22ce; font-weight: bold; }
+  #quest-log .row button { font-size: 7px; padding: 6px 8px; }
+  #quest-log .lvl { font: 8px "Press Start 2P", monospace; color: #7e22ce; }
+  #quest-log .empty { font-style: italic; }
+  body.touch #quest-tracker { right: auto; left: calc(12px + env(safe-area-inset-left)); top: auto; bottom: calc(190px + env(safe-area-inset-bottom)); width: min(200px, 52vw); padding: 6px 8px; }
+  body.touch #quest-tracker .list > div:not(.tracked) { display: none; }
+  body.indoors #quest-tracker { display: none; }
   #death { position: fixed; inset: 0; z-index: 8; display: grid; place-items: center; background: rgba(40,4,12,.72); padding: 16px; }
   #death .panel { position: relative; text-align: center; padding: 22px 26px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
   #death h2 { margin: 0; font-size: 22px; font-weight: normal; color: #ff4d4d; text-shadow: 3px 3px 0 #0b0d1f; }
@@ -243,6 +291,7 @@
   <div id="online" class="offline"><i></i><span>Connectant…</span></div>
   <div id="hp"><span class="lbl">VIDA</span><div class="bar"><i></i></div><span class="val">100/100</span></div>
   <div id="drunk" title="Embriaguesa: puja amb cerveses als bars, baixa amb cafès"><span class="lbl">EMBRIAGUESA</span><div class="bar"><i></i></div><span class="val">0/20</span></div>
+  <div id="level" title="Nivell i experiència: completa missions per pujar"><span class="lbl">NIVELL <b>1</b></span><div class="bar"><i></i></div><span class="val">0/100</span></div>
   <div id="money">
     <span id="wallet" title="Monedes que portes a sobre (te les poden robar)"><i class="coin"></i>A sobre <b>0</b></span>
     <span id="bank" title="Monedes assegurades al banc"><i class="vault"></i>Banc <b>0</b></span>
@@ -253,7 +302,7 @@
   <b>FLETXES / WASD</b> caminar · <b>SHIFT</b> córrer<br>
   <b>+ / −</b> o roda: zoom · arrossega: moure càmera<br>
   <b>C</b> centrar · <b>M</b> minimapa · <b>L</b> rètols<br>
-  <b>O</b> entrar al bar · <b>ESPAI</b> saltar · <b>ENTER</b> parlar · <b>R</b> bici · <b>N</b> fantasma · <b>P</b> opcions · <b>B</b> música · <b>H</b> ajuda
+  <b>O</b> entrar / parlar · <b>J</b> missions · <b>ESPAI</b> saltar · <b>ENTER</b> parlar · <b>R</b> bici · <b>N</b> fantasma · <b>P</b> opcions · <b>B</b> música · <b>H</b> ajuda
 </div>
 <div id="zoom" class="panel">
   <button id="zoom-out" type="button" aria-label="Allunyar">−</button>
@@ -288,6 +337,7 @@
     <button id="chat-btn" class="touch-btn touch-only" type="button">XAT</button>
     <button id="map-btn" class="touch-btn touch-only" type="button">MAPA</button>
     <button id="center-btn" class="touch-btn touch-only" type="button">CENTRAR</button>
+    <button id="quests-btn" class="touch-btn touch-only" type="button">MISSIONS</button>
   </div>
   <button id="run-btn" class="touch-btn touch-only" type="button" aria-pressed="false">Córrer</button>
 </div>
@@ -299,6 +349,26 @@
   <input id="chat-input" maxlength="30" enterkeyhint="send" spellcheck="false" placeholder="Escriu un missatge…">
   <span id="chat-count">0/30</span>
 </form>
+<div id="quest-tracker" class="panel hidden" title="Obre el diari de missions (J)">
+  <div class="head"><span>MISSIONS</span><small>J: diari</small></div>
+  <div class="list"></div>
+</div>
+<div id="quest-dialog" class="hidden" role="dialog" aria-modal="true">
+  <div class="parchment">
+    <div class="who"></div>
+    <h3></h3>
+    <div class="body"></div>
+    <div class="buttons"></div>
+  </div>
+</div>
+<div id="quest-log" class="hidden" role="dialog" aria-modal="true" aria-label="Diari de missions">
+  <div class="parchment">
+    <h3>DIARI DE MISSIONS</h3>
+    <div class="lvl"></div>
+    <div class="list"></div>
+    <div class="buttons"><button class="primary" data-close>Tancar</button></div>
+  </div>
+</div>
 <div id="intro" class="hidden" role="dialog" aria-modal="true" aria-labelledby="intro-title">
   <div class="panel">
     <h2 id="intro-title">BENVINGUT/DA A SANT ANDREU!</h2>
@@ -332,30 +402,31 @@
   </div>
 </div>
 <!-- ordre de càrrega: core i els fitxers base, després els sistemes (s'enganxen amb addSystem) -->
-<script src="core.js?v=57"></script>
-<script src="tiles.js?v=57"></script>
-<script src="sprites.js?v=57"></script>
-<script src="themes.js?v=57"></script>
-<script src="roofs.js?v=57"></script>
-<script src="game.js?v=57"></script>
-<script src="chat.js?v=57"></script>
-<script src="avatar.js?v=57"></script>
-<script src="net.js?v=57"></script>
-<script src="hud.js?v=57"></script>
-<script src="input.js?v=57"></script>
-<script src="world.js?v=57"></script>
-<script src="npcs.js?v=57"></script>
-<script src="pois.js?v=57"></script>
-<script src="animals.js?v=57"></script>
-<script src="coins.js?v=57"></script>
-<script src="thieves.js?v=57"></script>
-<script src="spooky.js?v=57"></script>
-<script src="bicing.js?v=57"></script>
-<script src="interior.js?v=57"></script>
-<script src="title.js?v=57"></script>
-<script src="drinks.js?v=57"></script>
-<script src="music.js?v=57"></script>
-<script src="fog.js?v=57"></script>
-<script src="intro.js?v=57"></script>
+<script src="core.js?v=58"></script>
+<script src="tiles.js?v=58"></script>
+<script src="sprites.js?v=58"></script>
+<script src="themes.js?v=58"></script>
+<script src="roofs.js?v=58"></script>
+<script src="game.js?v=58"></script>
+<script src="chat.js?v=58"></script>
+<script src="avatar.js?v=58"></script>
+<script src="net.js?v=58"></script>
+<script src="hud.js?v=58"></script>
+<script src="input.js?v=58"></script>
+<script src="world.js?v=58"></script>
+<script src="npcs.js?v=58"></script>
+<script src="pois.js?v=58"></script>
+<script src="animals.js?v=58"></script>
+<script src="coins.js?v=58"></script>
+<script src="thieves.js?v=58"></script>
+<script src="spooky.js?v=58"></script>
+<script src="bicing.js?v=58"></script>
+<script src="interior.js?v=58"></script>
+<script src="title.js?v=58"></script>
+<script src="drinks.js?v=58"></script>
+<script src="music.js?v=58"></script>
+<script src="fog.js?v=58"></script>
+<script src="quests.js?v=58"></script>
+<script src="intro.js?v=58"></script>
 </body>
 </html>

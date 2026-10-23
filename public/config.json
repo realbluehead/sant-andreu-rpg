@@ -91,6 +91,14 @@
     "enabled": true,
     "radius": 12
   },
+  "quests": {
+    "enabled": true,
+    "xpBase": 100,
+    "xpExponent": 1.5,
+    "maxLevel": 60,
+    "maxActive": 5,
+    "rewardScale": 1
+  },
   "auth": {
     "googleClientId": "191935334253-espbqq5ue0aqtct0up6op8u3q8gikph3.apps.googleusercontent.com"
   }

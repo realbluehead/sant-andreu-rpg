@@ -14,6 +14,8 @@ const INTRO_ITEMS = (touch) => [
   ["❤️", "Compte amb les <b>bicis, patinets i motos</b>: et treuen vida. A les <b>farmàcies</b> et cures."],
   ["🚲", touch ? "A les estacions de Bicing, prem <b>BICI</b> per agafar-ne una. <b>SALTA</b> per saltar les bosses d'escombraries."
                : "A les estacions de Bicing, prem <b>R</b> per agafar una bici. Amb <b>ESPAI</b> saltes les bosses d'escombraries."],
+  ["📜", touch ? "Busca el <b>!</b> groc sobre els locals: a dins, acosta't a qui té el <b>!</b> i prem <b>PARLA</b>. Les missions donen XP per pujar de nivell. <b>MISSIONS</b> obre el diari."
+               : "Busca el <b>!</b> groc sobre els locals: a dins, acosta't a qui té el <b>!</b> i prem <b>O</b>. Les missions donen XP per pujar de nivell. Amb <b>J</b> obres el diari."],
   ["🌙", "Cada minut és una hora. <b>De 20 a 6 h surten els monstres</b>…"],
   ["💬", touch ? "Prem <b>XAT</b> per parlar amb els altres jugadors. A <b>OPCIONS</b> canvies el teu personatge i la música."
                : "Prem <b>ENTER</b> per parlar amb els altres jugadors. Amb <b>P</b> obres les opcions (personatge i música) i amb <b>H</b> l'ajuda."],

@@ -30,6 +30,7 @@ function serveDrink(kind, name) {
     showBanner(`Glup! Una cervesa a ${name}`, "beer");
     saveDrunk();
     updateDrunkUi(true);
+    emit("drink", { kind, room: state.interior?.id });
     return "Aquí té la seva canya!";
   }
   if (drink.level <= 0) { showBanner("Ja estàs ben despert", "coffee"); return "Avui ja vas ben despert!"; }
@@ -38,6 +39,7 @@ function serveDrink(kind, name) {
   showBanner(`Un cafè a ${name}. Et despertes una mica!`, "coffee");
   saveDrunk();
   updateDrunkUi(true);
+  emit("drink", { kind, room: state.interior?.id });
   return "Un cafè ben carregat!";
 }
 

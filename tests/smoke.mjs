@@ -1,6 +1,6 @@
 // Test de fum del joc: serveix public/ en un port local, obre el joc en un Chromium sense finestra
 // (escriptori i mòbil) i comprova que arrenca i que es poden jugar uns quants fotogrames sense
-// errors: caminar, fer-se de nit, entrar i sortir d'un bar, obrir OPCIONS i el xat, fer zoom.
+// errors: caminar, fer-se de nit, entrar i sortir d'un bar, fer una missió, obrir OPCIONS i el xat, fer zoom.
 // No es connecta al servidor multijugador (el joc ha de funcionar igualment sense connexió).
 // Ús:  cd tests && npm install && npm run smoke
 import { createServer } from "node:http";
@@ -94,6 +94,28 @@ async function run(label, contextOpts) {
     frames(40, "dins del bar");
     exitBar();
     frames(5, "fora del bar");
+    // missions: parlar amb el donant del bar, acceptar, fer l'objectiu i entregar-la
+    const room = interiorFor(bar);
+    enterBar();
+    state.player.x = room.giver.x; state.player.y = room.giver.y + 12;
+    frames(2, "al costat del donant");
+    const talked = tryTalk();
+    const offered = quests.dialog?.mode === "offer";
+    dialogAction("accept");
+    const q = quests.active[quests.active.length - 1];
+    for (const o of q.objectives) o.have = o.need; // fem trampa: objectius complerts
+    q.turnIn = room.id;
+    const xp0 = quests.level * 1e6 + quests.xp;
+    tryTalk();
+    const completing = quests.dialog?.mode === "complete";
+    dialogAction("complete");
+    const xpUp = quests.level * 1e6 + quests.xp > xp0;
+    gainXp(xpToNext(quests.level)); // ha de pujar de nivell
+    frames(5, "missió completada");
+    exitBar();
+    frames(3, "fora amb marques de missió");
+    toggleQuestLog(true); toggleQuestLog(false);
+    var questOk = talked && offered && completing && xpUp && quests.level >= 2 && !quests.active.includes(q);
     toggleAvatarPanel(true); document.getElementById("avatar-random").click(); toggleAvatarPanel(false);
     toggleChat(true); toggleChat(false);
     setZoom(0); frames(3, "zoom ×0,5"); setZoom(2);
@@ -104,7 +126,7 @@ async function run(label, contextOpts) {
     const d = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
     const colors = new Set();
     for (let i = 0; i < d.length; i += 4 * 997) colors.add((d[i] << 16) | (d[i + 1] << 8) | d[i + 2]);
-    return { steps, night, inside, out: !state.interior, colors: colors.size, systems: systems.length };
+    return { steps, night, inside, out: !state.interior, colors: colors.size, systems: systems.length, questOk, level: quests.level };
   }).catch((e) => ({ error: e.message }));
 
   if (result.error) fail(`error jugant: ${result.error}`);
@@ -113,6 +135,7 @@ async function run(label, contextOpts) {
     if (result.night) ok("de nit surten els monstres"); else fail("de nit no surten els monstres");
     if (result.inside && result.out) ok("s'entra i se surt del bar"); else fail("no s'ha pogut entrar i sortir del bar");
     if (result.colors > 20) ok(`el mapa es dibuixa (${result.colors} colors)`); else fail(`el mapa sembla buit (${result.colors} colors)`);
+    if (result.questOk) ok(`missió acceptada i entregada, nivell ${result.level}`); else fail("el sistema de missions no ha funcionat");
     ok(`${result.systems} sistemes registrats`);
   }
   if (errors.length) errors.forEach((e) => fail(`error a la consola: ${e}`)); else ok("cap error a la consola");

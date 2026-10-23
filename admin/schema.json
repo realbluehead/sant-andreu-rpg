@@ -678,6 +678,71 @@
           "help": "Ho aplica també el servidor"
         }
       ]
+    },
+    {
+      "key": "quests",
+      "title": "Missions i nivells",
+      "icon": "📜",
+      "fields": [
+        {
+          "key": "enabled",
+          "label": "Missions actives",
+          "type": "bool",
+          "default": true
+        },
+        {
+          "key": "xpBase",
+          "label": "XP per passar del nivell 1 al 2",
+          "help": "Cada nivell en demana més: base × nivell^exponent",
+          "type": "int",
+          "min": 10,
+          "max": 2000,
+          "step": 10,
+          "default": 100,
+          "unit": "XP"
+        },
+        {
+          "key": "xpExponent",
+          "label": "Com creix l'XP per nivell",
+          "help": "1 = sempre igual; 1,5 = cada cop més difícil; 2 = molt difícil",
+          "type": "number",
+          "min": 1,
+          "max": 3,
+          "step": 0.05,
+          "default": 1.5,
+          "unit": "exponent"
+        },
+        {
+          "key": "maxLevel",
+          "label": "Nivell màxim",
+          "type": "int",
+          "min": 5,
+          "max": 100,
+          "step": 1,
+          "default": 60,
+          "unit": "nivell"
+        },
+        {
+          "key": "maxActive",
+          "label": "Missions alhora",
+          "type": "int",
+          "min": 1,
+          "max": 25,
+          "step": 1,
+          "default": 5,
+          "unit": "missions"
+        },
+        {
+          "key": "rewardScale",
+          "label": "Multiplicador d'XP de les missions",
+          "type": "number",
+          "min": 0.1,
+          "max": 10,
+          "step": 0.1,
+          "default": 1,
+          "unit": "×"
+        }
+      ]
     }
   ]
 }

@@ -51,6 +51,22 @@ Quan canvies de zona surt un avís, el panell mostra la zona actual i la música
 
 A la **Vila dels Bruixots**, els lladres van vestits de bruixot (túnica i barret en punta) i hi viuen **fantasmes** que suren travessant parets i espanten (però no fan mal) i **zombies** lents que, si et veuen, t'empaiten i et mosseguen (-10). Els zombies no surten de la Vila. Les quantitats i el dany es configuren a l'admin. A la **Ruta dels Monstres**, els lladres van amb una disfressa de drac de foc (caputxa amb banyes, ales i cua amb flama).
 
+## Missions i nivells
+
+A l'estil del WoW: a cada bar, cafeteria, farmàcia i banc hi ha un veí o veïna que dona missions. Un **!** groc a sobre del local (i al minimapa, si és a prop) vol dir que en té una per a tu; un **?** groc, que hi has d'anar a entregar-ne una. A dins, acosta't a qui té el signe i prem **O** (o **PARLA** al mòbil): et sortirà la missió en un pergamí, amb els objectius i les recompenses.
+
+Hi ha set tipus de missió (`QUEST_TEMPLATES` a `public/quests.js`):
+
+- **Monedes perdudes**: recull N monedes pel carrer.
+- **Un compte d'estalvis**: ingressa N monedes al banc.
+- **La ruta de bars**: fes-te una cervesa a N bars diferents.
+- **Un encàrrec**: porta un objecte a algú d'un altre local i entrega-li allà.
+- **Ves-m'ho a buscar**: recull un objecte en un altre local i torna'l a qui te l'ha demanat.
+- **Records del barri**: visita una plaça o un lloc del barri i torna.
+- **Fes salut, pedala!**: fes N metres en Bicing.
+
+Les missions donen **XP** i monedes. Per passar del nivell L al següent calen `100 × L^1,5` XP (100, 283, 520…), i com més nivell, més llargues són les missions (més monedes, locals més lluny). En pujar de nivell et cures del tot. El **diari** (tecla **J** o botó MISSIONS) mostra les missions actives (com a molt 5), quina segueixes (la fletxa lila t'hi porta) i permet abandonar-les. El teu nivell surt al costat del nom per als altres jugadors. Tot es configura a l'admin (secció *Missions i nivells*).
+
 ## Nit de monstres
 
 De **20 a 6 h** (hora del joc) surten 40 lladres més i 30 zombies i 20 fantasmes per tot el barri, i la música canvia a un tema de terror. En fer-se de dia s'amaguen. Es configura a l'admin (secció *Nit de monstres*).

@@ -55,6 +55,10 @@ A la **Vila dels Bruixots**, els lladres van vestits de bruixot (túnica i barre
 
 De **20 a 6 h** (hora del joc) surten 40 lladres més i 30 zombies i 20 fantasmes per tot el barri, i la música canvia a un tema de terror. En fer-se de dia s'amaguen. Es configura a l'admin (secció *Nit de monstres*).
 
+## Descoberta del mapa
+
+Al principi el mapa i el minimapa estan coberts de boira i només veus el que tens molt a prop. A mesura que camines es van descobrint (12 caselles al teu voltant) i queda desat al navegador, així que en tornar hi trobes el que ja havies explorat. Els altres jugadors no surten al minimapa si són en zona per descobrir. Es configura a l'admin (secció *Descoberta del mapa*); a la consola, `resetFog()` torna a tapar-ho tot.
+
 ## Música
 
 Cada zona té la seva música de fons, una composició original en estil chiptune de 8 bits, sintetitzada en directe amb Web Audio (`public/music.js`): dues ones quadrades (melodia i arpegis), una triangular (baix) i soroll (bateria). Comença amb la primera tecla o toc i es pot aturar amb el botó **Música** o la tecla **B**.

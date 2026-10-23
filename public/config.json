@@ -87,6 +87,10 @@
     "zombies": 30,
     "ghosts": 20
   },
+  "fog": {
+    "enabled": true,
+    "radius": 12
+  },
   "auth": {
     "googleClientId": "191935334253-espbqq5ue0aqtct0up6op8u3q8gikph3.apps.googleusercontent.com"
   }

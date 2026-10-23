@@ -90,6 +90,10 @@ const CFG = {
   "auth": {
     "googleClientId": ""
   },
+  "fog": {
+    "enabled": true,
+    "radius": 12
+  },
   "magic": {
     "ghosts": 12,
     "zombies": 14,
@@ -771,13 +775,15 @@ function drawMinimap() {
   if (!state.showMinimap) return;
   mmCtx.imageSmoothingEnabled = true;
   mmCtx.drawImage(mmBase, 0, 0, mm.width, mm.height);
+  drawNpcMinimap(mmCtx, mmScale);
+  drawFogMinimap(mmCtx, mmScale);
   const z = ZOOMS[state.zoomIdx];
   const vw = canvas.width / dpr / z / TS, vh = canvas.height / dpr / z / TS;
   mmCtx.strokeStyle = "#ffd35a"; mmCtx.lineWidth = 1;
   mmCtx.strokeRect(state.cam.x / TS * mmScale + .5, state.cam.y / TS * mmScale + .5, vw * mmScale, vh * mmScale);
   const px = state.player.x / TS * mmScale, py = state.player.y / TS * mmScale;
   for (const o of net.others.values()) {
-    if (o.room) continue; // és dins d'un bar
+    if (o.room || !fogExplored(o.x / TS, o.y / TS)) continue; // és dins d'un bar o en zona per descobrir
     const ox = o.x / TS * mmScale, oy = o.y / TS * mmScale;
     mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(ox - 2.5, oy - 2.5, 5, 5);
     mmCtx.fillStyle = "#5fb3ff"; mmCtx.fillRect(ox - 1.5, oy - 1.5, 3, 3);
@@ -788,7 +794,6 @@ function drawMinimap() {
     mmCtx.strokeStyle = "#ffffff"; mmCtx.lineWidth = 1.5;
     mmCtx.beginPath(); mmCtx.arc(fo.x / TS * mmScale, fo.y / TS * mmScale, 6, 0, Math.PI * 2); mmCtx.stroke();
   }
-  drawNpcMinimap(mmCtx, mmScale);
   mmCtx.fillStyle = "#1a1420"; mmCtx.fillRect(px - 3, py - 3, 6, 6);
   mmCtx.fillStyle = "#ff4d4d"; mmCtx.fillRect(px - 2, py - 2, 4, 4);
 }
@@ -960,6 +965,9 @@ function draw() {
   drawAnimalBubbles(camX, camY, z);
   drawThiefOverlay(camX, camY, z);
   drawSpookyOverlay(camX, camY, z);
+  ctx.setTransform(z, 0, 0, z, -ox, -oy);
+  drawFog(); // el que encara no has descobert (fog.js)
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   drawPlayerName(camX, camY, z);
   drawNpcOverlay(camX, camY, z);
   drawTreasurePointer(camX, camY, z);
@@ -997,7 +1005,7 @@ function drawSprites(list) {
 
 function drawPlayerName(camX, camY, z) {
   for (const o of net.others.values()) {
-    if (o.room) continue;
+    if (o.room || !fogExplored(o.x / TS, o.y / TS)) continue;
     drawNameTag(o.look.name, o.x, o.y, camX, camY, z, "#9fd3ff", 24 * z); // els altres jugadors s'escalen amb el mapa
     drawBubble(o.bubble, o.x, o.y, camX, camY, z, 24 * z);
   }
@@ -1496,6 +1504,7 @@ function bindInput() {
     const onMap = (x, y) => [r.left + (x / TS / state.W) * r.width, r.top + (y / TS / state.H) * r.height];
     const near = [];
     for (const [id, o] of net.others) {
+      if (o.room || !fogExplored(o.x / TS, o.y / TS)) continue;
       const [cx, cy] = onMap(o.x, o.y);
       const d = Math.hypot(cx - e.clientX, cy - e.clientY);
       if (d < 12) near.push({ id, o, d });
@@ -1563,6 +1572,7 @@ async function main() {
   initCoins();
   initThieves();
   initSpooky();
+  initFog();
   initDrinks();
   initMusic();
   bindNpcUi();
@@ -1591,6 +1601,7 @@ async function main() {
     updateCoins(dt);
     updateThieves(dt);
     updateSpooky(dt);
+    updateFog(dt);
     updateBicing();
     updateZone();
     updateEnterHint();

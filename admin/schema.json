@@ -413,6 +413,29 @@
       ]
     },
     {
+      "key": "fog",
+      "title": "Descoberta del mapa",
+      "icon": "🌫️",
+      "fields": [
+        {
+          "key": "enabled",
+          "label": "Mapa per descobrir (boira)",
+          "type": "bool",
+          "default": true
+        },
+        {
+          "key": "radius",
+          "label": "Radi que descobreixes",
+          "type": "int",
+          "min": 4,
+          "max": 40,
+          "step": 1,
+          "default": 12,
+          "unit": "caselles"
+        }
+      ]
+    },
+    {
       "key": "animals",
       "title": "Animals",
       "icon": "🐈",

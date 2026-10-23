@@ -13,6 +13,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..");
 const CONFIG = join(ROOT, "public", "config.json");
 const SCHEMA = join(HERE, "schema.json");
+// Registre de connexions: es llegeix del servidor multijugador amb el token de admin/.admin-token
+// (el mateix valor que el secret ADMIN_TOKEN del worker). ADMIN_SERVER_URL permet apuntar al servidor local.
+const GAME_SERVER = process.env.ADMIN_SERVER_URL || "https://sant-andreu-rpg.realbluehead.workers.dev";
+const TOKEN_FILE = join(HERE, ".admin-token");
 const ALLOWED_HOSTS = new Set([`localhost:${PORT}`, `127.0.0.1:${PORT}`]);
 
 const run = (cmd, args) => new Promise((resolve) => {
@@ -102,6 +106,15 @@ const server = createServer(async (req, res) => {
       log.push(p.out || "Res a pujar");
       console.log(`[${new Date().toLocaleTimeString()}] Publicar: ${p.ok ? "OK" : "ERROR"}\n  ${log.join("\n  ")}`);
       return send(res, p.ok ? 200 : 500, { ok: p.ok, log });
+    }
+
+    if (url.pathname === "/api/log" && req.method === "GET") {
+      let token = "";
+      try { token = (await readFile(TOKEN_FILE, "utf8")).trim(); } catch { /* sense token */ }
+      if (!token) return send(res, 500, { error: "Falta admin/.admin-token (el token d'admin del servidor)" });
+      const r = await fetch(`${GAME_SERVER}/admin/log`, { headers: { Authorization: `Bearer ${token}` } });
+      if (!r.ok) return send(res, 502, { error: `El servidor ha respost ${r.status}` });
+      return send(res, 200, await r.text());
     }
 
     return send(res, 404, { error: "No trobat" });

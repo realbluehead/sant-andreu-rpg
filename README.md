@@ -172,6 +172,12 @@ node admin/server.mjs
 
 Obre <http://localhost:8790>. **Desar** escriu `public/config.json` (el joc en local l'agafa en recarregar) i **Publicar a GitHub** fa un commit només d'aquest fitxer i el puja. La web s'actualitza en un minut, i el servidor de Cloudflare llegeix el `config.json` publicat (com a molt un cop per minut) per a les monedes i el xat, sense haver-lo de tornar a desplegar.
 
+A dalt de tot hi ha el **registre de connexions**: qui està jugant ara i les últimes 500 entrades i sortides (amb l'hora, quanta estona hi ha estat i, si ha entrat amb Google, el compte). S'actualitza cada 10 s. L'admin el llegeix del servidor amb el token de `admin/.admin-token` (no es puja al repositori), que ha de coincidir amb el secret del worker:
+
+```bash
+cd server && npx wrangler secret put ADMIN_TOKEN
+```
+
 L'admin només escolta a `127.0.0.1` i no té dependències. Els límits i textos de cada camp són a `admin/schema.json`.
 
 Per provar el servidor en local amb la configuració local, copia `server/.dev.vars.example` a `server/.dev.vars`.

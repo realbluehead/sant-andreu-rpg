@@ -14,6 +14,7 @@ const DEFAULT_CFG = { maxSay: 30, maxCoins: 50, coinEveryMs: 5000 };
 const CONFIG_TTL_MS = 60_000;
 const TS = 16;              // píxels per tile al client
 const PICK_RADIUS = 3;      // tiles de marge (latència) per validar que el jugador és a prop
+const LOG_MAX = 500;         // entrades del registre de connexions que es guarden (per a l'admin)
 const ALLOWED_ORIGINS = [/^https:\/\/realbluehead\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
 
 const COLOR = /^#[0-9a-f]{6}$/i;
@@ -106,6 +107,24 @@ export class Room extends DurableObject {
     return new Response(null, { status: 101, webSocket: client });
   }
 
+  // --- Registre de connexions (es consulta des de l'admin local) ---------
+  async addLog(ev, a, extra = {}) {
+    const online = this.ctx.getWebSockets().filter((o) => o.deserializeAttachment()?.p && !o.deserializeAttachment()?.left).length;
+    const entry = { t: Date.now(), ev, id: a.id, name: a.p?.look?.name || "", online, ...extra };
+    if (a.user) entry.google = a.user.email || a.user.name;
+    this.log ||= (await this.ctx.storage.get("log")) || []; // en memòria perquè dos esdeveniments seguits no es trepitgin
+    const log = this.log;
+    log.push(entry);
+    if (log.length > LOG_MAX) log.splice(0, log.length - LOG_MAX);
+    await this.ctx.storage.put("log", log);
+  }
+  async adminLog() {
+    const now = Date.now();
+    const players = this.ctx.getWebSockets().map((o) => o.deserializeAttachment()).filter((a) => a?.p && !a.left)
+      .map((a) => ({ id: a.id, name: a.p.look.name, since: a.since || null, room: a.p.room, google: a.user ? a.user.email || a.user.name : "" }));
+    return { now, players, log: this.log || (await this.ctx.storage.get("log")) || [] };
+  }
+
   // --- Monedes -----------------------------------------------------------
   async loadCoins() {
     if (this.coins) return;
@@ -161,7 +180,9 @@ export class Room extends DurableObject {
       if (!look) return;
       const isNew = !a.p;
       a.p = { id: a.id, look, ...cleanPos(m) };
+      if (isNew) a.since = Date.now();
       ws.serializeAttachment(a);
+      if (isNew) await this.addLog("join", a);
       const players = this.ctx.getWebSockets()
         .filter((o) => o !== ws)
         .map((o) => o.deserializeAttachment()?.p)
@@ -203,8 +224,9 @@ export class Room extends DurableObject {
         await this.ctx.storage.put({ [key]: user, userCount: total });
         // await notifyNewUser(this.env, user, total); // avís per correu desactivat de moment
       }
-      a.user = { sub: info.sub, name: info.name };
+      a.user = { sub: info.sub, name: info.name, email: info.email };
       ws.serializeAttachment(a);
+      await this.addLog("auth", a, newUser ? { newUser: true } : {});
       ws.send(JSON.stringify({ t: "auth", ok: true, name: info.name, newUser }));
     } else if (m.t === "say") {
       const text = String(m.text ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, (await this.getConfig()).maxSay);
@@ -222,16 +244,20 @@ export class Room extends DurableObject {
     }
   }
 
-  leave(ws) {
+  async leave(ws) {
     const a = ws.deserializeAttachment();
-    if (a?.p) this.broadcast({ t: "leave", id: a.id }, ws);
+    if (!a?.p || a.left) return; // close i error poden arribar tots dos
+    a.left = true;
+    ws.serializeAttachment(a);
+    this.broadcast({ t: "leave", id: a.id }, ws);
+    await this.addLog("leave", a, { secs: a.since ? Math.round((Date.now() - a.since) / 1000) : null });
   }
-  webSocketClose(ws, code) {
-    this.leave(ws);
+  async webSocketClose(ws, code) {
+    await this.leave(ws);
     try { ws.close(code, "adeu"); } catch { /* ja tancat */ }
   }
-  webSocketError(ws) {
-    this.leave(ws);
+  async webSocketError(ws) {
+    await this.leave(ws);
   }
 }
 
@@ -243,6 +269,12 @@ export default {
       const origin = request.headers.get("Origin") || "";
       if (!ALLOWED_ORIGINS.some((re) => re.test(origin))) return new Response("Origen no permès", { status: 403 });
       return env.ROOM.get(env.ROOM.idFromName(ROOM_NAME)).fetch(request);
+    }
+    // Registre de connexions per a l'admin local (cal el secret ADMIN_TOKEN)
+    if (url.pathname === "/admin/log") {
+      const auth = request.headers.get("Authorization") || "";
+      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) return new Response("No autoritzat", { status: 401 });
+      return Response.json(await env.ROOM.get(env.ROOM.idFromName(ROOM_NAME)).adminLog()); // crida RPC al Durable Object
     }
     return new Response("Sant Andreu RPG — servidor multijugador", { headers: { "content-type": "text/plain; charset=utf-8" } });
   },

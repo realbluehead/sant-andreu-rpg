@@ -64,6 +64,17 @@
   dialog p { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
   dialog code { color: var(--text); }
   .dlg-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  #conn { margin-bottom: 14px; }
+  #conn h2 { justify-content: space-between; }
+  #conn h2 small { font: 11.5px system-ui, sans-serif; color: var(--muted); }
+  .online { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .online .chip { font-size: 12px; background: #14532d; border: 1px solid var(--ok); border-radius: 12px; padding: 2px 10px; }
+  .online .chip i { font-style: normal; color: var(--muted); }
+  .online .none { color: var(--muted); font-size: 12px; }
+  .log { max-height: 340px; overflow-y: auto; font: 12px/1.6 ui-monospace, monospace; border-top: 1px solid rgba(255,255,255,.06); padding-top: 6px; }
+  .log div { display: grid; grid-template-columns: 150px 22px 1fr auto; gap: 8px; padding: 1px 0; }
+  .log time, .log .n { color: var(--muted); }
+  .log .join b { color: var(--ok); } .log .leave b { color: var(--err); } .log .auth b { color: var(--changed); }
   @media (max-width: 600px) { .actions { margin-left: 0; } .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -82,6 +93,11 @@
 <main>
   <p class="intro">Edita els paràmetres del joc. <b>Desar</b> escriu <code>public/config.json</code> (el joc en local ho agafa en recarregar).
     <b>Publicar</b> fa un commit només d'aquest fitxer i el puja a GitHub: la web s'actualitza en un minut i el servidor de monedes i xat també.</p>
+  <section id="conn">
+    <h2><span><span class="ic">📡</span> CONNEXIONS</span><small id="conn-status">Carregant…</small></h2>
+    <div id="online" class="online"></div>
+    <div id="log" class="log"></div>
+  </section>
   <div id="grid" class="grid"></div>
 </main>
 <div id="msg" class="msg hidden"></div>
@@ -233,6 +249,45 @@ addEventListener("keydown", (e) => {
 });
 addEventListener("beforeunload", (e) => { if (current && !same(current, saved)) e.preventDefault(); });
 load();
+
+// Registre de connexions del servidor multijugador (s'actualitza cada 10 s)
+const fmtTime = (t) => new Date(t).toLocaleString("ca-ES", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+const fmtDur = (s) => s == null ? "" : s < 60 ? `${s} s` : s < 3600 ? `${Math.round(s / 60)} min` : `${(s / 3600).toFixed(1)} h`;
+async function loadLog() {
+  const st = document.getElementById("conn-status");
+  let r;
+  try { r = await api("/api/log"); } catch { r = { ok: false, data: { error: "Sense connexió amb l'admin" } }; }
+  if (!r.ok) { st.textContent = r.data.error || "Error"; return; }
+  const { players, log } = r.data;
+  st.textContent = `Actualitzat ${new Date().toLocaleTimeString("ca-ES")} · ${players.length} connectat${players.length === 1 ? "" : "s"} ara`;
+  const on = document.getElementById("online");
+  on.textContent = "";
+  if (!players.length) on.innerHTML = `<span class="none">Ara no hi ha ningú jugant.</span>`;
+  for (const p of players) {
+    const c = document.createElement("span"); c.className = "chip";
+    c.textContent = p.name + (p.google ? ` (${p.google})` : "");
+    const i = document.createElement("i");
+    i.textContent = ` · ${p.since ? fmtDur(Math.round((r.data.now - p.since) / 1000)) : ""}${p.room ? " · dins d'un local" : ""}`;
+    c.appendChild(i); on.appendChild(c);
+  }
+  const el = document.getElementById("log");
+  el.textContent = "";
+  if (!log.length) el.innerHTML = `<span class="none">Encara no hi ha cap entrada.</span>`;
+  for (const e of [...log].reverse()) {
+    const row = document.createElement("div"); row.className = e.ev;
+    const [icon, what] = e.ev === "join" ? ["🟢", "ha entrat"] : e.ev === "leave" ? ["🔴", `ha sortit${e.secs != null ? " després de " + fmtDur(e.secs) : ""}`]
+      : ["🔑", e.newUser ? "s'ha registrat amb Google" : "ha iniciat sessió amb Google"];
+    const t = document.createElement("time"); t.textContent = fmtTime(e.t);
+    const ic = document.createElement("span"); ic.textContent = icon;
+    const txt = document.createElement("span");
+    const b = document.createElement("b"); b.textContent = e.name || "?";
+    txt.append(b, ` ${what}${e.google ? " · " + e.google : ""}`);
+    const n = document.createElement("span"); n.className = "n"; n.textContent = `${e.online} en línia`;
+    row.append(t, ic, txt, n); el.appendChild(row);
+  }
+}
+loadLog();
+setInterval(loadLog, 10_000);
 </script>
 </body>
 </html>

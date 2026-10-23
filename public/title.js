@@ -24,6 +24,7 @@ function startGame() {
   cancelAnimationFrame(title.raf);
   document.getElementById("title").classList.add("hidden");
   if (typeof startMusic === "function" && music.on) startMusic(); // el clic compta com a interacció
+  showIntroOnce(); // primera partida: com es juga (intro.js)
 }
 
 // ---------------------------------------------------------------------------

@@ -15,7 +15,7 @@ new_sqlite_classes = ["Room"]
 [vars]
 CONFIG_URL = "https://realbluehead.github.io/sant-andreu-rpg/config.json"
 # Inici de sessió amb Google: el mateix Client ID que public/config.json (auth.googleClientId)
-GOOGLE_CLIENT_ID = ""
+GOOGLE_CLIENT_ID = "191935334253-espbqq5ue0aqtct0up6op8u3q8gikph3.apps.googleusercontent.com"
 # On arriba l'avís de nous registres. La clau de Resend és un secret:
 #   npx wrangler secret put RESEND_API_KEY
 NOTIFY_EMAIL = "realbluehead@gmail.com"

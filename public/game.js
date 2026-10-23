@@ -1341,9 +1341,8 @@ function updateHud(dt) {
   if (hudTimer > 0) return;
   hudTimer = 0.15;
   if (state.interior) {
-    const html = `<div class="street">${escapeHtml(state.interior.name)}</div><div class="place">> Dins del bar</div>`;
+    const html = `<div class="street">${escapeHtml(state.interior.name)}</div>`;
     if (html !== lastHud) { hud.innerHTML = html; lastHud = html; }
-    updateTreasureHud();
     return;
   }
   const tx = state.player.x / TS, ty = state.player.y / TS;
@@ -1351,15 +1350,10 @@ function updateHud(dt) {
   const place = nearestPlace(tx, ty);
   const poi = nearestPoi(tx, ty);
   const placeText = poi ? (poi.name !== poi.label ? `${poi.name} (${poi.label})` : poi.name) : place?.name;
-  const inside = !(g(Math.floor(tx), Math.floor(ty)) & OUTSIDE);
-  const m = state.meta.metersPerTile;
-  const [S, Wl, N, E] = state.meta.bbox;
-  const lat = N - (ty / state.H) * (N - S), lon = Wl + (tx / state.W) * (E - Wl);
-  const html = `<div class="street">${street ?? (inside ? "Sant Andreu de Palomar" : "Fora del barri")}</div>` +
-    `<div class="place">${placeText ? "> " + escapeHtml(placeText) : ""}</div>` +
-    `<div class="meta">${inside ? "Sant Andreu de Palomar" : "Fora del barri"} · ${lat.toFixed(5)}, ${lon.toFixed(5)}${state.noclip ? " · FANTASMA" : ""}</div>`;
+  // al panell: només el carrer i el lloc més proper
+  const html = (street ? `<div class="street">${escapeHtml(street)}</div>` : "") +
+    (placeText ? `<div class="place">> ${escapeHtml(placeText)}</div>` : "");
   if (html !== lastHud) { hud.innerHTML = html; lastHud = html; }
-  updateTreasureHud();
 }
 
 const toastEl = document.getElementById("toast");

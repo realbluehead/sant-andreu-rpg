@@ -349,10 +349,7 @@ function updateZone() {
   if (th === currentZone) return;
   const first = currentZone < 0;
   currentZone = th;
-  const t = THEMES[th], el = document.getElementById("zone");
-  el.querySelector("b").textContent = t.name;
-  el.querySelector("small").textContent = t.style;
-  el.style.setProperty("--zone", t.color);
+  const t = THEMES[th];
   if (!first) showBanner(`Has entrat a: ${t.name}`, "zone");
   document.getElementById("banner").style.setProperty("--zone", t.color);
   setMusicTheme(th);

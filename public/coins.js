@@ -136,13 +136,6 @@ function updateCoinUi(bump) {
   }
 }
 
-let lastTreasure = "";
-function updateTreasureHud() {
-  const el = document.getElementById("treasure");
-  const text = !net.connected ? "" : coins.nearest ? `Tresor més proper: ${coins.nearest.meters} m` : "Cap tresor al barri ara mateix";
-  if (text !== lastTreasure) { el.textContent = text; el.classList.toggle("hidden", !text); lastTreasure = text; }
-}
-
 // ---------------------------------------------------------------------------
 // Dibuix
 function pushCoinSprites(list, camX, camY, vw, vh, k) {

@@ -1,12 +1,12 @@
 {
   "player": {
-    "walkSpeed": 90,
-    "runSpeed": 210,
+    "walkSpeed": 130,
+    "runSpeed": 295,
     "maxHp": 100,
     "hitCooldown": 1.2
   },
   "police": {
-    "count": 36,
+    "count": 21,
     "speed": 4.2,
     "damage": 20,
     "dropsCoins": true
@@ -84,12 +84,12 @@
     "startHour": 20,
     "endHour": 6,
     "thieves": 40,
-    "zombies": 30,
-    "ghosts": 20
+    "zombies": 70,
+    "ghosts": 69
   },
   "fog": {
     "enabled": true,
-    "radius": 12
+    "radius": 16
   },
   "quests": {
     "enabled": true,
